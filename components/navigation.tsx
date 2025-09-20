@@ -3,9 +3,6 @@ import { Button } from "@/components/ui/button"
 export function Navigation() {
   return (
     <nav className="border-b border-border bg-card">
-      <div className="container mx-auto px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-8">
             <div className="flex items-center space-x-6">
               <Button variant="ghost" className="text-foreground hover:text-primary">
                 港股
@@ -23,7 +20,6 @@ export function Navigation() {
                 更多
               </Button>
             </div>
-          </div>
           <div className="flex items-center space-x-6">
             <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
               首页
@@ -34,9 +30,7 @@ export function Navigation() {
             <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
               新股中心
             </Button>
-          </div>
         </div>
-      </div>
     </nav>
   )
 }

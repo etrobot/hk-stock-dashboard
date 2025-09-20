@@ -34,9 +34,9 @@ const indices = [
 
 export function MarketIndices() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="flex gap-4 w-full">
       {indices.map((index, i) => (
-        <Card key={i} className="p-4 bg-card border-border">
+        <Card key={i} className="p-4 bg-card border-border w-full">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm text-muted-foreground">{index.name}</h3>
             <TrendingUp className="h-4 w-4 text-chart-1" />
