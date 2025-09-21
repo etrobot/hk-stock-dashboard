@@ -1,45 +1,15 @@
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Card } from "./ui/card"
+import { Button } from "./ui/button"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
+import { Stock, DividendStock } from "../market"
 
-const gainersData = [
-  { rank: 1, code: "00243", name: "品质国际", change: "+94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 2, code: "01375", name: "中州证券", change: "+94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 3, code: "00381", name: "权识国际", change: "+94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 4, code: "00476", name: "科特动力控股", change: "+94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 5, code: "00721", name: "中国金融国际", change: "+94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 6, code: "01456", name: "国联民生", change: "+94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 7, code: "03329", name: "交通国际", change: "+94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 8, code: "01141", name: "民银资本", change: "+94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 9, code: "00619", name: "南华金融", change: "+94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 10, code: "02286", name: "威兴发展", change: "+94.87%", price: "0.380", volume: "-0.185" },
-]
-
-const losersData = [
-  { rank: 1, code: "00243", name: "品质国际", change: "-94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 2, code: "01375", name: "中州证券", change: "-94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 3, code: "00381", name: "权识国际", change: "-94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 4, code: "00476", name: "科特动力控股", change: "-94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 5, code: "00721", name: "中国金融国际", change: "-94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 6, code: "01456", name: "国联民生", change: "-94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 7, code: "03329", name: "交通国际", change: "-94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 8, code: "01141", name: "民银资本", change: "0.00%", price: "0.380", volume: "-0.185" },
-  { rank: 9, code: "00619", name: "南华金融", change: "-94.87%", price: "0.380", volume: "-0.185" },
-  { rank: 10, code: "02286", name: "威兴发展", change: "-94.87%", price: "0.380", volume: "-0.185" },
-]
-
-const activeData = [
-  { rank: 1, code: "00243", name: "品质国际", change: "+94.87%", price: "0.380", ttm: "154.490%" },
-  { rank: 2, code: "01375", name: "中州证券", change: "94.87%", price: "0.380", ttm: "+0.18%" },
-  { rank: 3, code: "00381", name: "权识国际", change: "94.87%", price: "0.380", ttm: "+0.18%" },
-  { rank: 4, code: "00476", name: "科特动力控股", change: "94.87%", price: "0.380", ttm: "+0.18%" },
-  { rank: 5, code: "00721", name: "中国金融国际", change: "94.87%", price: "0.380", ttm: "+0.18%" },
-  { rank: 6, code: "01456", name: "国联民生", change: "94.87%", price: "0.380", ttm: "+0.18%" },
-  { rank: 7, code: "03329", name: "交通国际", change: "94.87%", price: "0.380", ttm: "+0.18%" },
-  { rank: 8, code: "01141", name: "民银资本", change: "94.87%", price: "0.380", ttm: "+0.18%" },
-  { rank: 9, code: "00619", name: "南华金融", change: "94.87%", price: "0.380", ttm: "+0.18%" },
-  { rank: 10, code: "02286", name: "威兴发展", change: "94.87%", price: "0.380", ttm: "+0.18%" },
-]
+interface StockTablesProps {
+  gainers: Stock[];
+  losers: Stock[];
+  hotStocks: Stock[];
+  dividendStocks?: DividendStock[];
+  dividendTitle?: string;
+}
 
 function StockTable({ title, data, showTTM = false }: { title: string; data: any[]; showTTM?: boolean }) {
   return (
@@ -69,26 +39,26 @@ function StockTable({ title, data, showTTM = false }: { title: string; data: any
               <TableCell className="text-foreground">{stock.name}</TableCell>
               <TableCell
                 className={`font-semibold ${
-                  stock.change.startsWith("+")
+                  stock.percentage?.startsWith("+")
                     ? "text-chart-1"
-                    : stock.change.startsWith("-")
+                    : stock.percentage?.startsWith("-")
                       ? "text-chart-2"
                       : "text-muted-foreground"
                 }`}
               >
-                {stock.change}
+                {stock.percentage}
               </TableCell>
               <TableCell className="text-foreground font-mono">{stock.price}</TableCell>
               <TableCell
                 className={`${
                   showTTM
                     ? "text-foreground"
-                    : (stock.volume || stock.ttm)?.startsWith("+")
+                    : stock.change?.startsWith("+")
                       ? "text-chart-1"
                       : "text-chart-2"
                 }`}
               >
-                {showTTM ? stock.ttm : stock.volume}
+                {showTTM ? stock.ttm : stock.change}
               </TableCell>
             </TableRow>
           ))}
@@ -98,22 +68,27 @@ function StockTable({ title, data, showTTM = false }: { title: string; data: any
   )
 }
 
-export function StockTables() {
+export function StockTables({ gainers, losers, hotStocks, dividendStocks, dividendTitle = "高股息" }: StockTablesProps) {
   return (
     <div className="space-y-6">
       <div className="flex gap-6">
         <div className="flex-1">
-          <StockTable title="领涨榜" data={gainersData} />
+          <StockTable title="领涨榜" data={gainers.map((stock, i) => ({ ...stock, rank: i + 1 }))} />
         </div>
         <div className="flex-1">
-          <StockTable title="领跌榜" data={losersData} />
+          <StockTable title="领跌榜" data={losers.map((stock, i) => ({ ...stock, rank: i + 1 }))} />
         </div>
       </div>
 
-      <div className="flex">
+      <div className="flex gap-6">
         <div className="flex-1">
-          <StockTable title="热度榜" data={activeData} showTTM={true} />
+          <StockTable title="热度榜" data={hotStocks.map((stock, i) => ({ ...stock, rank: i + 1 }))} />
         </div>
+        {dividendStocks && (
+          <div className="flex-1">
+            <StockTable title={dividendTitle} data={dividendStocks.map((stock, i) => ({ ...stock, rank: i + 1, ttm: stock.dividend }))} showTTM={true} />
+          </div>
+        )}
       </div>
     </div>
   )

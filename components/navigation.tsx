@@ -1,36 +1,38 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "./ui/button"
 
-export function Navigation() {
+interface NavigationProps {
+  currentPage: string;
+  onPageChange: (page: string) => void;
+}
+
+export function Navigation({ currentPage, onPageChange }: NavigationProps) {
+  const pages = [
+    { id: 'hk', label: '港股' },
+    { id: 'us', label: '美股' },
+    { id: 'crypto', label: '加密货币' },
+    { id: 'cn', label: '沪深' },
+    { id: 'stock-detail', label: '股票详情' },
+    { id: 'more', label: '更多' }
+  ];
+
   return (
     <nav className="border-b border-border bg-card">
-            <div className="flex items-center space-x-6">
-              <Button variant="ghost" className="text-foreground hover:text-primary">
-                港股
-              </Button>
-              <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-                美股
-              </Button>
-              <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-                加密货币
-              </Button>
-              <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-                沪深
-              </Button>
-              <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-                更多
-              </Button>
-            </div>
-          <div className="flex items-center space-x-6">
-            <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-              首页
-            </Button>
-            <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-              概念板块
-            </Button>
-            <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-              新股中心
-            </Button>
-        </div>
+      <div className="flex items-center space-x-6 px-4 py-2">
+        {pages.map((page) => (
+          <Button
+            key={page.id}
+            variant="ghost"
+            className={
+              currentPage === page.id
+                ? "text-foreground hover:text-primary font-medium"
+                : "text-muted-foreground hover:text-foreground"
+            }
+            onClick={() => onPageChange(page.id)}
+          >
+            {page.label}
+          </Button>
+        ))}
+      </div>
     </nav>
   )
 }

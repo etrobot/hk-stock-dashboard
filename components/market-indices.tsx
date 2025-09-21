@@ -1,56 +1,35 @@
-import { Card } from "@/components/ui/card"
+import { Card } from "./ui/card"
 import { TrendingUp } from "lucide-react"
+import { MarketIndex } from "../market"
 
-const indices = [
-  {
-    name: "恒生指数",
-    value: "24406.09",
-    change: "+377.72",
-    percentage: "+1.57%",
-    isPositive: true,
-  },
-  {
-    name: "恒生科技指数",
-    value: "5301.16",
-    change: "+84.56",
-    percentage: "+1.62%",
-    isPositive: true,
-  },
-  {
-    name: "恒生国企指数",
-    value: "24411",
-    change: "+388",
-    percentage: "+1.62%",
-    isPositive: true,
-  },
-  {
-    name: "国企指数",
-    value: "8800.21",
-    change: "+131.95",
-    percentage: "+1.52%",
-    isPositive: true,
-  },
-]
+interface MarketIndicesProps {
+  indices: MarketIndex[];
+}
 
-export function MarketIndices() {
+export function MarketIndices({ indices }: MarketIndicesProps) {
   return (
-    <div className="flex gap-4 w-full">
+    <div className="flex space-x-6 bg-[#11131B] py-2 px-4">
       {indices.map((index, i) => (
-        <Card key={i} className="p-4 bg-card border-border w-full">
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm text-muted-foreground">{index.name}</h3>
-            <TrendingUp className="h-4 w-4 text-chart-1" />
+        <div key={i} className="flex items-center space-x-2 min-w-[200px]">
+          <span className="text-white text-xs font-medium">{index.name}</span>
+          <span className={`text-xs font-mono ${index.isPositive ? "text-[#16BA71]" : "text-[#16BA71]"}`}>
+            {index.value}
+          </span>
+          <span className={`text-xs font-mono ${index.isPositive ? "text-[#16BA71]" : "text-[#16BA71]"}`}>
+            {index.change}
+          </span>
+          <span className={`text-xs font-mono ${index.isPositive ? "text-[#16BA71]" : "text-[#16BA71]"}`}>
+            {index.percentage}%
+          </span>
+          <div className="w-[7px] h-[10px] flex items-center justify-center">
+            <svg width="7" height="10" viewBox="0 0 7 10" fill="currentColor" className={index.isPositive ? "text-[#16BA71] rotate-180" : "text-[#16BA71]"}>
+              <path d="M4.8292 0L2.1708 0L2.1708 5.67698L0 5.67698L3.5 10L7 5.67698L4.8292 5.67698L4.8292 0Z"/>
+            </svg>
           </div>
-          <div className="space-y-1">
-            <div className="text-2xl font-bold text-foreground">{index.value}</div>
-            <div className="flex items-center space-x-2">
-              <span className={`text-sm ${index.isPositive ? "text-chart-1" : "text-chart-2"}`}>{index.change}</span>
-              <span className={`text-sm ${index.isPositive ? "text-chart-1" : "text-chart-2"}`}>
-                {index.percentage}
-              </span>
-            </div>
-          </div>
-        </Card>
+          <span className="text-white text-xs">
+            {index.name === '恒生指数' ? '2258亿' : index.name === '国企指数' ? '669亿' : '669亿'}
+          </span>
+        </div>
       ))}
     </div>
   )
