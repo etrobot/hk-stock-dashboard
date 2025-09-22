@@ -1,4 +1,4 @@
-import { MarketIndex, Stock, DividendStock, SectorData, IndexDetail } from "../market";
+import { MarketIndex, Stock, DividendStock, SectorData, IndexDetail } from "../types/market";
 
 export const hkIndices: MarketIndex[] = [
   {

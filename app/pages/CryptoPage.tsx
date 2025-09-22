@@ -2,40 +2,47 @@ import { MarketIndices } from "../components/market-indices"
 import { StockTables } from "../components/stock-tables"
 import { SectorHeatmap } from "../components/sector-heatmap"
 import { Button } from "../components/ui/button"
-import { usIndices, usGainers, usLosers, usHotStocks, usDividendStocks } from '../data/mock-data'
+import { cryptoIndices, cryptoGainers, cryptoLosers, cryptoHotStocks, cryptoDeFiStocks } from '../data/mock-data'
+import React from "react"
 
-export default function USStockPage() {
+interface CryptoPageProps {
+  onStockClick?: (stock: any) => void;
+}
+
+export default function CryptoPage({ onStockClick }: CryptoPageProps) {
   return (
     <>
       <div className="flex items-center space-x-6">
         <Button variant="ghost" className="text-blue-400 hover:text-blue-300">
-          我的自选
+          我的持仓
         </Button>
         <Button variant="ghost" className="text-foreground font-medium">
-          美股市场
+          加密货币市场
         </Button>
         <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-          板块
+          DeFi
         </Button>
         <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-          IPO
+          NFT
         </Button>
         <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-          财报日历
+          新币上线
         </Button>
       </div>
       <div className="container mx-auto p-4 space-y-6">
         <div className="flex gap-4">
-          <MarketIndices indices={usIndices} />
+          <MarketIndices indices={cryptoIndices} />
         </div>
 
         <div className="flex gap-6">
           <div className="flex-1 min-w-0">
-            <StockTables 
-              gainers={usGainers}
-              losers={usLosers}
-              hotStocks={usHotStocks}
-              dividendStocks={usDividendStocks}
+            <StockTables
+              gainers={cryptoGainers}
+              losers={cryptoLosers}
+              hotStocks={cryptoHotStocks}
+              dividendStocks={cryptoDeFiStocks}
+              dividendTitle="DeFi收益"
+              onStockClick={onStockClick}
             />
           </div>
           <div className="w-80 flex-shrink-0">

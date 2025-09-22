@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "./ui/card"
 import { Button } from "./ui/button"
 import { Heart, TrendingUp } from "lucide-react"
-import { IndexDetail } from "../market"
+import { IndexDetail } from "../types/market"
 
 interface IndexInfoPanelProps {
   indexDetail: IndexDetail;

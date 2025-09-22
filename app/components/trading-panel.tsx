@@ -1,12 +1,13 @@
 'use client'
 
 import React, { useState } from 'react'
+import { Menu, ArrowDown } from 'lucide-react'
 import { Card } from './ui/card'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
+import { Badge } from './ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
 interface StockData {
   symbol: string
@@ -51,9 +52,92 @@ export function TradingPanel({ stockData }: TradingPanelProps) {
     return (qty * prc).toFixed(2)
   }
 
+  const isPositive = stockData.change >= 0;
+  const changeColor = isPositive ? 'text-[#16BA71]' : 'text-[#F44345]';
+
   return (
-    <div className="w-[274px] h-full bg-[#1A1D29] border-l border-gray-800">
-      <Tabs defaultValue="trade" className="h-full">
+    <div className="w-[274px] h-full bg-[#1A1D29] border-l border-gray-800 overflow-y-auto">
+      {/* 主要股票信息卡片 */}
+      <Card className="bg-[#1A1D29] border-gray-800 p-6">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            {/* 股票基本信息 */}
+            <div className="mb-6">
+              <div className="flex items-center space-x-3 mb-2">
+                <div className="flex items-center space-x-2">
+                  <h1 className="text-lg font-medium text-white">
+                    {stockData.symbol}
+                  </h1>
+                  <span className="text-white text-sm">{stockData.name}</span>
+                  <div className="flex items-center space-x-1">
+                    <div className="w-3 h-2.5 bg-blue-600 rounded-sm flex items-center justify-center">
+                      <span className="text-[8px] text-white font-bold">$</span>
+                    </div>
+                    <Badge variant="outline" className="border-[#874EFE] bg-[#874EFE]/20 text-[#874EFE] text-[7px] px-1">
+                      L2
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-baseline space-x-4">
+                <span className="text-3xl font-bold text-[#16BA71]">
+                  {stockData.price.toFixed(3)}
+                </span>
+                <div className={`flex items-center space-x-2 ${changeColor}`}>
+                  <span className="text-lg font-semibold">
+                    {isPositive ? '+' : ''}{stockData.change.toFixed(3)}
+                  </span>
+                  <span className="text-lg font-semibold">
+                    {isPositive ? '+' : ''}{stockData.changePercent.toFixed(2)}%
+                  </span>
+                  <div className="w-[10px] h-[14px] flex items-center justify-center">
+                    <ArrowDown className={`w-[10px] h-[14px] ${changeColor} ${isPositive ? 'rotate-180' : ''}`} />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-2 flex items-center space-x-4 text-sm text-gray-400">
+                <span>07/11</span>
+                <span>16:00:00</span>
+                <span>(美东)</span>
+              </div>
+            </div>
+
+            {/* 收盘价标签 */}
+            <div className="mb-4">
+              <span className="text-gray-400 text-sm">收盘价</span>
+            </div>
+          </div>
+
+          {/* 股票统计信息 */}
+          <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+            <div>
+              <div className="text-sm text-gray-400 text-right">最高</div>
+              <div className="text-sm font-semibold text-[#16BA71] text-right">{stockData.high.toFixed(3)}</div>
+            </div>
+            <div>
+              <div className="text-sm text-gray-400 text-right">最低</div>
+              <div className="text-sm font-semibold text-[#F44345] text-right">{stockData.low.toFixed(3)}</div>
+            </div>
+            <div>
+              <div className="text-sm text-gray-400 text-right">今开</div>
+              <div className="text-sm font-semibold text-[#F44345] text-right">{stockData.open.toFixed(3)}</div>
+            </div>
+            <div>
+              <div className="text-sm text-gray-400 text-right">昨收</div>
+              <div className="text-sm font-semibold text-gray-300 text-right">{stockData.previousClose.toFixed(3)}</div>
+            </div>
+            <div>
+              <div className="text-sm text-gray-400 text-right">成交量</div>
+              <div className="text-sm font-semibold text-white text-right">{stockData.volume}</div>
+            </div>
+            <div>
+              <div className="text-sm text-gray-400 text-right">成交额</div>
+              <div className="text-sm font-semibold text-white text-right">{stockData.turnover}</div>
+            </div>
+          </div>
+        </div>
+      </Card>
+      <Tabs defaultValue="trade" className="h-[calc(100%-300px)]">
         {/* 标签头部 */}
         <div className="flex items-center justify-center bg-[#11131B] py-2 border-b border-gray-800">
           <div className="flex items-center space-x-8">
@@ -98,9 +182,7 @@ export function TradingPanel({ stockData }: TradingPanelProps) {
             <div className="flex justify-between items-center">
               <span className="text-white text-sm font-medium">深度摆盘</span>
               <div className="text-gray-400">
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
-                  <path d="M0 3.5C0 3.22386 0.223858 3 0.5 3L9.5 3C9.77614 3 10 3.22386 10 3.5L10 3.5C10 3.77614 9.77614 4 9.5 4L0.5 4C0.223858 4 0 3.77614 0 3.5L0 3.5ZM0 0.5C0 0.223858 0.223858 0 0.5 0L9.5 0C9.77614 0 10 0.223858 10 0.5L10 0.5C10 0.776142 9.77614 1 9.5 1L0.5 1C0.223858 1 0 0.776142 0 0.5L0 0.5ZM0 6.5C0 6.22386 0.223858 6 0.5 6L9.5 6C9.77614 6 10 6.22386 10 6.5L10 6.5C10 6.77614 9.77614 7 9.5 7L0.5 7C0.223858 7 0 6.77614 0 6.5L0 6.5Z"/>
-                </svg>
+                <Menu size={10} />
               </div>
             </div>
 

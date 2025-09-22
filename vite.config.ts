@@ -7,10 +7,15 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, '.'),
+      '@': path.resolve(__dirname, './app'),
     },
   },
   server: {
-    port: 3000
+    port: 3456,
+    host: '0.0.0.0',
+    strictPort: true,
+    hmr: {
+      clientPort: 3000
+    }
   }
 })

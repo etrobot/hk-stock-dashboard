@@ -1,7 +1,8 @@
 import { Card } from "./ui/card"
 import { Button } from "./ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
-import { Stock, DividendStock } from "../market"
+import { Stock, DividendStock } from "../types/market"
+import React from "react";
 
 interface StockTablesProps {
   gainers: Stock[];
@@ -9,9 +10,10 @@ interface StockTablesProps {
   hotStocks: Stock[];
   dividendStocks?: DividendStock[];
   dividendTitle?: string;
+  onStockClick?: (stock: any) => void;
 }
 
-function StockTable({ title, data, showTTM = false }: { title: string; data: any[]; showTTM?: boolean }) {
+function StockTable({ title, data, showTTM = false, onStockClick }: { title: string; data: any[]; showTTM?: boolean; onStockClick?: (stock: any) => void }) {
   return (
     <Card className="p-4 bg-card border-border">
       <div className="flex items-center justify-between mb-4">
@@ -33,7 +35,11 @@ function StockTable({ title, data, showTTM = false }: { title: string; data: any
         </TableHeader>
         <TableBody>
           {data.map((stock, i) => (
-            <TableRow key={i} className="border-border hover:bg-muted/50">
+            <TableRow
+              key={i}
+              className="border-border hover:bg-muted/50 cursor-pointer"
+              onClick={() => onStockClick?.(stock)}
+            >
               <TableCell className="text-muted-foreground">{stock.rank}</TableCell>
               <TableCell className="text-foreground font-mono">{stock.code}</TableCell>
               <TableCell className="text-foreground">{stock.name}</TableCell>
@@ -68,25 +74,25 @@ function StockTable({ title, data, showTTM = false }: { title: string; data: any
   )
 }
 
-export function StockTables({ gainers, losers, hotStocks, dividendStocks, dividendTitle = "高股息" }: StockTablesProps) {
+export function StockTables({ gainers, losers, hotStocks, dividendStocks, dividendTitle = "高股息", onStockClick }: StockTablesProps) {
   return (
     <div className="space-y-6">
       <div className="flex gap-6">
         <div className="flex-1">
-          <StockTable title="领涨榜" data={gainers.map((stock, i) => ({ ...stock, rank: i + 1 }))} />
+          <StockTable title="领涨榜" data={gainers.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} />
         </div>
         <div className="flex-1">
-          <StockTable title="领跌榜" data={losers.map((stock, i) => ({ ...stock, rank: i + 1 }))} />
+          <StockTable title="领跌榜" data={losers.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} />
         </div>
       </div>
 
       <div className="flex gap-6">
         <div className="flex-1">
-          <StockTable title="热度榜" data={hotStocks.map((stock, i) => ({ ...stock, rank: i + 1 }))} />
+          <StockTable title="热度榜" data={hotStocks.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} />
         </div>
         {dividendStocks && (
           <div className="flex-1">
-            <StockTable title={dividendTitle} data={dividendStocks.map((stock, i) => ({ ...stock, rank: i + 1, ttm: stock.dividend }))} showTTM={true} />
+            <StockTable title={dividendTitle} data={dividendStocks.map((stock, i) => ({ ...stock, rank: i + 1, ttm: stock.dividend }))} showTTM={true} onStockClick={onStockClick} />
           </div>
         )}
       </div>
