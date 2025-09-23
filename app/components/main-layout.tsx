@@ -15,6 +15,7 @@ import { ModeToggle } from './mode-toggle'
 import { TradingPopup } from './trading-popup'
 import { useState } from 'react'
 import DiscoveryPage from '../pages/DiscoveryPage'
+import HeatmapPage from '../pages/HeatmapPage'
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="flex-1 p-4 text-center text-foreground">
@@ -57,15 +58,17 @@ export function MainLayout() {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div className="min-h-screen bg-background text-foreground">
-        <div className="flex">
-          {/* 左侧导航 */}
-          <SidebarNavigation />
+      <div className="h-screen flex flex-col">
+        <div className="flex flex-1 min-h-0">
+          {/* 左侧导航 - 固定 */}
+          <div className="flex-shrink-0">
+            <SidebarNavigation />
+          </div>
 
           {/* 主内容区域 */}
-          <div className="flex-1 flex flex-col">
-            {/* 天风国际PC客户端标题 */}
-            <div className="h-8 bg-card flex items-center justify-center border-b border-border relative">
+          <div className="flex-1 flex flex-col min-w-0">
+            {/* 天风国际PC客户端标题 - 固定 */}
+            <div className="h-8 bg-card flex items-center justify-center border-b border-border relative flex-shrink-0">
               {/* 左侧图标按钮 */}
               <div className="absolute left-2 flex items-center gap-1.5">
                 <Tooltip>
@@ -127,16 +130,17 @@ export function MainLayout() {
               </div>
             </div>
 
-            {/* 页面内容 */}
-            <div className="flex-1">
+            {/* 页面内容 - 可滚动 */}
+            <div className="flex-1 overflow-y-auto min-h-0">
               <Routes>
                 <Route path="/" element={<Navigate to="/market" replace />} />
                 <Route path="/watchlist" element={<StockDetailPage titleOverride="自选" />} />
-                <Route path="/market" element={<div className="h-full bg-background text-foreground"><App /></div>} />
+                <Route path="/market" element={<div className="bg-background text-foreground"><App /></div>} />
                 <Route path="/stock/:symbol" element={<StockDetailPage />} />
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/options" element={<PlaceholderPage title="期权" />} />
                 <Route path="/discovery" element={<DiscoveryPage />} />
+                <Route path="/heatmap" element={<HeatmapPage />} />
                 <Route path="*" element={<PlaceholderPage title="页面未找到" />} />
               </Routes>
             </div>

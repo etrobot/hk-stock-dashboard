@@ -4,10 +4,7 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react({
-    // 启用 Fast Refresh
-    fastRefresh: true,
-  })],
+  plugins: [react()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './app'),

@@ -1,7 +1,8 @@
-import { Card } from "./ui/card"
-import { Button } from "./ui/button"
+import { Card } from "../components/ui/card"
+import { Button } from "../components/ui/button"
 import ReactECharts from 'echarts-for-react'
 import { useEffect, useState } from 'react'
+import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 interface TreeNode {
@@ -75,7 +76,7 @@ const mockSectorData: TreeNode[] = [
   }
 ]
 
-export function SectorHeatmap() {
+export default function HeatmapPage() {
   const navigate = useNavigate()
   const [chartData, setChartData] = useState<TreeNode[]>([])
 
@@ -85,10 +86,6 @@ export function SectorHeatmap() {
     convertData(processedData)
     setChartData(processedData)
   }, [])
-
-  const handleMoreClick = () => {
-    navigate('/heatmap')
-  }
 
   function convertData(originList: TreeNode[]) {
     let min = Infinity
@@ -141,11 +138,11 @@ export function SectorHeatmap() {
       subtext: '涨幅 > 0: 绿色; 跌幅 < 0: 红色; 无变化 = 0: 灰色',
       textStyle: {
         color: 'var(--foreground)',
-        fontSize: 16
+        fontSize: 20
       },
       subtextStyle: {
         color: 'var(--muted-foreground)',
-        fontSize: 12
+        fontSize: 14
       }
     },
     tooltip: {
@@ -172,12 +169,12 @@ export function SectorHeatmap() {
       {
         name: '港股板块',
         type: 'treemap',
-        top: 60,
+        top: 80,
         label: {
           show: true,
           formatter: '{b}',
           color: 'var(--foreground)',
-          fontSize: 12
+          fontSize: 14
         },
         itemStyle: {
           borderColor: 'var(--border)',
@@ -214,32 +211,40 @@ export function SectorHeatmap() {
     ]
   }
 
+  const handleGoBack = () => {
+    navigate(-1)
+  }
+
   return (
-    <div className="space-y-4">
-      <Card className="p-4 bg-card border-border">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-4">
-            <h3 className="text-lg font-semibold text-foreground">热力图</h3>
-            <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="sm" className="text-foreground bg-primary/20">
-                行业
-              </Button>
-              <Button variant="ghost" size="sm" className="text-muted-foreground">
-                个股
-              </Button>
-            </div>
-          </div>
+    <div className="h-full flex flex-col p-4">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center space-x-4">
           <Button 
             variant="ghost" 
             size="sm" 
+            onClick={handleGoBack}
             className="text-muted-foreground hover:text-foreground"
-            onClick={handleMoreClick}
           >
-            更多 →
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            返回
+          </Button>
+          <h1 className="text-2xl font-bold text-foreground">热力图</h1>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          <Button variant="ghost" size="sm" className="text-foreground bg-primary/20">
+            行业
+          </Button>
+          <Button variant="ghost" size="sm" className="text-muted-foreground">
+            个股
           </Button>
         </div>
+      </div>
 
-        <div className="h-96">
+      {/* Full-screen Heatmap */}
+      <Card className="flex-1 p-4 bg-card border-border">
+        <div className="h-full">
           <ReactECharts 
             option={option}
             style={{ height: '100%', width: '100%' }}

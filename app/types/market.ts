@@ -31,6 +31,28 @@ export interface SectorData {
   isPositive: boolean;
 }
 
+export interface DetailedStock {
+  name: string;
+  code: string;
+  price: string;
+  percentage: string;
+  fiveMinPercentage: string;
+  sixtyDayPercentage: string;
+  ytdPercentage: string;
+  change: string;
+  listingDate: string;
+  firstDayGain: string;
+  cumulativeGain: string;
+  volume: string;
+  turnover: string;
+  turnoverRate: string;
+  pe: string;
+  amplitude: string;
+  marketCap: string;
+  volumeRatio: string;
+  bidAskRatio: string;
+}
+
 export interface IndexDetail {
   code: string;
   name: string;

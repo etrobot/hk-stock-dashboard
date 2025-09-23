@@ -23,6 +23,10 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
   const [preMarketEnabled, setPreMarketEnabled] = useState(false)
   const [market, setMarket] = useState('全部')
   const [currency, setCurrency] = useState('USD')
+  
+  // 条件单相关状态
+  const [triggerPrice, setTriggerPrice] = useState('199.99')
+  const [conditionalQuantity, setConditionalQuantity] = useState('1000')
 
   // Helpers: adjust price and quantity via +/- buttons
   const adjustPrice = (delta: number) => {
@@ -38,6 +42,21 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
     const current = isNaN(cur) ? 0 : cur
     const next = Math.max(0, current + delta)
     setQuantity(String(next))
+  }
+
+  // 条件单价格和数量调整
+  const adjustTriggerPrice = (delta: number) => {
+    const cur = parseFloat(triggerPrice)
+    const current = isNaN(cur) ? 0 : cur
+    const next = Math.max(0, current + delta)
+    setTriggerPrice(next.toFixed(2))
+  }
+
+  const adjustConditionalQuantity = (delta: number) => {
+    const cur = parseInt(conditionalQuantity, 10)
+    const current = isNaN(cur) ? 0 : cur
+    const next = Math.max(0, current + delta)
+    setConditionalQuantity(String(next))
   }
 
   // Mock account data
@@ -326,9 +345,279 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="conditional" className="mt-3 text-xs text-[#72737A]">
-          {/* 条件单内容占位 */}
-          <div className="p-4 text-center">暂无条件单内容</div>
+        <TabsContent value="conditional" className="mt-3">
+          <div className="grid grid-cols-3 gap-6">
+            {/* Left Panel - 条件单设置 */}
+            <div className="space-y-4">
+              {/* 买入/卖出选择 */}
+              <div className="flex gap-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-[#FF5C00] rounded"></div>
+                  <span className="text-xs text-white">买入</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-[#72737A]">卖出</span>
+                </div>
+              </div>
+
+              {/* 股票选择 */}
+              <div className="bg-[#1D212A] rounded p-3 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-[#919CAD] rounded-full"></div>
+                    <span className="text-xs text-[#DBDBE0]">小米集团-W</span>
+                    <span className="text-xs text-[#DBDBE0]">00005</span>
+                  </div>
+                  <X className="w-2 h-2 text-[#919CAD]" />
+                </div>
+                
+                <div className="text-xs">
+                  <span className="text-[#F44345]">250.60</span>
+                  <span className="text-[#F44345] ml-2">0.800</span>
+                  <span className="text-[#F44345] ml-2">3.08%</span>
+                </div>
+              </div>
+
+              {/* 触发条件 */}
+              <div className="space-y-3">
+                <h3 className="text-xs text-[#DBDBE0] font-medium">触发条件</h3>
+                
+                {/* 图表区域 */}
+                <div className="bg-[#1D212A] rounded p-3 h-24 relative">
+                  <div className="absolute top-2 left-2 text-xs text-[#8A8B96]">价格</div>
+                  <div className="absolute bottom-2 right-2 text-xs text-[#8A8B96]">时间</div>
+                  <div className="absolute top-1/2 right-2 text-xs text-[#8A8B96]">触发价</div>
+                  
+                  {/* 简化的图表线条 */}
+                  <div className="absolute bottom-4 left-4 right-4 h-px bg-[#919CAD] opacity-20"></div>
+                  <div className="absolute bottom-4 left-4 w-px h-16 bg-[#919CAD] opacity-20"></div>
+                  
+                  {/* 触发点 */}
+                  <div className="absolute bottom-6 right-8 w-1 h-1 bg-[#FF5C00] rounded-full"></div>
+                  <div className="absolute bottom-6 right-12 px-1 py-0.5 bg-[#FF5C00] rounded text-xs text-white">触发</div>
+                </div>
+              </div>
+
+              {/* 股价条件 */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-[#DBDBE0]">股价条件</span>
+                  <ChevronDown className="w-3 h-3 text-[#919CAD] rotate-90" />
+                </div>
+                
+                <div className="bg-[#1D212A] rounded p-3 flex items-center gap-2">
+                  <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-[#2a2f3b]" onClick={() => adjustTriggerPrice(-0.01)}>-</Button>
+                  <div className="flex-1">
+                    <Input 
+                      value={triggerPrice}
+                      onChange={(e) => setTriggerPrice(e.target.value)}
+                      placeholder="触发价格"
+                      inputMode="decimal"
+                      className="bg-transparent border-0 text-xs h-6 px-2 text-center text-[#72737A]"
+                    />
+                  </div>
+                  <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-[#2a2f3b]" onClick={() => adjustTriggerPrice(0.01)}>+</Button>
+                </div>
+              </div>
+
+              {/* 委托价格 */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-[#DBDBE0]">委托价格</span>
+                  <ChevronDown className="w-3 h-3 text-[#919CAD] rotate-90" />
+                </div>
+                
+                <div className="bg-[#1D212A] rounded p-3 flex items-center gap-2">
+                  <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-[#2a2f3b]" onClick={() => adjustConditionalQuantity(-100)}>-</Button>
+                  <div className="flex-1">
+                    <Input 
+                      value={conditionalQuantity}
+                      onChange={(e) => setConditionalQuantity(e.target.value)}
+                      placeholder="买入数量"
+                      inputMode="numeric"
+                      className="bg-transparent border-0 text-xs h-6 px-2 text-center text-[#72737A]"
+                    />
+                  </div>
+                  <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-[#2a2f3b]" onClick={() => adjustConditionalQuantity(100)}>+</Button>
+                </div>
+              </div>
+
+              {/* 参考可买 */}
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-[#DBDBE0]">参考可买{conditionalQuantity}股</span>
+                <span className="text-xs text-[#FF5C00]">编辑仓位</span>
+              </div>
+
+              {/* 仓位选择 */}
+              <div className="flex gap-2">
+                <Button className="flex-1 text-xs h-6 bg-[#FF5C00] hover:bg-[#e54f00] text-white border border-[#FF5C00]">
+                  全仓
+                </Button>
+                <Button variant="outline" className="flex-1 text-xs h-6 bg-transparent hover:bg-[#2a2f3b] text-[#72737A] border-[#4B5269]">
+                  1/2
+                </Button>
+                <Button variant="outline" className="flex-1 text-xs h-6 bg-transparent hover:bg-[#2a2f3b] text-[#72737A] border-[#4B5269]">
+                  1/4
+                </Button>
+                <Button variant="outline" className="flex-1 text-xs h-6 bg-transparent hover:bg-[#2a2f3b] text-[#72737A] border-[#4B5269]">
+                  1/8
+                </Button>
+              </div>
+
+              {/* 底部按钮 */}
+              <div className="flex gap-2 pt-4">
+                <Button variant="outline" className="flex-1 text-xs h-6 bg-transparent hover:bg-[#2a2f3b] text-[#FF5C00] border-[#FF5C00]">
+                  添加提醒
+                </Button>
+                <Button className="flex-1 text-xs h-6 bg-[#FF5C00] hover:bg-[#e54f00] text-white">
+                  提交条件单
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Panel - 条件单列表 */}
+            <div className="col-span-2 space-y-4">
+              {/* 状态选择 */}
+              <div className="flex gap-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-[#FF5C00] rounded"></div>
+                  <span className="text-xs text-white">监控中</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-[#72737A]">已触发</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-[#72737A]">失效</span>
+                </div>
+              </div>
+
+              {/* 延时行情提示 */}
+              <div className="bg-[#FF5C00] bg-opacity-10 rounded p-2 flex items-center justify-between">
+                <span className="text-xs text-[#FF5C00]">当前页面为延时行情，升级可以查看实时行情</span>
+                <ChevronDown className="w-3 h-3 text-[#FF5C00]" />
+              </div>
+
+              {/* 条件单列表 */}
+              <div className="space-y-3">
+                {/* 条件单1: 触发价格 */}
+                <div className="bg-[#1D212A] rounded p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-white">腾讯控股</span>
+                    <span className="text-xs text-white">00700</span>
+                    <Badge className="bg-[#16BA71] text-white text-xs px-2 py-0.5">卖</Badge>
+                  </div>
+                  
+                  <div className="space-y-2 text-xs">
+                    <div>
+                      <span className="text-white">股价条件：</span>
+                      <span className="text-white">触发价格199.99</span>
+                    </div>
+                    <div className="text-white">买5价*1000股</div>
+                    <div className="text-[#8A8B96]">提交于 2023-12-12 10:00 当日收盘失效</div>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <span className="text-xs text-[#FF5C00]">取消监控 &gt;</span>
+                  </div>
+                </div>
+
+                {/* 条件单2: 触发买入条件 */}
+                <div className="bg-[#1D212A] rounded p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-white">腾讯控股</span>
+                    <span className="text-xs text-white">00700</span>
+                    <Badge className="bg-[#16BA71] text-white text-xs px-2 py-0.5">卖</Badge>
+                  </div>
+                  
+                  <div className="space-y-2 text-xs">
+                    <div>
+                      <span className="text-white">触发买入条件：</span>
+                      <span className="text-white">触发跌幅</span>
+                    </div>
+                    <div>
+                      <span className="text-white">触发幅度</span>
+                    </div>
+                    <div className="flex gap-4">
+                      <span className="text-[#16BA71]">-5%</span>
+                      <span className="text-[#F44345]">+2%</span>
+                    </div>
+                    <div className="text-white">买5价*1000股</div>
+                    <div className="text-[#8A8B96]">提交于 2023-12-12 10:00 当日收盘失效</div>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <span className="text-xs text-[#FF5C00]">取消监控 &gt;</span>
+                  </div>
+                </div>
+
+                {/* 条件单3: 止盈止损 */}
+                <div className="bg-[#1D212A] rounded p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-white">腾讯控股</span>
+                    <span className="text-xs text-white">00700</span>
+                    <Badge className="bg-[#16BA71] text-white text-xs px-2 py-0.5">卖</Badge>
+                  </div>
+                  
+                  <div className="space-y-2 text-xs">
+                    <div>
+                      <span className="text-white">止盈止损条件：</span>
+                    </div>
+                    <div className="flex gap-4">
+                      <div>
+                        <span className="text-white">止盈价格</span>
+                        <span className="text-white ml-2">12.22</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-4">
+                      <div>
+                        <span className="text-white">止损价格</span>
+                        <span className="text-white ml-2">10.90</span>
+                      </div>
+                    </div>
+                    <div className="text-white">买5价*1000股</div>
+                    <div className="text-[#8A8B96]">提交于 2023-12-12 10:00 当日收盘失效</div>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <span className="text-xs text-[#FF5C00]">取消监控 &gt;</span>
+                  </div>
+                </div>
+
+                {/* 条件单4: 回落卖出条件 */}
+                <div className="bg-[#1D212A] rounded p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-white">腾讯控股</span>
+                    <span className="text-xs text-white">00700</span>
+                    <Badge className="bg-[#F44345] text-white text-xs px-2 py-0.5">买</Badge>
+                  </div>
+                  
+                  <div className="space-y-2 text-xs">
+                    <div>
+                      <span className="text-white">回落卖出条件：</span>
+                    </div>
+                    <div className="flex gap-4">
+                      <div>
+                        <span className="text-white">触发跌幅</span>
+                        <span className="text-[#16BA71] ml-2">-5%</span>
+                      </div>
+                    </div>
+                    <div className="flex gap-4">
+                      <div>
+                        <span className="text-white">触发幅度</span>
+                        <span className="text-[#F44345] ml-2">+2%</span>
+                      </div>
+                    </div>
+                    <div className="text-white">买5价*1000股</div>
+                    <div className="text-[#8A8B96]">提交于 2023-12-12 10:00 当日收盘失效</div>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <span className="text-xs text-[#FF5C00]">取消监控 &gt;</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
         </div>

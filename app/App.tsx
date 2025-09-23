@@ -9,16 +9,26 @@ import { useNavigate } from 'react-router-dom'
 import CNStockPage from "./pages/CNStockPage"
 import USStockPage from "./pages/USStockPage"
 import CryptoPage from "./pages/CryptoPage"
+import { DetailedStockTablePage } from "./pages/DetailedStockTablePage"
 import { hkIndices, hkGainers, hkLosers, hkHotStocks, hkIndexDetail, cnIndexDetail, usIndexDetail, cryptoIndexDetail } from './data/mock-data'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('hk')
+  const [showDetailedTable, setShowDetailedTable] = useState<string | null>(null)
 
   const navigate = useNavigate()
   const handleStockClick = (stock: any) => {
     const code = stock?.code || stock?.symbol || ''
     navigate(`/stock/${encodeURIComponent(code)}`)
   }
+
+  const handleShowMore = (tableType: string) => {
+    setShowDetailedTable(tableType);
+  };
+
+  const handleBackToMain = () => {
+    setShowDetailedTable(null);
+  };
 
   const renderPageContent = () => {
     switch (currentPage) {
@@ -31,6 +41,14 @@ function App() {
       case 'hk':
       case 'more':
       default:
+        if (showDetailedTable) {
+          return (
+            <DetailedStockTablePage 
+              title={showDetailedTable} 
+              onBack={handleBackToMain}
+            />
+          );
+        }
         return (
           <>
             <div className="flex items-center space-x-6">
@@ -54,6 +72,7 @@ function App() {
                     losers={hkLosers}
                     hotStocks={hkHotStocks}
                     onStockClick={handleStockClick}
+                    onShowMore={handleShowMore}
                   />
                 </div>
                 <div className="w-80 flex-shrink-0">

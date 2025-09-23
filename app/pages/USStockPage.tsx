@@ -3,13 +3,33 @@ import { StockTables } from "../components/stock-tables"
 import { SectorHeatmap } from "../components/sector-heatmap"
 import { Button } from "../components/ui/button"
 import { usIndices, usGainers, usLosers, usHotStocks, usDividendStocks } from '../data/mock-data'
-import React from "react"
+import { DetailedStockTablePage } from "./DetailedStockTablePage"
+import React, { useState } from "react"
 
 interface USStockPageProps {
   onStockClick?: (stock: any) => void;
 }
 
 export default function USStockPage({ onStockClick }: USStockPageProps) {
+  const [showDetailedTable, setShowDetailedTable] = useState<string | null>(null);
+
+  const handleShowMore = (tableType: string) => {
+    setShowDetailedTable(tableType);
+  };
+
+  const handleBackToMain = () => {
+    setShowDetailedTable(null);
+  };
+
+  if (showDetailedTable) {
+    return (
+      <DetailedStockTablePage 
+        title={showDetailedTable} 
+        onBack={handleBackToMain}
+      />
+    );
+  }
+
   return (
     <>
       <div className="flex items-center space-x-6">
@@ -31,6 +51,7 @@ export default function USStockPage({ onStockClick }: USStockPageProps) {
               hotStocks={usHotStocks}
               dividendStocks={usDividendStocks}
               onStockClick={onStockClick}
+              onShowMore={handleShowMore}
             />
           </div>
           <div className="w-80 flex-shrink-0">
