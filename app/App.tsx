@@ -10,7 +10,6 @@ import CNStockPage from "./pages/CNStockPage"
 import USStockPage from "./pages/USStockPage"
 import CryptoPage from "./pages/CryptoPage"
 import { hkIndices, hkGainers, hkLosers, hkHotStocks, hkIndexDetail, cnIndexDetail, usIndexDetail, cryptoIndexDetail } from './data/mock-data'
-import React from "react"
 
 function App() {
   const [currentPage, setCurrentPage] = useState('hk')
@@ -46,6 +45,8 @@ function App() {
               </Button>
             </div>
             <div className="container mx-auto p-4 space-y-6">
+            <MarketIndices indices={hkIndices} />
+
               <div className="flex gap-6">
                 <div className="flex-1 min-w-0">
                   <StockTables
@@ -60,7 +61,6 @@ function App() {
                 </div>
               </div>
             </div>
-            <MarketIndices indices={hkIndices} />
           </>
         )
     }

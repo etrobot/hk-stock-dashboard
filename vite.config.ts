@@ -4,7 +4,10 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react({
+    // 启用 Fast Refresh
+    fastRefresh: true,
+  })],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './app'),
@@ -12,10 +15,12 @@ export default defineConfig({
   },
   server: {
     port: 3456,
-    host: '0.0.0.0',
-    strictPort: true,
-    hmr: {
-      clientPort: 3000
-    }
+    host: 'localhost',
+    open: true,
+    hmr: true,
+  },
+  // 优化开发体验
+  optimizeDeps: {
+    include: ['react', 'react-dom']
   }
 })

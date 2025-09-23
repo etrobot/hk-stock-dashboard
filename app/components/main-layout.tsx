@@ -1,9 +1,9 @@
 'use client'
 
-import React from 'react'
 import { SidebarNavigation } from './sidebar-navigation'
 import { StockDetailPage } from './stock-detail-page'
 import App from '../App'
+import AccountPage from '../pages/AccountPage'
 import { Button } from './ui/button'
 import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip'
 import { History, Home, ArrowLeft, ArrowRight, Search } from 'lucide-react'
@@ -11,6 +11,10 @@ import { toast } from '../hooks/use-toast'
 import { ThemeProvider } from './theme-provider'
 import { Toaster } from './ui/toaster'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
+import { ModeToggle } from './mode-toggle'
+import { TradingPopup } from './trading-popup'
+import { useState } from 'react'
+import DiscoveryPage from '../pages/DiscoveryPage'
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="flex-1 p-4 text-center text-foreground">
@@ -21,6 +25,7 @@ const PlaceholderPage = ({ title }: { title: string }) => (
 
 export function MainLayout() {
   const navigate = useNavigate()
+  const [tradingPopupOpen, setTradingPopupOpen] = useState(false)
 
   const handleGoHome = () => {
     navigate('/market')
@@ -44,6 +49,10 @@ export function MainLayout() {
 
   const handleSearch = () => {
     toast({ title: '搜索', description: '搜索功能开发中…' })
+  }
+
+  const handleQuickTrading = () => {
+    setTradingPopupOpen(true)
   }
 
   return (
@@ -106,8 +115,13 @@ export function MainLayout() {
               </div>
 
               <span className="text-foreground text-xs font-medium">天风国际PC客户端</span>
-              <div className="absolute right-4">
-                <button className="bg-[#FF5C00] text-white px-3 py-1 rounded text-xs font-medium hover:bg-[#e54f00] transition-colors">
+              <div className="absolute right-4 flex items-center gap-2">
+                {/* 主题切换 */}
+                <ModeToggle />
+                <button 
+                  onClick={handleQuickTrading}
+                  className="bg-[#FF5C00] px-3 py-1 rounded text-xs font-medium hover:bg-[#e54f00] transition-colors"
+                >
                   快捷交易
                 </button>
               </div>
@@ -120,15 +134,19 @@ export function MainLayout() {
                 <Route path="/watchlist" element={<StockDetailPage titleOverride="自选" />} />
                 <Route path="/market" element={<div className="h-full bg-background text-foreground"><App /></div>} />
                 <Route path="/stock/:symbol" element={<StockDetailPage />} />
-                <Route path="/account" element={<PlaceholderPage title="账户" />} />
+                <Route path="/account" element={<AccountPage />} />
                 <Route path="/options" element={<PlaceholderPage title="期权" />} />
-                <Route path="/discovery" element={<PlaceholderPage title="发现" />} />
+                <Route path="/discovery" element={<DiscoveryPage />} />
                 <Route path="*" element={<PlaceholderPage title="页面未找到" />} />
               </Routes>
             </div>
           </div>
         </div>
         <Toaster />
+        <TradingPopup 
+          open={tradingPopupOpen} 
+          onOpenChange={setTradingPopupOpen} 
+        />
       </div>
     </ThemeProvider>
   )

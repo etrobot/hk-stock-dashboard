@@ -63,7 +63,7 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
   return (
     <div className="flex h-screen bg-[#11131B]">
       {/* Left Ranking Sidebar */}
-      <aside className="w-[260px] border-r border-gray-800 bg-[#0f1117] text-white flex-shrink-0">
+      <aside className="w-[260px] border-r border-gray-800 flex-shrink-0">
         <div className="p-3 border-b border-gray-800 text-sm font-medium">{rankingTitle}</div>
         <div className="p-3">
           <Table>
@@ -81,7 +81,7 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
                   className="border-gray-800 hover:bg-white/5 cursor-pointer"
                   onClick={() => navigate(`/stock/${encodeURIComponent(s.code)}`)}
                 >
-                  <TableCell className="text-sm text-white whitespace-nowrap">
+                  <TableCell className="text-sm whitespace-nowrap">
                     <div className="flex flex-col leading-tight">
                       <span>{s.name}</span>
                       <span className="text-xs text-gray-400">{s.code}</span>
@@ -111,7 +111,6 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
             <div className="mb-4">
               <StockChart symbol={stockData.symbol} />
             </div>
-            <MarketIndices indices={marketIndices} />
           </div>
 
           {/* Right Trading Panel */}

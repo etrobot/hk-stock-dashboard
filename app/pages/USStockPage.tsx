@@ -14,22 +14,15 @@ export default function USStockPage({ onStockClick }: USStockPageProps) {
     <>
       <div className="flex items-center space-x-6">
         <Button variant="ghost" className="text-blue-400 hover:text-blue-300">
-          我的自选
+          首页
         </Button>
         <Button variant="ghost" className="text-foreground font-medium">
-          美股市场
-        </Button>
-        <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-          板块
-        </Button>
-        <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-          IPO
-        </Button>
-        <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-          财报日历
+          概念板块
         </Button>
       </div>
       <div className="container mx-auto p-4 space-y-6">
+      <MarketIndices indices={usIndices} />
+
         <div className="flex gap-6">
           <div className="flex-1 min-w-0">
             <StockTables
@@ -45,7 +38,6 @@ export default function USStockPage({ onStockClick }: USStockPageProps) {
           </div>
         </div>
       </div>
-      <MarketIndices indices={usIndices} />
     </>
   );
 }

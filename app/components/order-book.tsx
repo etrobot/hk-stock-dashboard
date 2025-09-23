@@ -66,13 +66,13 @@ export function OrderBook() {
     <Card className="bg-[#1A1D29] border-gray-800">
       <Tabs defaultValue="orderbook" className="w-full">
         <TabsList className="grid w-full grid-cols-3 bg-[#11131B]">
-          <TabsTrigger value="orderbook" className="text-white data-[state=active]:bg-[#FF5C00]">
+          <TabsTrigger value="orderbook" className="data-[state=active]:bg-[#FF5C00]">
             订单簿
           </TabsTrigger>
-          <TabsTrigger value="recent" className="text-white data-[state=active]:bg-[#FF5C00]">
+          <TabsTrigger value="recent" className="data-[state=active]:bg-[#FF5C00]">
             最新成交
           </TabsTrigger>
-          <TabsTrigger value="depth" className="text-white data-[state=active]:bg-[#FF5C00]">
+          <TabsTrigger value="depth" className="data-[state=active]:bg-[#FF5C00]">
             市场深度
           </TabsTrigger>
         </TabsList>
@@ -93,7 +93,7 @@ export function OrderBook() {
                   <div className="text-[#F44345] font-mono">
                     {ask.price.toFixed(2)}
                   </div>
-                  <div className="text-right text-white font-mono">
+                  <div className="text-right font-mono">
                     {formatNumber(ask.volume)}
                   </div>
                   <div className="text-right text-gray-400 font-mono">
@@ -117,7 +117,7 @@ export function OrderBook() {
                   <div className="text-[#16BA71] font-mono">
                     {bid.price.toFixed(2)}
                   </div>
-                  <div className="text-right text-white font-mono">
+                  <div className="text-right font-mono">
                     {formatNumber(bid.volume)}
                   </div>
                   <div className="text-right text-gray-400 font-mono">
@@ -153,7 +153,7 @@ export function OrderBook() {
                   <div className={`text-right font-mono ${isPositive ? 'text-[#16BA71]' : 'text-[#F44345]'}`}>
                     {price.toFixed(2)}
                   </div>
-                  <div className="text-right text-white font-mono">
+                  <div className="text-right font-mono">
                     {formatNumber(volume)}
                   </div>
                 </div>

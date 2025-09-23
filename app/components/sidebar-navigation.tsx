@@ -15,7 +15,7 @@ const navigationItems: NavigationItem[] = [
   { label: '自选', to: '/watchlist', icon: (<Star className="w-4 h-4" />) },
   { label: '市场', to: '/market', icon: (<BarChart3 className="w-4 h-4" />) },
   { label: '账户', to: '/account', icon: (<User className="w-4 h-4" />) },
-  { label: '期权', to: '/options', icon: (<BadgeDollarSign className="w-4 h-4" />) },
+  // { label: '期权', to: '/options', icon: (<BadgeDollarSign className="w-4 h-4" />) },
   { label: '发现', to: '/discovery', icon: (<Compass className="w-4 h-4" />) },
 ]
 
@@ -53,7 +53,7 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
                 className={({ isActive }) =>
                   cn(
                     "flex flex-col items-center space-y-1 p-2 rounded-lg cursor-pointer transition-colors",
-                    isActive ? "bg-[#454C56] text-white" : "text-[#9FA0A9] hover:text-white hover:bg-[#454C56]/50",
+                    isActive ? "bg-[#454C56] text-white" : "text-[#9FA0A9] hover:hover:bg-[#454C56]/50",
                   )
                 }
               >

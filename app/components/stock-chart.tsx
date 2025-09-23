@@ -151,7 +151,7 @@ export function StockChart({ symbol }: StockChartProps) {
               className={`px-3 py-1 text-sm rounded transition-colors ${
                 timeframe === tf
                   ? 'bg-[#FF5C00] text-white'
-                  : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                  : 'text-gray-400 hover:hover:bg-gray-700'
               }`}
             >
               {tf}

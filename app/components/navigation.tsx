@@ -1,6 +1,4 @@
 import { Button } from "./ui/button"
-import { ModeToggle as ThemeSwitcher } from "./mode-toggle"
-import React from "react";
 
 interface NavigationProps {
   currentPage: string;
@@ -35,8 +33,6 @@ export function Navigation({ currentPage, onPageChange }: NavigationProps) {
           ))}
         </div>
         <div className="ml-auto">
-          {/* 主题切换 */}
-          <ThemeSwitcher />
         </div>
       </div>
     </nav>

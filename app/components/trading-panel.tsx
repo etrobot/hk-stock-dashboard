@@ -1,11 +1,6 @@
-'use client'
-
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Menu, ArrowDown } from 'lucide-react'
 import { Card } from './ui/card'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
-import { Label } from './ui/label'
 import { Badge } from './ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
 
@@ -56,9 +51,9 @@ export function TradingPanel({ stockData }: TradingPanelProps) {
   const changeColor = isPositive ? 'text-[#16BA71]' : 'text-[#F44345]';
 
   return (
-    <div className="w-[274px] h-full bg-[#1A1D29] border-l border-gray-800 overflow-y-auto">
+    <div className="w-[274px] h-full border-l border-gray-800 overflow-y-auto">
       {/* 主要股票信息卡片 */}
-      <Card className="bg-[#1A1D29] border-gray-800 p-6">
+      <Card className="border-gray-800 p-6">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             {/* 股票基本信息 */}
@@ -68,10 +63,10 @@ export function TradingPanel({ stockData }: TradingPanelProps) {
                   <h1 className="text-lg font-medium text-white">
                     {stockData.symbol}
                   </h1>
-                  <span className="text-white text-sm">{stockData.name}</span>
+                  <span className="text-sm">{stockData.name}</span>
                   <div className="flex items-center space-x-1">
                     <div className="w-3 h-2.5 bg-blue-600 rounded-sm flex items-center justify-center">
-                      <span className="text-[8px] text-white font-bold">$</span>
+                      <span className="text-[8px] font-bold">$</span>
                     </div>
                     <Badge variant="outline" className="border-[#874EFE] bg-[#874EFE]/20 text-[#874EFE] text-[7px] px-1">
                       L2
@@ -128,32 +123,32 @@ export function TradingPanel({ stockData }: TradingPanelProps) {
             </div>
             <div>
               <div className="text-sm text-gray-400 text-right">成交量</div>
-              <div className="text-sm font-semibold text-white text-right">{stockData.volume}</div>
+              <div className="text-sm font-semibold text-right">{stockData.volume}</div>
             </div>
             <div>
               <div className="text-sm text-gray-400 text-right">成交额</div>
-              <div className="text-sm font-semibold text-white text-right">{stockData.turnover}</div>
+              <div className="text-sm font-semibold text-right">{stockData.turnover}</div>
             </div>
           </div>
         </div>
       </Card>
       <Tabs defaultValue="trade" className="h-[calc(100%-300px)]">
         {/* 标签头部 */}
-        <div className="flex items-center justify-center bg-[#11131B] py-2 border-b border-gray-800">
+        <div className="flex items-center justify-center py-2 border-b border-gray-800">
           <div className="flex items-center space-x-8">
             <div className="flex items-center space-x-2">
-              <span className="text-white text-sm font-medium border-b-2 border-[#FF5C00] pb-1">行情</span>
+              <span className="text-sm font-medium border-b-2 border-[#FF5C00] pb-1">行情</span>
             </div>
             <span className="text-gray-400 text-sm cursor-pointer hover:text-white">分析</span>
             <span className="text-gray-400 text-sm cursor-pointer hover:text-white">资讯</span>
           </div>
         </div>
 
-        <TabsList className="grid w-full grid-cols-2 bg-[#11131B] m-4 mb-0">
-          <TabsTrigger value="trade" className="text-white data-[state=active]:bg-[#FF5C00]">
+        <TabsList className="grid w-full grid-cols-2 m-4 mb-0">
+          <TabsTrigger value="trade" className="data-[state=active]:bg-[#FF5C00]">
             买盘
           </TabsTrigger>
-          <TabsTrigger value="positions" className="text-white data-[state=active]:bg-[#FF5C00]">
+          <TabsTrigger value="positions" className="data-[state=active]:bg-[#FF5C00]">
             卖盘
           </TabsTrigger>
         </TabsList>
@@ -162,8 +157,8 @@ export function TradingPanel({ stockData }: TradingPanelProps) {
           {/* 买卖盘比例 */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-white text-sm font-medium">买盘</span>
-              <span className="text-white text-sm font-medium">卖盘</span>
+              <span className="text-sm font-medium">买盘</span>
+              <span className="text-sm font-medium">卖盘</span>
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-[#16BA71]">10.00%</span>
@@ -180,7 +175,7 @@ export function TradingPanel({ stockData }: TradingPanelProps) {
           {/* 订单簿 */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-white text-sm font-medium">深度摆盘</span>
+              <span className="text-sm font-medium">深度摆盘</span>
               <div className="text-gray-400">
                 <Menu size={10} />
               </div>
@@ -205,14 +200,14 @@ export function TradingPanel({ stockData }: TradingPanelProps) {
                 }`}>
                   <span className="text-white">BLUE</span>
                   <span className="text-[#F44345] text-right">{order.price}</span>
-                  <span className="text-white text-right">{order.quantity}</span>
+                  <span className="text-right">{order.quantity}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* 60档盘口信息 */}
-          <div className="text-white text-sm font-medium">
+          <div className="text-sm font-medium">
             60档盘口信息
           </div>
         </TabsContent>
@@ -268,7 +263,7 @@ export function TradingPanel({ stockData }: TradingPanelProps) {
             {/* 持仓汇总 */}
             <Card className="bg-[#11131B] border-gray-600 p-3">
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between text-white font-semibold">
+                <div className="flex justify-between font-semibold">
                   <span>总持仓市值:</span>
                   <span>$74,291.50</span>
                 </div>

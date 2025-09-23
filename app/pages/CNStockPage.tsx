@@ -30,6 +30,8 @@ export default function CNStockPage({ onStockClick }: CNStockPageProps) {
         </Button>
       </div>
       <div className="container mx-auto p-4 space-y-6">
+      <MarketIndices indices={cnIndices} />
+
         <div className="flex gap-6">
           <div className="flex-1 min-w-0">
             <StockTables
@@ -45,7 +47,6 @@ export default function CNStockPage({ onStockClick }: CNStockPageProps) {
           </div>
         </div>
       </div>
-      <MarketIndices indices={cnIndices} />
 
     </>
   );

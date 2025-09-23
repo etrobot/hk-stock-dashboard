@@ -21,9 +21,9 @@ export function StockPriceHeader({ stockData }: StockPriceHeaderProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
-            <h1 className="text-white text-sm font-medium">{stockData.symbol}</h1>
-            <span className="text-white text-sm">{stockData.name}</span>
-            <span className="text-white text-sm">{stockData.price.toFixed(3)}</span>
+            <h1 className="text-sm font-medium">{stockData.symbol}</h1>
+            <span className="text-sm">{stockData.name}</span>
+            <span className="text-sm">{stockData.price.toFixed(3)}</span>
             <span className={`text-sm ${changeColor}`}>
               {isPositive ? '+' : ''}{stockData.change.toFixed(3)}
             </span>
@@ -37,7 +37,7 @@ export function StockPriceHeader({ stockData }: StockPriceHeaderProps) {
       {/* 图表/期权/ETF等标签 */}
       <div className="flex items-center space-x-6">
         <div className="flex items-center space-x-2">
-          <span className="text-white text-sm font-medium bg-transparent border-b-2 border-[#FF5C00] pb-1">图表</span>
+          <span className="text-sm font-medium bg-transparent border-b-2 border-[#FF5C00] pb-1">图表</span>
         </div>
         <span className="text-gray-400 text-sm cursor-pointer hover:text-white">期权</span>
         <div className="flex items-center space-x-1">
