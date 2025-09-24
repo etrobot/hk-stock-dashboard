@@ -480,7 +480,6 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
               {/* 状态选择 */}
               <div className="flex gap-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-[#FF5C00] rounded"></div>
                   <span className="text-xs text-white">监控中</span>
                 </div>
                 <div className="flex items-center gap-2">
