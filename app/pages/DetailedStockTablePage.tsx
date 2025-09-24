@@ -3,7 +3,7 @@ import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
 import { DetailedStock } from "../types/market";
-import { ArrowLeft, ChevronUp, ChevronDown, List, Grid3X3 } from "lucide-react";
+import { ChevronUp, ChevronDown, List, Grid3X3 } from "lucide-react";
 import { mockStockGridData } from "../data/mock-grid-data";
 import { mockDetailedStocks } from "../data/mock-detailed-stocks";
 
@@ -260,7 +260,7 @@ function StockGridItem({ stock, selectedPeriod }: { stock: any, selectedPeriod: 
   );
 }
 
-export function DetailedStockTablePage({ title }: DetailedStockTablePageProps) {
+export function DetailedStockTablePage({ title, onBack }: DetailedStockTablePageProps) {
   const [sortField, setSortField] = useState<SortField>('percentage');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
@@ -315,8 +315,20 @@ export function DetailedStockTablePage({ title }: DetailedStockTablePageProps) {
   return (
     <div className="flex flex-col h-screen">
       <div className="flex-shrink-0 p-6 pb-0">
-        <div className="mb-6 flex items-center">
-          {/* View Mode Tabs */}
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold">{title}</h1>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={onBack}
+              className="ml-4"
+            >
+              返回
+            </Button>
+          </div>
+          <div className="flex items-center">
+            {/* View Mode Tabs */}
           <div className="flex items-center gap-2">
             <Button
               variant={viewMode === 'list' ? 'default' : 'ghost'}
@@ -342,79 +354,79 @@ export function DetailedStockTablePage({ title }: DetailedStockTablePageProps) {
 
       <div className="flex-1 min-h-0 px-6 pb-6">
         {viewMode === 'list' ? (
-            <div className="flex-1 overflow-auto p-6">
-              <div className="overflow-x-auto" style={{ minWidth: '100%' }}>
-                <Table style={{ minWidth: '1400px' }}>
-                  <TableHeader>
-                    <TableRow className="border-border">
-                      <SortableHeader field="name">名称代码</SortableHeader>
-                      <SortableHeader field="price">价格</SortableHeader>
-                      <SortableHeader field="percentage">涨跌幅</SortableHeader>
-                      <SortableHeader field="fiveMinPercentage">5分钟涨跌幅</SortableHeader>
-                      <SortableHeader field="sixtyDayPercentage">60日涨跌幅</SortableHeader>
-                      <SortableHeader field="ytdPercentage">年初至今</SortableHeader>
-                      <SortableHeader field="change">涨跌额</SortableHeader>
-                      <SortableHeader field="listingDate">上市日期</SortableHeader>
-                      <SortableHeader field="firstDayGain">首日涨幅</SortableHeader>
-                      <SortableHeader field="cumulativeGain">累计涨幅</SortableHeader>
-                      <SortableHeader field="volume">成交量</SortableHeader>
-                      <SortableHeader field="turnover">成交额</SortableHeader>
-                      <SortableHeader field="turnoverRate">换手率</SortableHeader>
-                      <SortableHeader field="pe">市盈率</SortableHeader>
-                      <SortableHeader field="amplitude">振幅</SortableHeader>
-                      <SortableHeader field="marketCap">市值</SortableHeader>
-                      <SortableHeader field="volumeRatio">量比</SortableHeader>
-                      <SortableHeader field="bidAskRatio">委比</SortableHeader>
+          <div className="flex-1 overflow-auto p-6">
+            <div className="overflow-x-auto" style={{ minWidth: '100%' }}>
+              <Table style={{ minWidth: '1400px' }}>
+                <TableHeader>
+                  <TableRow className="border-border">
+                    <SortableHeader field="name">名称代码</SortableHeader>
+                    <SortableHeader field="price">价格</SortableHeader>
+                    <SortableHeader field="percentage">涨跌幅</SortableHeader>
+                    <SortableHeader field="fiveMinPercentage">5分钟涨跌幅</SortableHeader>
+                    <SortableHeader field="sixtyDayPercentage">60日涨跌幅</SortableHeader>
+                    <SortableHeader field="ytdPercentage">年初至今</SortableHeader>
+                    <SortableHeader field="change">涨跌额</SortableHeader>
+                    <SortableHeader field="listingDate">上市日期</SortableHeader>
+                    <SortableHeader field="firstDayGain">首日涨幅</SortableHeader>
+                    <SortableHeader field="cumulativeGain">累计涨幅</SortableHeader>
+                    <SortableHeader field="volume">成交量</SortableHeader>
+                    <SortableHeader field="turnover">成交额</SortableHeader>
+                    <SortableHeader field="turnoverRate">换手率</SortableHeader>
+                    <SortableHeader field="pe">市盈率</SortableHeader>
+                    <SortableHeader field="amplitude">振幅</SortableHeader>
+                    <SortableHeader field="marketCap">市值</SortableHeader>
+                    <SortableHeader field="volumeRatio">量比</SortableHeader>
+                    <SortableHeader field="bidAskRatio">委比</SortableHeader>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sortedStocks.map((stock, index) => (
+                    <TableRow key={index} className="border-border hover:bg-muted/50">
+                      <TableCell className="text-foreground whitespace-nowrap">
+                        <div className="flex flex-col">
+                          <span className="font-medium">{stock.name}</span>
+                          <span className="text-sm text-muted-foreground font-mono">{stock.code}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-foreground font-mono whitespace-nowrap">{stock.price}</TableCell>
+                      <TableCell className={`font-semibold whitespace-nowrap ${getColorClass(stock.percentage)}`}>
+                        {stock.percentage}
+                      </TableCell>
+                      <TableCell className={`whitespace-nowrap ${getColorClass(stock.fiveMinPercentage)}`}>
+                        {stock.fiveMinPercentage}
+                      </TableCell>
+                      <TableCell className={`whitespace-nowrap ${getColorClass(stock.sixtyDayPercentage)}`}>
+                        {stock.sixtyDayPercentage}
+                      </TableCell>
+                      <TableCell className={`whitespace-nowrap ${getColorClass(stock.ytdPercentage)}`}>
+                        {stock.ytdPercentage}
+                      </TableCell>
+                      <TableCell className={`whitespace-nowrap ${getColorClass(stock.change)}`}>
+                        {stock.change}
+                      </TableCell>
+                      <TableCell className="text-foreground whitespace-nowrap">{stock.listingDate}</TableCell>
+                      <TableCell className={`whitespace-nowrap ${getColorClass(stock.firstDayGain)}`}>
+                        {stock.firstDayGain}
+                      </TableCell>
+                      <TableCell className={`whitespace-nowrap ${getColorClass(stock.cumulativeGain)}`}>
+                        {stock.cumulativeGain}
+                      </TableCell>
+                      <TableCell className="text-foreground whitespace-nowrap">{stock.volume}</TableCell>
+                      <TableCell className="text-foreground whitespace-nowrap">{stock.turnover}</TableCell>
+                      <TableCell className="text-foreground whitespace-nowrap">{stock.turnoverRate}</TableCell>
+                      <TableCell className="text-foreground whitespace-nowrap">{stock.pe}</TableCell>
+                      <TableCell className="text-foreground whitespace-nowrap">{stock.amplitude}</TableCell>
+                      <TableCell className="text-foreground whitespace-nowrap">{stock.marketCap}</TableCell>
+                      <TableCell className="text-foreground whitespace-nowrap">{stock.volumeRatio}</TableCell>
+                      <TableCell className={`whitespace-nowrap ${getColorClass(stock.bidAskRatio)}`}>
+                        {stock.bidAskRatio}
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {sortedStocks.map((stock, index) => (
-                      <TableRow key={index} className="border-border hover:bg-muted/50">
-                        <TableCell className="text-foreground whitespace-nowrap">
-                          <div className="flex flex-col">
-                            <span className="font-medium">{stock.name}</span>
-                            <span className="text-sm text-muted-foreground font-mono">{stock.code}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-foreground font-mono whitespace-nowrap">{stock.price}</TableCell>
-                        <TableCell className={`font-semibold whitespace-nowrap ${getColorClass(stock.percentage)}`}>
-                          {stock.percentage}
-                        </TableCell>
-                        <TableCell className={`whitespace-nowrap ${getColorClass(stock.fiveMinPercentage)}`}>
-                          {stock.fiveMinPercentage}
-                        </TableCell>
-                        <TableCell className={`whitespace-nowrap ${getColorClass(stock.sixtyDayPercentage)}`}>
-                          {stock.sixtyDayPercentage}
-                        </TableCell>
-                        <TableCell className={`whitespace-nowrap ${getColorClass(stock.ytdPercentage)}`}>
-                          {stock.ytdPercentage}
-                        </TableCell>
-                        <TableCell className={`whitespace-nowrap ${getColorClass(stock.change)}`}>
-                          {stock.change}
-                        </TableCell>
-                        <TableCell className="text-foreground whitespace-nowrap">{stock.listingDate}</TableCell>
-                        <TableCell className={`whitespace-nowrap ${getColorClass(stock.firstDayGain)}`}>
-                          {stock.firstDayGain}
-                        </TableCell>
-                        <TableCell className={`whitespace-nowrap ${getColorClass(stock.cumulativeGain)}`}>
-                          {stock.cumulativeGain}
-                        </TableCell>
-                        <TableCell className="text-foreground whitespace-nowrap">{stock.volume}</TableCell>
-                        <TableCell className="text-foreground whitespace-nowrap">{stock.turnover}</TableCell>
-                        <TableCell className="text-foreground whitespace-nowrap">{stock.turnoverRate}</TableCell>
-                        <TableCell className="text-foreground whitespace-nowrap">{stock.pe}</TableCell>
-                        <TableCell className="text-foreground whitespace-nowrap">{stock.amplitude}</TableCell>
-                        <TableCell className="text-foreground whitespace-nowrap">{stock.marketCap}</TableCell>
-                        <TableCell className="text-foreground whitespace-nowrap">{stock.volumeRatio}</TableCell>
-                        <TableCell className={`whitespace-nowrap ${getColorClass(stock.bidAskRatio)}`}>
-                          {stock.bidAskRatio}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
+          </div>
         ) : (
           <div className="h-full flex flex-col">
             {/* Sticky Period Selector Header */}
@@ -454,6 +466,7 @@ export function DetailedStockTablePage({ title }: DetailedStockTablePageProps) {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }
