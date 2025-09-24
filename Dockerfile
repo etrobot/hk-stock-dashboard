@@ -39,5 +39,5 @@ ENV HOST=0.0.0.0
 ENV PORT=3456
 
 # 启动静态文件服务器，配置 SPA 路由
-CMD ["npx", "serve", "-s", "dist", "-l", "3456"]
+CMD ["npx", "serve", "dist/app", "-s", "-l", "tcp://0.0.0.0:3456"]
 
