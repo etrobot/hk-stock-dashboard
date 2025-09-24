@@ -5,120 +5,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { DetailedStock } from "../types/market";
 import { ArrowLeft, ChevronUp, ChevronDown, List, Grid3X3 } from "lucide-react";
 import { mockStockGridData } from "../data/mock-grid-data";
+import { mockDetailedStocks } from "../data/mock-detailed-stocks";
 
 interface DetailedStockTablePageProps {
   title: string;
   onBack: () => void;
 }
-
-// Mock data based on the provided information
-const mockDetailedStocks: DetailedStock[] = [
-  {
-    name: "嘉宏教育",
-    code: "01935",
-    price: "1.540",
-    percentage: "+48.08%",
-    fiveMinPercentage: "+0.00%",
-    sixtyDayPercentage: "-54.71%",
-    ytdPercentage: "-45.39%",
-    change: "+0.500",
-    listingDate: "2019/06/18",
-    firstDayGain: "+10.00%",
-    cumulativeGain: "+2.67%",
-    volume: "133.40万股",
-    turnover: "183.43万",
-    turnoverRate: "0.08%",
-    pe: "6.18",
-    amplitude: "58.65%",
-    marketCap: "24.65亿",
-    volumeRatio: "0.55",
-    bidAskRatio: "-15.62%"
-  },
-  {
-    name: "宇华教育",
-    code: "06169",
-    price: "1.360",
-    percentage: "+18.26%",
-    fiveMinPercentage: "+0.00%",
-    sixtyDayPercentage: "+18.26%",
-    ytdPercentage: "-51.25%",
-    change: "+0.210",
-    listingDate: "2017/02/28",
-    firstDayGain: "+1.95%",
-    cumulativeGain: "-33.66%",
-    volume: "1.29亿股",
-    turnover: "1.67亿",
-    turnoverRate: "3.59%",
-    pe: "4.93",
-    amplitude: "20.00%",
-    marketCap: "48.89亿",
-    volumeRatio: "5.29",
-    bidAskRatio: "41.85%"
-  },
-  {
-    name: "中汇集团",
-    code: "00382",
-    price: "2.820",
-    percentage: "+17.50%",
-    fiveMinPercentage: "+0.36%",
-    sixtyDayPercentage: "+29.95%",
-    ytdPercentage: "-37.78%",
-    change: "+0.420",
-    listingDate: "2019/07/16",
-    firstDayGain: "+0.70%",
-    cumulativeGain: "-1.05%",
-    volume: "910.08万股",
-    turnover: "2472.70万",
-    turnoverRate: "0.84%",
-    pe: "6.13",
-    amplitude: "21.25%",
-    marketCap: "30.52亿",
-    volumeRatio: "3.98",
-    bidAskRatio: "-6.35%"
-  },
-  {
-    name: "中教控股",
-    code: "00839",
-    price: "8.640",
-    percentage: "+17.23%",
-    fiveMinPercentage: "-0.69%",
-    sixtyDayPercentage: "+44.97%",
-    ytdPercentage: "-30.65%",
-    change: "+1.270",
-    listingDate: "2017/12/15",
-    firstDayGain: "-1.86%",
-    cumulativeGain: "+33.95%",
-    volume: "4588.46万股",
-    turnover: "3.94亿",
-    turnoverRate: "1.93%",
-    pe: "11.85",
-    amplitude: "26.05%",
-    marketCap: "205.90亿",
-    volumeRatio: "3.71",
-    bidAskRatio: "55.04%"
-  },
-  {
-    name: "希望教育",
-    code: "01765",
-    price: "0.840",
-    percentage: "+16.67%",
-    fiveMinPercentage: "+1.20%",
-    sixtyDayPercentage: "+35.48%",
-    ytdPercentage: "-42.47%",
-    change: "+0.120",
-    listingDate: "2018/08/03",
-    firstDayGain: "-2.60%",
-    cumulativeGain: "-56.25%",
-    volume: "4.33亿股",
-    turnover: "3.65亿",
-    turnoverRate: "5.39%",
-    pe: "9.23",
-    amplitude: "36.11%",
-    marketCap: "67.43亿",
-    volumeRatio: "6.73",
-    bidAskRatio: "17.72%"
-  }
-];
 
 function getColorClass(value: string): string {
   if (value.startsWith('+')) return 'text-chart-1';
@@ -368,7 +260,7 @@ function StockGridItem({ stock, selectedPeriod }: { stock: any, selectedPeriod: 
   );
 }
 
-export function DetailedStockTablePage({ title, onBack }: DetailedStockTablePageProps) {
+export function DetailedStockTablePage({ title }: DetailedStockTablePageProps) {
   const [sortField, setSortField] = useState<SortField>('percentage');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
@@ -423,19 +315,7 @@ export function DetailedStockTablePage({ title, onBack }: DetailedStockTablePage
   return (
     <div className="flex flex-col h-screen">
       <div className="flex-shrink-0 p-6 pb-0">
-        <div className="mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={onBack}
-              className="text-muted-foreground hover:text-foreground p-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </Button>
-            <h1 className="text-2xl font-bold text-foreground">{title}</h1>
-          </div>
-          
+        <div className="mb-6 flex items-center">
           {/* View Mode Tabs */}
           <div className="flex items-center gap-2">
             <Button
@@ -462,7 +342,6 @@ export function DetailedStockTablePage({ title, onBack }: DetailedStockTablePage
 
       <div className="flex-1 min-h-0 px-6 pb-6">
         {viewMode === 'list' ? (
-          <Card className="h-full bg-card border-border flex flex-col">
             <div className="flex-1 overflow-auto p-6">
               <div className="overflow-x-auto" style={{ minWidth: '100%' }}>
                 <Table style={{ minWidth: '1400px' }}>
@@ -536,7 +415,6 @@ export function DetailedStockTablePage({ title, onBack }: DetailedStockTablePage
                 </Table>
               </div>
             </div>
-          </Card>
         ) : (
           <div className="h-full flex flex-col">
             {/* Sticky Period Selector Header */}

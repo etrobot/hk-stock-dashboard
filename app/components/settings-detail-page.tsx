@@ -13,7 +13,6 @@ interface SettingsDetailPageProps {
 
 export function SettingsDetailPage({ isOpen, onClose, className }: SettingsDetailPageProps) {
   const [selectedLanguage, setSelectedLanguage] = useState('简体中文')
-  const [selectedMode, setSelectedMode] = useState('常规模式') // '常规模式' | '大屏模式'
   const [selectedColorScheme, setSelectedColorScheme] = useState('红涨绿跌') // '红涨绿跌' | '绿涨红跌'
   const [selectedTheme, setSelectedTheme] = useState('浅色') // '深色' | '浅色'
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
@@ -89,57 +88,6 @@ export function SettingsDetailPage({ isOpen, onClose, className }: SettingsDetai
                 ))}
               </div>
             )}
-          </div>
-        </div>
-
-        {/* Mode Switch Section */}
-        <div className="space-y-3">
-          <div className="text-[#DBDBE0] text-[12px] font-normal">模式切换</div>
-          <div className="flex space-x-3">
-            {/* Regular Mode */}
-            <div className="w-[100px] h-[72px] space-y-1">
-              <div 
-                className={cn(
-                  "w-full h-[51px] rounded-sm border-[1px] relative overflow-hidden cursor-pointer",
-                  selectedMode === '常规模式' 
-                    ? "border-white bg-white" 
-                    : "border-[#11131B] bg-[#11131B]"
-                )}
-                onClick={() => setSelectedMode('常规模式')}
-              >
-                {/* Grid pattern for regular mode */}
-                <div className="absolute inset-0 grid grid-cols-2 gap-0">
-                  <div className="bg-[#11131B]"></div>
-                  <div className="bg-[#11131B]"></div>
-                  <div className="bg-[#11131B]"></div>
-                  <div className="bg-[#11131B]"></div>
-                </div>
-              </div>
-              <div className="text-[#72737A] text-[10px] font-normal text-center">常规模式</div>
-            </div>
-
-            {/* Large Screen Mode */}
-            <div className="w-[100px] h-[72px] space-y-1">
-              <div 
-                className={cn(
-                  "w-full h-[51px] rounded-sm border-[1px] relative overflow-hidden cursor-pointer",
-                  selectedMode === '大屏模式' 
-                    ? "border-white bg-white" 
-                    : "border-[#11131B] bg-[#11131B]"
-                )}
-                onClick={() => setSelectedMode('大屏模式')}
-              >
-                {/* Different grid pattern for large screen mode */}
-                <div className="absolute inset-0 grid grid-cols-1 gap-0">
-                  <div className="bg-[#11131B] h-[31px]"></div>
-                  <div className="bg-[#11131B] flex">
-                    <div className="w-1/2 bg-[#11131B]"></div>
-                    <div className="w-1/2 bg-[#11131B]"></div>
-                  </div>
-                </div>
-              </div>
-              <div className="text-[#72737A] text-[10px] font-normal text-center">大屏模式</div>
-            </div>
           </div>
         </div>
 

@@ -1,8 +1,8 @@
 import { StockTables } from "../components/stock-tables"
 import { SectorHeatmap } from "../components/sector-heatmap"
-import { cryptoGainers, cryptoLosers, cryptoHotStocks, cryptoDeFiStocks } from '../data/mock-data'
+import { cryptoGainers as 加密货币涨幅榜, cryptoLosers as 加密货币跌幅榜, cryptoHotStocks as 加密货币热门币, cryptoDeFiStocks as 加密货币DeFi收益 } from '../data/mock-data'
 import { DetailedStockTablePage } from "./DetailedStockTablePage"
-import React, { useState } from "react"
+import { useState } from "react"
 
 interface CryptoPageProps {
   onStockClick?: (stock: any) => void;
@@ -34,10 +34,10 @@ export default function CryptoPage({ onStockClick }: CryptoPageProps) {
         <div className="flex gap-6">
           <div className="flex-1 min-w-0">
             <StockTables
-              gainers={cryptoGainers}
-              losers={cryptoLosers}
-              hotStocks={cryptoHotStocks}
-              dividendStocks={cryptoDeFiStocks}
+              gainers={加密货币涨幅榜}
+              losers={加密货币跌幅榜}
+              hotStocks={加密货币热门币}
+              dividendStocks={加密货币DeFi收益}
               dividendTitle="DeFi收益"
               onStockClick={onStockClick}
               onShowMore={handleShowMore}

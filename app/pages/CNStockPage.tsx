@@ -1,10 +1,10 @@
 import { MarketIndices } from "../components/market-indices"
 import { StockTables } from "../components/stock-tables"
 import { SectorHeatmap } from "../components/sector-heatmap"
-import { Button } from "../components/ui/button"
+
 import { cnIndices, cnGainers, cnLosers, cnHotStocks, cnDividendStocks } from '../data/mock-data'
 import { DetailedStockTablePage } from "./DetailedStockTablePage"
-import React, { useState } from "react"
+import { useState } from "react"
 
 interface CNStockPageProps {
   onStockClick?: (stock: any) => void;

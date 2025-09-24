@@ -190,6 +190,24 @@ export const usDividendStocks: DividendStock[] = [
   { name: "AT&T", code: "T", price: "$25.42", change: "+$0.18", percentage: "+0.71%", isPositive: true, dividend: "7.4%" }
 ];
 
+export const hkSectors: SectorData[] = [
+  { name: "科技", change: "+2.8%", percentage: "+2.8%", isPositive: true },
+  { name: "金融", change: "+1.2%", percentage: "+1.2%", isPositive: true },
+  { name: "地产", change: "-0.5%", percentage: "-0.5%", isPositive: false },
+  { name: "能源", change: "+3.1%", percentage: "+3.1%", isPositive: true },
+  { name: "医药", change: "+1.8%", percentage: "+1.8%", isPositive: true },
+  { name: "消费", change: "-1.2%", percentage: "-1.2%", isPositive: false }
+];
+
+export const usSectors: SectorData[] = [
+  { name: "科技", change: "+2.5%", percentage: "+2.5%", isPositive: true },
+  { name: "金融", change: "+1.8%", percentage: "+1.8%", isPositive: true },
+  { name: "医疗", change: "+0.9%", percentage: "+0.9%", isPositive: true },
+  { name: "能源", change: "-0.7%", percentage: "-0.7%", isPositive: false },
+  { name: "消费", change: "+1.2%", percentage: "+1.2%", isPositive: true },
+  { name: "工业", change: "+0.5%", percentage: "+0.5%", isPositive: true }
+];
+
 export const hkIndexDetail: IndexDetail = {
   code: "800000",
   name: "恒生指数",
@@ -273,35 +291,35 @@ export const cryptoIndices: MarketIndex[] = [
 ];
 
 export const cryptoGainers: Stock[] = [
-  { name: "Solana", code: "SOL", price: "$89.45", change: "+$12.34", percentage: "+16.02%", isPositive: true },
-  { name: "Cardano", code: "ADA", price: "$0.4567", change: "+$0.0678", percentage: "+17.45%", isPositive: true },
-  { name: "Polygon", code: "MATIC", price: "$0.8901", change: "+$0.1234", percentage: "+16.12%", isPositive: true },
-  { name: "Chainlink", code: "LINK", price: "$14.56", change: "+$1.89", percentage: "+14.89%", isPositive: true },
-  { name: "Uniswap", code: "UNI", price: "$6.78", change: "+$0.89", percentage: "+15.12%", isPositive: true }
+  { name: "索拉纳", code: "SOL", price: "$89.45", change: "+$12.34", percentage: "+16.02%", isPositive: true },
+  { name: "卡尔达诺", code: "ADA", price: "$0.4567", change: "+$0.0678", percentage: "+17.45%", isPositive: true },
+  { name: "多边形", code: "MATIC", price: "$0.8901", change: "+$0.1234", percentage: "+16.12%", isPositive: true },
+  { name: "链环", code: "LINK", price: "$14.56", change: "+$1.89", percentage: "+14.89%", isPositive: true },
+  { name: "去中心化交易所", code: "UNI", price: "$6.78", change: "+$0.89", percentage: "+15.12%", isPositive: true }
 ];
 
 export const cryptoLosers: Stock[] = [
-  { name: "Dogecoin", code: "DOGE", price: "$0.0789", change: "-$0.0123", percentage: "-13.45%", isPositive: false },
-  { name: "Shiba Inu", code: "SHIB", price: "$0.000009", change: "-$0.000002", percentage: "-18.18%", isPositive: false },
-  { name: "Avalanche", code: "AVAX", price: "$18.45", change: "-$2.34", percentage: "-11.25%", isPositive: false },
-  { name: "Polkadot", code: "DOT", price: "$5.67", change: "-$0.78", percentage: "-12.10%", isPositive: false },
-  { name: "Litecoin", code: "LTC", price: "$72.34", change: "-$8.90", percentage: "-10.95%", isPositive: false }
+  { name: "狗狗币", code: "DOGE", price: "$0.0789", change: "-$0.0123", percentage: "-13.45%", isPositive: false },
+  { name: "柴犬币", code: "SHIB", price: "$0.000009", change: "-$0.000002", percentage: "-18.18%", isPositive: false },
+  { name: "雪崩协议", code: "AVAX", price: "$18.45", change: "-$2.34", percentage: "-11.25%", isPositive: false },
+  { name: "波卡", code: "DOT", price: "$5.67", change: "-$0.78", percentage: "-12.10%", isPositive: false },
+  { name: "莱特币", code: "LTC", price: "$72.34", change: "-$8.90", percentage: "-10.95%", isPositive: false }
 ];
 
 export const cryptoHotStocks: Stock[] = [
-  { name: "Bitcoin", code: "BTC", price: "$43,256.78", change: "+$1,234.56", percentage: "+2.94%", isPositive: true },
-  { name: "Ethereum", code: "ETH", price: "$2,678.90", change: "+$89.45", percentage: "+3.46%", isPositive: true },
-  { name: "Binance Coin", code: "BNB", price: "$312.45", change: "-$8.67", percentage: "-2.70%", isPositive: false },
-  { name: "XRP", code: "XRP", price: "$0.6234", change: "+$0.0234", percentage: "+3.90%", isPositive: true },
-  { name: "Tether", code: "USDT", price: "$1.0001", change: "+$0.0001", percentage: "+0.01%", isPositive: true }
+  { name: "比特币", code: "BTC", price: "$43,256.78", change: "+$1,234.56", percentage: "+2.94%", isPositive: true },
+  { name: "以太坊", code: "ETH", price: "$2,678.90", change: "+$89.45", percentage: "+3.46%", isPositive: true },
+  { name: "币安币", code: "BNB", price: "$312.45", change: "-$8.67", percentage: "-2.70%", isPositive: false },
+  { name: "瑞波币", code: "XRP", price: "$0.6234", change: "+$0.0234", percentage: "+3.90%", isPositive: true },
+  { name: "泰达币", code: "USDT", price: "$1.0001", change: "+$0.0001", percentage: "+0.01%", isPositive: true }
 ];
 
 export const cryptoDeFiStocks: DividendStock[] = [
-  { name: "Compound", code: "COMP", price: "$56.78", change: "+$4.56", percentage: "+8.74%", isPositive: true, dividend: "5.2%" },
-  { name: "Aave", code: "AAVE", price: "$89.12", change: "+$6.78", percentage: "+8.24%", isPositive: true, dividend: "4.8%" },
+  { name: "复合协议", code: "COMP", price: "$56.78", change: "+$4.56", percentage: "+8.74%", isPositive: true, dividend: "5.2%" },
+  { name: "Aave借贷", code: "AAVE", price: "$89.12", change: "+$6.78", percentage: "+8.24%", isPositive: true, dividend: "4.8%" },
   { name: "MakerDAO", code: "MKR", price: "$1,234.56", change: "+$89.12", percentage: "+7.78%", isPositive: true, dividend: "6.1%" },
-  { name: "Yearn Finance", code: "YFI", price: "$6,789.01", change: "+$456.78", percentage: "+7.22%", isPositive: true, dividend: "8.9%" },
-  { name: "Curve DAO", code: "CRV", price: "$0.89", change: "+$0.06", percentage: "+7.23%", isPositive: true, dividend: "12.5%" }
+  { name: "Yearn金融", code: "YFI", price: "$6,789.01", change: "+$456.78", percentage: "+7.22%", isPositive: true, dividend: "8.9%" },
+  { name: "曲线DAO", code: "CRV", price: "$0.89", change: "+$0.06", percentage: "+7.23%", isPositive: true, dividend: "12.5%" }
 ];
 
 export const cryptoIndexDetail: IndexDetail = {
@@ -320,3 +338,40 @@ export const cryptoIndexDetail: IndexDetail = {
   market: "加密货币",
   status: "24小时交易 UTC 14:30:25"
 };
+
+export interface NewStock {
+  code: string;
+  name: string;
+  ipoPrice: string;
+  lotSize: number;
+  minSubscription: string;
+}
+
+export interface ListedNewStock {
+  code: string;
+  name: string;
+  latestPrice: string;
+  firstDayChange: string;
+  darkMarketChange: string;
+}
+
+export const upcomingStocks: NewStock[] = [
+  { code: "44078", name: "政府银债二...", ipoPrice: "100HKD", lotSize: 100, minSubscription: "10000.00HKD" },
+  { code: "02259", name: "紫金黄金国...", ipoPrice: "71.590HKD", lotSize: 100, minSubscription: "7231.19HKD" },
+  { code: "02583", name: "西普尼", ipoPrice: "27.000~29.600HKD", lotSize: 100, minSubscription: "2989.85HKD" },
+  { code: "02889", name: "博泰车联", ipoPrice: "102.230HKD", lotSize: 20, minSubscription: "2065.23HKD" },
+  { code: "09973", name: "奇瑞汽车", ipoPrice: "27.750~30.750HKD", lotSize: 100, minSubscription: "3106.00HKD" }
+];
+
+export const listedNewStocks: ListedNewStock[] = [
+  { code: "06090", name: "不同集团", latestPrice: "99.000", firstDayChange: "+43.96%", darkMarketChange: "+38.600" },
+  { code: "02595", name: "劲方医药-B", latestPrice: "40.640", firstDayChange: "+106.47%", darkMarketChange: "+22.450" },
+  { code: "02656", name: "健康160", latestPrice: "28.500", firstDayChange: "+137.34%", darkMarketChange: "+17.010" },
+  { code: "02525", name: "禾赛-W", latestPrice: "232.800", firstDayChange: "+9.96%", darkMarketChange: "+15.400" },
+  { code: "09477", name: "平安东西精选-U", latestPrice: "2.076", firstDayChange: "0.00%", darkMarketChange: "0.000" },
+  { code: "09406", name: "平安科技精选-U", latestPrice: "2.216", firstDayChange: "0.00%", darkMarketChange: "0.000" },
+  { code: "03477", name: "平安东西精选", latestPrice: "16.140", firstDayChange: "0.00%", darkMarketChange: "0.000" },
+  { code: "03406", name: "平安科技精选", latestPrice: "17.230", firstDayChange: "0.00%", darkMarketChange: "0.000" },
+  { code: "02543", name: "大行科工", latestPrice: "59.550", firstDayChange: "+14.95%", darkMarketChange: "+29.200" },
+  { code: "02580", name: "奥克斯电气", latestPrice: "16.200", firstDayChange: "-5.40%", darkMarketChange: "-0.740" }
+];

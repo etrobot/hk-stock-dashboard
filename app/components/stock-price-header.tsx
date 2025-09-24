@@ -1,10 +1,6 @@
 'use client'
 
-import React from 'react'
-import { Card } from './ui/card'
-import { Badge } from './ui/badge'
-import { ArrowDown } from 'lucide-react'
-import { type StockData } from '../mockStockData'
+import { type StockData } from '../data/mockStockData'
 
 interface StockPriceHeaderProps {
   stockData: StockData
@@ -13,7 +9,6 @@ interface StockPriceHeaderProps {
 export function StockPriceHeader({ stockData }: StockPriceHeaderProps) {
   const isPositive = stockData.change >= 0
   const changeColor = isPositive ? 'text-[#16BA71]' : 'text-[#F44345]'
-  const bgColor = isPositive ? 'bg-[#16BA71]/10' : 'bg-[#F44345]/10'
 
   return (
     <div className="space-y-4">

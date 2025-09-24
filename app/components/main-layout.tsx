@@ -6,7 +6,7 @@ import App from '../App'
 import AccountPage from '../pages/AccountPage'
 import { Button } from './ui/button'
 import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip'
-import { History, Home, ArrowLeft, ArrowRight, Search } from 'lucide-react'
+import { Home, ArrowLeft, ArrowRight, Search } from 'lucide-react'
 import { toast } from '../hooks/use-toast'
 import { ThemeProvider } from './theme-provider'
 import { Toaster } from './ui/toaster'
@@ -44,9 +44,9 @@ export function MainLayout() {
     }
   }
 
-  const handleHistory = () => {
-    toast({ title: '历史', description: '历史功能开发中…' })
-  }
+  // const handleHistory = () => {
+  //   toast({ title: '历史', description: '历史功能开发中…' })
+  // }
 
   const handleSearch = () => {
     toast({ title: '搜索', description: '搜索功能开发中…' })

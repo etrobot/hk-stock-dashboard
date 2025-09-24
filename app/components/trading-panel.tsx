@@ -3,49 +3,35 @@ import { Menu, ArrowDown } from 'lucide-react'
 import { Card } from './ui/card'
 import { Badge } from './ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'
-
-interface StockData {
-  symbol: string
-  name: string
-  price: number
-  change: number
-  changePercent: number
-  volume: string
-  marketCap: string
-  pe: string
-}
+import { StockData } from '../data/mockStockData'
 
 interface TradingPanelProps {
   stockData: StockData
 }
 
 export function TradingPanel({ stockData }: TradingPanelProps) {
-  const [orderType, setOrderType] = useState('limit')
-  const [side, setSide] = useState<'buy' | 'sell'>('buy')
-  const [quantity, setQuantity] = useState('')
-  const [price, setPrice] = useState(stockData.price.toString())
   const [positions] = useState([
     { symbol: 'AAPL', quantity: 100, avgPrice: 210.50, currentPrice: 212.41, pnl: 191 },
     { symbol: 'MSFT', quantity: 50, avgPrice: 415.20, currentPrice: 418.75, pnl: 177.5 },
     { symbol: 'GOOGL', quantity: 25, avgPrice: 2750.30, currentPrice: 2735.80, pnl: -362.5 }
   ])
 
-  const handleSubmitOrder = () => {
-    console.log('提交订单:', {
-      symbol: stockData.symbol,
-      side,
-      orderType,
-      quantity: parseFloat(quantity),
-      price: parseFloat(price)
-    })
-    // 这里会调用实际的交易API
-  }
+  // const handleSubmitOrder = () => {
+  //   console.log('提交订单:', {
+  //     symbol: stockData.symbol,
+  //     side,
+  //     orderType,
+  //     quantity: parseFloat(quantity),
+  //     price: parseFloat(price)
+  //   })
+  //   // 这里会调用实际的交易API
+  // }
 
-  const calculateTotal = () => {
-    const qty = parseFloat(quantity) || 0
-    const prc = parseFloat(price) || 0
-    return (qty * prc).toFixed(2)
-  }
+  // const calculateTotal = () => {
+  //   const qty = parseFloat(quantity) || 0
+  //   const prc = parseFloat(price) || 0
+  //   return (qty * prc).toFixed(2)
+  // }
 
   const isPositive = stockData.change >= 0;
   const changeColor = isPositive ? 'text-[#16BA71]' : 'text-[#F44345]';

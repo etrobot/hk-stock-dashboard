@@ -88,10 +88,9 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
         <div className="flex items-center space-x-2">
           <div className="w-[30px] h-[30px] rounded-full bg-[#D8D8D8] border border-gray-500 flex items-center justify-center overflow-hidden">
             <div
-              className="w-[60px] h-[35px] bg-cover bg-center"
+              className="w-full h-full bg-cover bg-center"
               style={{
-                backgroundImage: 'url("https://image-resource.mastergo.com/47299612875115/171703047671075/c0e35759dfa4625741d469d72017f9c0.png")',
-                transform: 'translate(-21.82px, -4.69px)'
+                backgroundImage: 'url("https://api.dicebear.com/7.x/avataaars/svg?seed=user&backgroundColor=b6e3f4")'
               }}
             />
           </div>

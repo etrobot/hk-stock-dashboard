@@ -39,7 +39,7 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
             <div
               className="w-full h-full rounded-full bg-cover bg-center"
               style={{
-                backgroundImage: 'url("https://image-resource.mastergo.com/47299612875115/171703047671075/c0e35759dfa4625741d469d72017f9c0.png")'
+                backgroundImage: 'url("https://api.dicebear.com/7.x/avataaars/svg?seed=user&backgroundColor=b6e3f4")'
               }}
             />
           </button>

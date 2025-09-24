@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { X, ChevronDown, Info } from 'lucide-react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Switch } from './ui/switch'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog'
+import { Dialog, DialogContent, DialogHeader } from './ui/dialog'
 import { Badge } from './ui/badge'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
 
@@ -488,12 +488,6 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-[#72737A]">失效</span>
                 </div>
-              </div>
-
-              {/* 延时行情提示 */}
-              <div className="bg-[#FF5C00] bg-opacity-10 rounded p-2 flex items-center justify-between">
-                <span className="text-xs text-[#FF5C00]">当前页面为延时行情，升级可以查看实时行情</span>
-                <ChevronDown className="w-3 h-3 text-[#FF5C00]" />
               </div>
 
               {/* 条件单列表 */}

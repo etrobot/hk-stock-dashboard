@@ -2,7 +2,7 @@ import { Card } from "./ui/card"
 import { Button } from "./ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 import { Stock, DividendStock } from "../types/market"
-import React from "react";
+
 
 interface StockTablesProps {
   gainers: Stock[];

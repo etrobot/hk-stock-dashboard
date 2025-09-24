@@ -2,6 +2,7 @@ import { useState } from "react"
 import { MarketIndices } from "./components/market-indices"
 import { StockTables } from "./components/stock-tables"
 import { SectorHeatmap } from "./components/sector-heatmap"
+import { ConceptSectors } from "./components/concept-sectors"
 import { Navigation } from "./components/navigation"
 import { IndexInfoPanel } from "./components/index-info-panel"
 import { Button } from "./components/ui/button"
@@ -10,11 +11,14 @@ import CNStockPage from "./pages/CNStockPage"
 import USStockPage from "./pages/USStockPage"
 import CryptoPage from "./pages/CryptoPage"
 import { DetailedStockTablePage } from "./pages/DetailedStockTablePage"
-import { hkIndices, hkGainers, hkLosers, hkHotStocks, hkIndexDetail, cnIndexDetail, usIndexDetail, cryptoIndexDetail } from './data/mock-data'
+import { NewStockCenter } from "./components/new-stock-center"
+import { hkIndices, hkGainers, hkLosers, hkHotStocks, hkIndexDetail, cnIndexDetail, usIndexDetail, cryptoIndexDetail, hkSectors, cnSectors } from './data/mock-data'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('hk')
   const [showDetailedTable, setShowDetailedTable] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<string>('首页')
+  const [selectedSector, setSelectedSector] = useState<string | null>(null)
 
   const navigate = useNavigate()
   const handleStockClick = (stock: any) => {
@@ -28,6 +32,18 @@ function App() {
 
   const handleBackToMain = () => {
     setShowDetailedTable(null);
+  };
+
+  const handleTabChange = (tabName: string) => {
+    setActiveTab(tabName);
+  };
+
+  const handleSectorSelect = (sectorName: string) => {
+    setSelectedSector(selectedSector === sectorName ? null : sectorName);
+  };
+
+  const getCurrentSectors = () => {
+    return currentPage === 'cn' ? cnSectors : hkSectors;
   };
 
   const renderPageContent = () => {
@@ -52,32 +68,66 @@ function App() {
         return (
           <>
             <div className="flex items-center space-x-6">
-              <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
+              <Button 
+                variant="ghost" 
+                className={`${activeTab === '首页' ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
+                onClick={() => handleTabChange('首页')}
+              >
                 首页
               </Button>
-              <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
+              <Button 
+                variant="ghost" 
+                className={`${activeTab === '概念板块' ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
+                onClick={() => handleTabChange('概念板块')}
+              >
                 概念板块
               </Button>
-              <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
+              <Button 
+                variant="ghost" 
+                className={`${activeTab === '新股中心' ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
+                onClick={() => handleTabChange('新股中心')}
+              >
                 新股中心
               </Button>
             </div>
             <div className="container mx-auto p-4 space-y-6">
-            <MarketIndices indices={hkIndices} />
+            {activeTab === '首页' && <MarketIndices indices={hkIndices} />}
 
               <div className="flex gap-6">
-                <div className="flex-1 min-w-0">
-                  <StockTables
-                    gainers={hkGainers}
-                    losers={hkLosers}
-                    hotStocks={hkHotStocks}
-                    onStockClick={handleStockClick}
-                    onShowMore={handleShowMore}
-                  />
-                </div>
-                <div className="w-80 flex-shrink-0">
-                  <SectorHeatmap />
-                </div>
+                {activeTab === '概念板块' ? (
+                  <>
+                    <ConceptSectors 
+                      sectors={getCurrentSectors()}
+                      selectedSector={selectedSector}
+                      onSectorSelect={handleSectorSelect}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <DetailedStockTablePage 
+                        title="概念板块"
+                        onBack={() => setActiveTab('首页')}
+                      />
+                    </div>
+                  </>
+                ) : activeTab === '新股中心' ? (
+                  <div className="flex-1 min-w-0">
+                    <NewStockCenter />
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex-1 min-w-0">
+                      <StockTables
+                        gainers={hkGainers}
+                        losers={hkLosers}
+                        hotStocks={hkHotStocks}
+                        onStockClick={handleStockClick}
+                        onShowMore={handleShowMore}
+                      />
+                    </div>
+                    <div className="w-80 flex-shrink-0">
+                      <SectorHeatmap />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </>

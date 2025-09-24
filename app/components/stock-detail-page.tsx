@@ -1,14 +1,11 @@
 'use client'
 
-import React from 'react'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { StockPriceHeader } from './stock-price-header'
 import { StockChart } from './stock-chart'
 import { TradingPanel } from './trading-panel'
-import { MarketIndices } from './market-indices'
-import { mockStockData, mockMarketIndices, type StockData } from '../data/mockStockData'
-import type { MarketIndex } from '../types/market'
+import { type StockData, mockStockData } from '../data/mockStockData'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { hkHotStocks } from '../data/mock-data'
 import { useNavigate } from 'react-router-dom'
@@ -25,33 +22,17 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
     }
   }, [params])
 
-  // Convert mock data to match MarketIndex interface
-  const [marketIndices] = useState<MarketIndex[]>(
-    mockMarketIndices.map(index => ({
-      name: index.name,
-      value: index.value,
-      change: index.change,
-      percentage: index.changePercent,
-      isPositive: index.isPositive
-    }))
-  )
 
   // Simulate real-time price updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setStockData(prev => {
-        const randomChange = (Math.random() - 0.5) * 0.1
-        const newPrice = prev.price + randomChange
-        const newChange = newPrice - prev.previousClose
-        const newChangePercent = (newChange / prev.previousClose) * 100
-
-        return {
-          ...prev,
-          price: Number(newPrice.toFixed(3)),
-          change: Number(newChange.toFixed(3)),
-          changePercent: Number(newChangePercent.toFixed(2))
-        }
-      })
+      setStockData(prev => ({
+        ...mockStockData,
+        ...prev,
+        price: Number((prev.price + (Math.random() - 0.5) * 0.1).toFixed(3)),
+        change: Number((prev.price + (Math.random() - 0.5) * 0.1 - prev.previousClose).toFixed(3)),
+        changePercent: Number((((prev.price + (Math.random() - 0.5) * 0.1 - prev.previousClose) / prev.previousClose) * 100).toFixed(2))
+      }))
     }, 3000)
 
     return () => clearInterval(interval)
