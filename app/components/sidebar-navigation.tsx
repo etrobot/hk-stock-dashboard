@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { cn } from '../lib/utils'
-import { Star, BarChart3, User, Compass, SlidersHorizontal } from 'lucide-react'
+import { Star, BarChart3, User, Compass, SlidersHorizontal, MessageSquare, Users } from 'lucide-react'
 import { DropdownMenu } from './dropdown-menu-component'
 
 interface NavigationItem {
@@ -18,6 +18,8 @@ const navigationItems: NavigationItem[] = [
   { label: '账户', to: '/account', icon: (<User className="w-4 h-4" />) },
   // { label: '期权', to: '/options', icon: (<BadgeDollarSign className="w-4 h-4" />) },
   { label: '发现', to: '/discovery', icon: (<Compass className="w-4 h-4" />) },
+  { label: '消息', to: '/messages', icon: (<MessageSquare className="w-4 h-4" />) },
+  { label: '社区', to: '/community', icon: (<Users className="w-4 h-4" />) },
 ]
 
 interface SidebarNavigationProps {

@@ -31,8 +31,12 @@ COPY --from=build /app/dist ./dist
 # 安装静态文件服务器
 RUN npm install -g serve
 
-# 暴露 3000 端口
-EXPOSE 3000
+# 暴露 3456 端口
+EXPOSE 3456
+
+# 设置环境变量
+ENV HOST=0.0.0.0
+ENV PORT=3456
 
 # 启动静态文件服务器
-CMD ["serve", "-s", "dist", "-l", "3000"]
+CMD ["serve", "-s", "dist", "-l", "3456"]
