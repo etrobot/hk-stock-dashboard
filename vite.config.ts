@@ -12,9 +12,12 @@ export default defineConfig({
   },
   server: {
     port: 3456,
-    host: 'localhost',
+    host: '0.0.0.0',
     open: true,
-    hmr: true,
+    hmr: {
+      host: 'localhost',
+      port: 3456
+    },
   },
   // 优化开发体验
   optimizeDeps: {
