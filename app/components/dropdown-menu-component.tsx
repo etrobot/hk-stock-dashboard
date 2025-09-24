@@ -74,15 +74,15 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
         className={className}
       />
       
-      {/* Main Dropdown Menu */}
-      <div 
-        ref={dropdownRef}
-        className={cn(
-          "absolute left-8 top-0 w-[167px] bg-[#222632] rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.6)] z-50",
-          showSettingsDetail && "hidden", // Hide main menu when settings detail is open
-          className
-        )}
-      >
+      {/* Main Dropdown Menu - Only show when settings is not open */}
+      {!showSettingsDetail && (
+        <div 
+          ref={dropdownRef}
+          className={cn(
+            "absolute left-8 top-0 w-[250px] bg-[#222632] rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.6)] z-50",
+            className
+          )}
+        >
       {/* User Profile Section */}
       <div className="p-2.5 border-b border-gray-600">
         <div className="flex items-center space-x-2">
@@ -96,28 +96,28 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
             />
           </div>
           <div className="flex-1">
-            <div className="text-white text-[10px] font-normal">Absjkdsdkjs</div>
-            <div className="text-[#72737A] text-[8px] font-normal">77676733</div>
+            <div className="text-white text-[15px] font-normal">Absjkdsdkjs</div>
+            <div className="text-[#72737A] text-[12px] font-normal">77676733</div>
           </div>
         </div>
         
         {/* Stats Section */}
         <div className="flex justify-between mt-2 text-center">
           <div className="flex-1">
-            <div className="text-white text-[8px] font-normal">0</div>
-            <div className="text-[#72737A] text-[8px] font-normal">动态</div>
+            <div className="text-white text-[12px] font-normal">0</div>
+            <div className="text-[#72737A] text-[12px] font-normal">动态</div>
           </div>
           <div className="flex-1">
-            <div className="text-white text-[8px] font-normal">0</div>
-            <div className="text-[#72737A] text-[8px] font-normal">关注</div>
+            <div className="text-white text-[12px] font-normal">0</div>
+            <div className="text-[#72737A] text-[12px] font-normal">关注</div>
           </div>
           <div className="flex-1">
-            <div className="text-white text-[8px] font-normal">0</div>
-            <div className="text-[#72737A] text-[8px] font-normal">粉丝</div>
+            <div className="text-white text-[12px] font-normal">0</div>
+            <div className="text-[#72737A] text-[12px] font-normal">粉丝</div>
           </div>
           <div className="flex-1">
-            <div className="text-white text-[8px] font-normal">0</div>
-            <div className="text-[#72737A] text-[8px] font-normal">收藏</div>
+            <div className="text-white text-[12px] font-normal">0</div>
+            <div className="text-[#72737A] text-[12px] font-normal">收藏</div>
           </div>
         </div>
       </div>
@@ -129,21 +129,22 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
             key={index}
             onClick={() => handleMenuItemClick(item)}
             className={cn(
-              "w-full px-8 py-2 text-left text-[8px] font-normal text-[#DBDBE0] hover:bg-[#222632] flex items-center justify-between transition-colors",
+              "w-full px-8 py-3 text-left text-[12px] font-normal text-[#DBDBE0] hover:bg-[#222632] flex items-center justify-between transition-colors",
               item.isActive && "bg-[#222632]"
             )}
           >
-            <div className="flex items-center space-x-2">
-              {item.icon}
+            <div className="flex items-center space-x-3">
+              {React.cloneElement(item.icon as React.ReactElement, { className: "w-5 h-5" })}
               <span>{item.label}</span>
             </div>
             {item.hasArrow && (
-              <ChevronRight className="w-1.5 h-1.5 text-[#DBDBE0]" />
+              <ChevronRight className="w-3 h-3 text-[#DBDBE0]" />
             )}
           </button>
         ))}
       </div>
-      </div>
+        </div>
+      )}
     </>
   )
 }

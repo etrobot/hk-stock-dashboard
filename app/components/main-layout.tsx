@@ -73,15 +73,6 @@ export function MainLayout() {
               <div className="absolute left-2 flex items-center gap-1.5">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="sm" aria-label="历史" onClick={handleHistory}>
-                      <History className="w-3.5 h-3.5" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>历史</TooltipContent>
-                </Tooltip>
-
-                <Tooltip>
-                  <TooltipTrigger asChild>
                     <Button variant="ghost" size="sm" aria-label="首页" onClick={handleGoHome}>
                       <Home className="w-3.5 h-3.5" />
                     </Button>
