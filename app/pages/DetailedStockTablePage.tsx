@@ -3,12 +3,11 @@ import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
 import { DetailedStock } from "../types/market";
-import { ChevronUp, ChevronDown, List, Grid3X3 } from "lucide-react";
+import { ChevronUp, ChevronDown, List, Grid3X3, ArrowLeft } from "lucide-react";
 import { mockStockGridData } from "../data/mock-grid-data";
 import { mockDetailedStocks } from "../data/mock-detailed-stocks";
 
 interface DetailedStockTablePageProps {
-  title: string;
   onBack: () => void;
 }
 
@@ -260,7 +259,7 @@ function StockGridItem({ stock, selectedPeriod }: { stock: any, selectedPeriod: 
   );
 }
 
-export function DetailedStockTablePage({ title, onBack }: DetailedStockTablePageProps) {
+export function DetailedStockTablePage({ onBack }: DetailedStockTablePageProps) {
   const [sortField, setSortField] = useState<SortField>('percentage');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
@@ -316,40 +315,33 @@ export function DetailedStockTablePage({ title, onBack }: DetailedStockTablePage
     <div className="flex flex-col h-screen">
       <div className="flex-shrink-0 p-6 pb-0">
         <div className="mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold">{title}</h1>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={onBack}
-              className="ml-4"
-            >
-              返回
-            </Button>
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={onBack}
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                >
+                  <List className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                >
+                  <Grid3X3 className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center">
-            {/* View Mode Tabs */}
-          <div className="flex items-center gap-2">
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('list')}
-              className="flex items-center gap-2"
-            >
-              <List className="w-4 h-4" />
-              列表
-            </Button>
-            <Button
-              variant={viewMode === 'grid' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('grid')}
-              className="flex items-center gap-2"
-            >
-              <Grid3X3 className="w-4 h-4" />
-              宫格
-            </Button>
-          </div>
-        </div>
       </div>
 
       <div className="flex-1 min-h-0 px-6 pb-6">

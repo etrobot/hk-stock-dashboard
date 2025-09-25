@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom'
 import { cn } from '../lib/utils'
 import { Star, BarChart3, User, Compass, SlidersHorizontal, MessageSquare, Users } from 'lucide-react'
 import { DropdownMenu } from './dropdown-menu-component'
+import { MessagePopup } from './message-popup'
 
 interface NavigationItem {
   label: string
@@ -28,6 +29,8 @@ interface SidebarNavigationProps {
 
 export function SidebarNavigation({ className }: SidebarNavigationProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isMessagePopupOpen, setIsMessagePopupOpen] = useState(false)
+  const [isCommunityPopupOpen, setIsCommunityPopupOpen] = useState(false)
 
   return (
     <div className={cn("border-r border-gray-700 flex flex-col", className)}>
@@ -61,24 +64,82 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
         <div className="space-y-2">
           {navigationItems.map((item) => (
             <div key={item.to} className="px-2">
-              <NavLink
-                to={item.to}
-                className={({ isActive }) =>
-                  cn(
-                    "flex flex-col items-center space-y-1 p-2 rounded-lg cursor-pointer transition-colors",
-                    isActive ? "bg-[#454C56] text-white" : "text-[#9FA0A9] hover:hover:bg-[#454C56]/50",
-                  )
-                }
-              >
-                <div className="w-4 h-4">
-                  {item.icon}
-                </div>
-                <span className="text-xs font-medium">{item.label}</span>
-              </NavLink>
+              {item.to === '/messages' ? (
+                <button
+                  onClick={() => setIsMessagePopupOpen(true)}
+                  className={cn(
+                    "flex flex-col items-center space-y-1 p-2 rounded-lg cursor-pointer transition-colors w-full",
+                    "text-[#9FA0A9] hover:bg-[#454C56]/50"
+                  )}
+                >
+                  <div className="w-4 h-4">
+                    {item.icon}
+                  </div>
+                  <span className="text-xs font-medium">{item.label}</span>
+                </button>
+              ) : item.to === '/community' ? (
+                <button
+                  onClick={() => setIsCommunityPopupOpen(true)}
+                  className={cn(
+                    "flex flex-col items-center space-y-1 p-2 rounded-lg cursor-pointer transition-colors w-full",
+                    "text-[#9FA0A9] hover:bg-[#454C56]/50"
+                  )}
+                >
+                  <div className="w-4 h-4">
+                    {item.icon}
+                  </div>
+                  <span className="text-xs font-medium">{item.label}</span>
+                </button>
+              ) : (
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) =>
+                    cn(
+                      "flex flex-col items-center space-y-1 p-2 rounded-lg cursor-pointer transition-colors",
+                      isActive ? "bg-[#454C56] text-white" : "text-[#9FA0A9] hover:hover:bg-[#454C56]/50",
+                    )
+                  }
+                >
+                  <div className="w-4 h-4">
+                    {item.icon}
+                  </div>
+                  <span className="text-xs font-medium">{item.label}</span>
+                </NavLink>
+              )}
             </div>
           ))}
         </div>
       </div>
+
+      {/* Message Popup */}
+      <MessagePopup 
+        isOpen={isMessagePopupOpen}
+        onClose={() => setIsMessagePopupOpen(false)}
+      />
+
+      {/* Community Popup */}
+      {isCommunityPopupOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-[90vw] h-[90vh] max-w-6xl max-h-[800px] flex flex-col shadow-2xl">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h3 className="text-lg font-semibold">社区</h3>
+              <button
+                onClick={() => setIsCommunityPopupOpen(false)}
+                className="text-gray-500 hover:text-gray-700 text-xl"
+              >
+                ×
+              </button>
+            </div>
+            <div className="flex-1">
+              <iframe
+                src="https://tfi.tfisec.cn/communityPC"
+                className="w-full h-full border-0"
+                title="社区"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

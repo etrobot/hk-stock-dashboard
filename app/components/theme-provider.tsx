@@ -63,7 +63,7 @@ function withDisabledTransitions(enabled: boolean, fn: () => void) {
 
 export function ThemeProvider({
   children,
-  defaultTheme = 'system',
+  defaultTheme = 'dark',
   storageKey = 'vite-ui-theme',
   attribute = 'class',
   enableSystem = true,

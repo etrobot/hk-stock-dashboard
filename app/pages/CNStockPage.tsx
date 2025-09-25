@@ -24,7 +24,6 @@ export default function CNStockPage({ onStockClick }: CNStockPageProps) {
   if (showDetailedTable) {
     return (
       <DetailedStockTablePage 
-        title={showDetailedTable} 
         onBack={handleBackToMain}
       />
     );

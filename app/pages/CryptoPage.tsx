@@ -22,7 +22,6 @@ export default function CryptoPage({ onStockClick }: CryptoPageProps) {
   if (showDetailedTable) {
     return (
       <DetailedStockTablePage 
-        title={showDetailedTable} 
         onBack={handleBackToMain}
       />
     );

@@ -35,7 +35,6 @@ export default function USStockPage({ onStockClick }: USStockPageProps) {
   if (showDetailedTable) {
     return (
       <DetailedStockTablePage 
-        title={showDetailedTable} 
         onBack={handleBackToMain}
       />
     );
@@ -72,7 +71,6 @@ export default function USStockPage({ onStockClick }: USStockPageProps) {
               />
               <div className="flex-1 min-w-0">
                 <DetailedStockTablePage 
-                  title="概念板块"
                   onBack={() => setActiveTab('首页')}
                 />
               </div>
