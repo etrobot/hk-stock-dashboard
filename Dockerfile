@@ -4,7 +4,7 @@ FROM node:20-alpine as build
 # 设置工作目录
 WORKDIR /app
 
-# 复制 package.json 和 package-lock.json
+# 复制 package.json 和 package-lock.yaml
 COPY package.json pnpm-lock.yaml* ./
 
 # 安装 pnpm
@@ -25,8 +25,8 @@ FROM node:20-alpine as production
 # 设置工作目录
 WORKDIR /app
 
-# 复制构建产物
-COPY --from=build /app/dist ./dist
+# 复制构建产物 - 修改这里，复制 dist/app 的内容到 dist
+COPY --from=build /app/dist/app ./dist
 
 # 安装静态文件服务器
 RUN npm install -g serve
@@ -40,4 +40,3 @@ ENV PORT=3456
 
 # 启动静态文件服务器，配置 SPA 路由
 CMD ["npx", "serve", "dist", "-s", "-l", "tcp://0.0.0.0:3456"]
-
