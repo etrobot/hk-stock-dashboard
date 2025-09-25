@@ -25,8 +25,8 @@ FROM node:20-alpine as production
 # 设置工作目录
 WORKDIR /app
 
-# 复制构建产物 - 修改这里，复制 dist/app 的内容到 dist
-COPY --from=build /app/dist/app ./dist
+# 复制构建产物 - 复制 dist 的内容到 dist 根目录
+COPY --from=build /app/dist ./dist
 
 # 安装静态文件服务器
 RUN npm install -g serve
