@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { cn } from '../lib/utils'
 import { ChevronRight, FileText, Gift, TrendingUp, CreditCard, Settings, LogOut } from 'lucide-react'
 import { SettingsDetailPage } from './settings-detail-page'
+import { LoginDialog } from './login-dialog'
 
 interface MenuItem {
   label: string
@@ -32,10 +33,16 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
   const navigate = useNavigate()
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [showSettingsDetail, setShowSettingsDetail] = useState(false)
+  const [showLoginDialog, setShowLoginDialog] = useState(false)
 
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
+      // Don't close if login dialog is open
+      if (showLoginDialog || showSettingsDetail) {
+        return
+      }
+      
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         onClose()
       }
@@ -47,7 +54,7 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
         document.removeEventListener('mousedown', handleClickOutside)
       }
     }
-  }, [isOpen, onClose])
+  }, [isOpen, onClose, showLoginDialog, showSettingsDetail])
 
   const handleMenuItemClick = (item: MenuItem) => {
     if (item.label === '业务办理') {
@@ -55,6 +62,8 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
       navigate('/discovery')
     } else if (item.label === '设置') {
       setShowSettingsDetail(true)
+    } else if (item.label === '退出登陆') {
+      setShowLoginDialog(true)
     }
     // Add other navigation logic here as needed
   }
@@ -63,10 +72,21 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
     setShowSettingsDetail(false)
   }
 
+  const handleLoginClose = () => {
+    setShowLoginDialog(false)
+    onClose()
+  }
+
   if (!isOpen) return null
 
   return (
     <>
+      {/* Login Dialog - Always render when needed */}
+      <LoginDialog 
+        isOpen={showLoginDialog}
+        onClose={handleLoginClose}
+      />
+      
       {/* Settings Detail Page */}
       <SettingsDetailPage 
         isOpen={showSettingsDetail} 
@@ -79,7 +99,7 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
         <div 
           ref={dropdownRef}
           className={cn(
-            "absolute left-8 top-0 w-[250px] bg-[#222632] rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.6)] z-50",
+            "absolute left-8 top-8 w-[250px] bg-[#222632] rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.6)] z-50",
             className
           )}
         >
