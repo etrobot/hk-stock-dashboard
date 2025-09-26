@@ -1,3 +1,5 @@
+import { CapitalFlowChart } from './CapitalFlowChart'
+
 interface MarketContentProps {
   indexCode?: string;
 }
@@ -26,9 +28,43 @@ export function MarketContent({ }: MarketContentProps) {
         
         <div className="text-xs text-muted-foreground mb-3">5日净流入：9.99亿</div>
         
-        {/* 图表区域 */}
-        <div className="h-48 bg-muted/50 border border-border mb-3 flex items-center justify-center">
-          <div className="text-muted-foreground text-xs">资金流向图表</div>
+        {/* 资金成交统计 */}
+        <div className="h-48 bg-muted/50 border border-border mb-3 flex items-center justify-center p-4">
+          <CapitalFlowChart
+            totalInflow={18163.34}
+            totalOutflow={23749.76}
+            netOutflow={1.72}
+            data={[
+              { 
+                category: '特大', 
+                inflow: 6053.98, 
+                outflow: 2636.57, 
+                inflowPercentage: 4.11, 
+                outflowPercentage: 1.79 
+              },
+              { 
+                category: '大单', 
+                inflow: 13044.97, 
+                outflow: 15528.90, 
+                inflowPercentage: 8.85, 
+                outflowPercentage: 10.54 
+              },
+              { 
+                category: '中单', 
+                inflow: 16597.67, 
+                outflow: 17585.03, 
+                inflowPercentage: 11.26, 
+                outflowPercentage: 11.93 
+              },
+              { 
+                category: '小单', 
+                inflow: 28577.26, 
+                outflow: 47366.29, 
+                inflowPercentage: 19.39, 
+                outflowPercentage: 32.14 
+              }
+            ]}
+          />
         </div>
         
         {/* 图例 */}
@@ -45,61 +81,6 @@ export function MarketContent({ }: MarketContentProps) {
             <div className="w-3 h-0.5 bg-blue-500"></div>
             <span className="text-muted-foreground">收盘价</span>
           </div>
-        </div>
-      </div>
-
-      {/* 资金成交统计 */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-base font-semibold text-foreground">资金成交统计</h3>
-          <span className="text-xs text-muted-foreground">单位：万元</span>
-        </div>
-        <div className="text-xs text-muted-foreground mb-3">更新：2021/06/07 10:17</div>
-        
-        {/* 饼图和净流出 */}
-        <div className="flex items-center justify-center mb-4">
-          <div className="w-32 h-32 rounded-full bg-gradient-conic from-red-400 via-orange-400 to-green-400 flex items-center justify-center">
-            <div className="w-20 h-20 bg-background rounded-full flex flex-col items-center justify-center">
-              <div className="text-xs text-muted-foreground">净流出</div>
-              <div className="text-sm font-semibold text-green-500">1.72</div>
-            </div>
-          </div>
-        </div>
-        
-        {/* 流入流出统计 */}
-        <div className="flex items-center justify-center gap-8 text-xs mb-4">
-          <div>
-            <span className="text-muted-foreground">流入：</span>
-            <span className="text-red-500">64273.88</span>
-          </div>
-          <div>
-            <span className="text-muted-foreground">流出：</span>
-            <span className="text-green-500">83116.79</span>
-          </div>
-        </div>
-
-        {/* 分类统计 */}
-        <div className="space-y-2">
-          {[
-            { name: "特大", inflow: "6053.98", outflow: "2636.57", inflowWidth: "4.11%", outflowWidth: "1.79%" },
-            { name: "大单", inflow: "13044.97", outflow: "15528.90", inflowWidth: "8.85%", outflowWidth: "10.54%" },
-            { name: "中单", inflow: "16597.67", outflow: "17585.03", inflowWidth: "11.26%", outflowWidth: "11.93%" },
-            { name: "小单", inflow: "28577.26", outflow: "47366.29", inflowWidth: "19.39%", outflowWidth: "32.14%" }
-          ].map((item, index) => (
-            <div key={index} className="flex items-center text-xs">
-              <div className="w-16 text-right text-red-500">{item.inflow}</div>
-              <div className="flex-1 mx-2 flex items-center">
-                <div className="flex-1 h-4 bg-muted relative">
-                  <div className="h-full bg-red-500" style={{ width: item.inflowWidth }}></div>
-                </div>
-                <div className="w-8 text-center text-muted-foreground">{item.name}</div>
-                <div className="flex-1 h-4 bg-muted relative">
-                  <div className="h-full bg-green-500" style={{ width: item.outflowWidth }}></div>
-                </div>
-              </div>
-              <div className="w-16 text-green-500">{item.outflow}</div>
-            </div>
-          ))}
         </div>
       </div>
 
