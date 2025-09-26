@@ -2,7 +2,7 @@ interface MarketContentProps {
   indexCode?: string;
 }
 
-export function MarketContent({ indexCode = "HSI" }: MarketContentProps) {
+export function MarketContent({ }: MarketContentProps) {
   return (
     <div className="bg-background">
       {/* 资金流向趋势 */}

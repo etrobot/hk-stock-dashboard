@@ -1,6 +1,5 @@
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
-import { useTheme } from '../theme-provider';
 
 interface TotalAssetTrendProps {
   selectedPeriod: string;
@@ -18,8 +17,6 @@ export const TotalAssetTrend = ({
   selectedPeriod,
   onPeriodChange
 }: TotalAssetTrendProps) => {
-  const { resolvedTheme } = useTheme();
-
   return (
     <>
       {/* Time Period Buttons */}

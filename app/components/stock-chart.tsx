@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { Card } from './ui/card'
 import { init, dispose } from 'klinecharts'
 
@@ -40,9 +40,7 @@ const generateKLineData = (days: number) => {
 }
 
 export function StockChart({ symbol }: StockChartProps) {
-  const [timeframe, setTimeframe] = useState('日线')
-
-  const timeframes = ['1分', '5分', '15分', '30分', '60分', '日线', '周线', '月线']
+  const [timeframe] = useState('日线')
 
   useEffect(() => {
     const chart = init('kline-chart')
