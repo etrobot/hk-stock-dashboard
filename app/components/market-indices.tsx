@@ -4,6 +4,72 @@ interface MarketIndicesProps {
   indices: MarketIndex[];
 }
 
+// 生成模拟趋势数据的函数
+function generateTrendData(isPositive: boolean): number[] {
+  const baseValue = 50;
+  const data: number[] = [];
+  let currentValue = baseValue;
+  
+  for (let i = 0; i < 12; i++) {
+    // 根据正负趋势调整随机变化
+    const changeRange = isPositive ? [-2, 4] : [-4, 2];
+    const change = Math.random() * (changeRange[1] - changeRange[0]) + changeRange[0];
+    currentValue = Math.max(10, Math.min(90, currentValue + change));
+    data.push(currentValue);
+  }
+  
+  return data;
+}
+
+// 趋势图组件
+function TrendChart({ isPositive }: { isPositive: boolean }) {
+  const data = generateTrendData(isPositive);
+  const width = 60;
+  const height = 24;
+  
+  // 计算路径点
+  const maxValue = Math.max(...data);
+  const minValue = Math.min(...data);
+  const range = maxValue - minValue || 1;
+  
+  const points = data.map((value, index) => {
+    const x = (index / (data.length - 1)) * width;
+    const y = height - ((value - minValue) / range) * height;
+    return `${x},${y}`;
+  }).join(' ');
+  
+  const color = isPositive ? '#16BA71' : '#F44345';
+  
+  return (
+    <svg width={width} height={height} className="opacity-80">
+      <polyline
+        fill="none"
+        stroke={color}
+        strokeWidth="1.5"
+        points={points}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* 添加一些圆点来增强视觉效果 */}
+      {data.slice(-3).map((value, index) => {
+        const realIndex = data.length - 3 + index;
+        const x = (realIndex / (data.length - 1)) * width;
+        const y = height - ((value - minValue) / range) * height;
+        return (
+          <circle
+            key={index}
+            cx={x}
+            cy={y}
+            r="1"
+            fill={color}
+            opacity={0.6}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
 
 export function MarketIndices({ indices }: MarketIndicesProps) {
   return (
@@ -21,7 +87,7 @@ export function MarketIndices({ indices }: MarketIndicesProps) {
             <div className="flex justify-between items-start h-full">
               {/* 左侧文字信息 */}
               <div className="flex flex-col justify-between h-full">
-                <h3 className="text-[9px] leading-[13px] text-white font-normal">
+                <h3 className="text-[9px] leading-[13px] font-normal">
                   {index.name}
                 </h3>
                 
@@ -46,6 +112,7 @@ export function MarketIndices({ indices }: MarketIndicesProps) {
               
               {/* 右侧趋势图 */}
               <div className="flex items-center h-full">
+                <TrendChart isPositive={index.isPositive} />
               </div>
             </div>
           </div>

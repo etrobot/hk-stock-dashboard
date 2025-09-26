@@ -5,7 +5,7 @@ import { DetailedStockTablePage } from "./DetailedStockTablePage"
 import { useState } from "react"
 
 interface CryptoPageProps {
-  onStockClick?: (stock: any) => void;
+  onStockClick?: (stock: any, tableTitle?: string) => void;
 }
 
 export default function CryptoPage({ onStockClick }: CryptoPageProps) {

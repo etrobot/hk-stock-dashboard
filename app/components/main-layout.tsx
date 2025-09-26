@@ -61,7 +61,7 @@ export function MainLayout() {
       <div className="h-screen flex flex-col">
         <div className="flex flex-1 min-h-0">
           {/* 左侧导航 - 固定 */}
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 h-full">
             <SidebarNavigation />
           </div>
 

@@ -162,13 +162,13 @@ export const benchmarkComparisons: BenchmarkComparison[] = [
 export const timePeriods = [
   { label: "近1周", value: "1w" },
   { label: "近1月", value: "1m" },
-  { label: "年初至今", value: "ytd", active: true },
+  { label: "年初至今", value: "ytd" },
   { label: "自定义", value: "custom" }
 ];
 
 // Chart view options
 export const chartViews = [
-  { label: "收益率走势", value: "returns", active: true },
-  { label: "总资产走势", value: "assets" },
+  { label: "收益率走势", value: "returns" },
+  { label: "总资产走势", value: "total-asset" },
   { label: "收益日历", value: "calendar" }
 ];

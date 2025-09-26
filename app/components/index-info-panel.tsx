@@ -2,12 +2,18 @@ import { Card, CardContent, CardHeader } from "./ui/card"
 import { Button } from "./ui/button"
 import { Heart, TrendingUp } from "lucide-react"
 import { IndexDetail } from "../types/market"
+import { MarketContent } from "./market-content"
+import { useState } from "react"
+import { useTheme } from "./theme-provider"
 
 interface IndexInfoPanelProps {
   indexDetail: IndexDetail;
 }
 
 export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
+  const [activeTab, setActiveTab] = useState<'market' | 'analysis' | 'news'>('market')
+  const { resolvedTheme } = useTheme()
+  
   const newsItems = [
     {
       title: "苹果(AAPL.US)句报计划明年上半年推出廉价版iPhone、iPad平板及Mac电脑升级",
@@ -75,29 +81,29 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-slate-400">最高</span>
-                <span className="text-white">{indexDetail.high}</span>
+                <span className="">{indexDetail.high}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">今开</span>
-                <span className="text-white">{indexDetail.open}</span>
+                <span className="">{indexDetail.open}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">成交额</span>
-                <span className="text-white">{indexDetail.volume}</span>
+                <span className="">{indexDetail.volume}</span>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-slate-400">最低</span>
-                <span className="text-white">{indexDetail.low}</span>
+                <span className="">{indexDetail.low}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">昨收</span>
-                <span className="text-white">{indexDetail.close}</span>
+                <span className="">{indexDetail.close}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">平均价</span>
-                <span className="text-white">{indexDetail.avgPrice}</span>
+                <span className="">{indexDetail.avgPrice}</span>
               </div>
             </div>
           </div>
@@ -106,7 +112,7 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
             <div className="flex items-center justify-between">
               <span className="text-slate-400">{indexDetail.market}相关</span>
               <div className="flex items-center gap-2">
-                <span className="text-white">{indexDetail.value}</span>
+                <span className="">{indexDetail.value}</span>
                 <span className={`${indexDetail.isPositive ? 'text-green-400' : 'text-red-400'}`}>
                   {indexDetail.change} {indexDetail.percentage}
                 </span>
@@ -115,7 +121,7 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
             <div className="flex items-center justify-between">
               <span className="text-slate-400">期货</span>
               <div className="flex items-center gap-2">
-                <span className="text-white">{indexDetail.value}</span>
+                <span className="">{indexDetail.value}</span>
                 <span className={`${indexDetail.isPositive ? 'text-green-400' : 'text-red-400'}`}>
                   {indexDetail.change} {indexDetail.percentage}
                 </span>
@@ -126,48 +132,84 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
         </CardContent>
       </Card>
 
-      {/* News Section */}
+      {/* Tabs Section */}
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center gap-4 text-sm">
-            <button className="text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500 pb-1">
+            <button 
+              className={`pb-1 ${activeTab === 'market' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
+              onClick={() => setActiveTab('market')}
+            >
               行情
             </button>
-            <button className="text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500 pb-1">
+            <button 
+              className={`pb-1 ${activeTab === 'analysis' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
+              onClick={() => setActiveTab('analysis')}
+            >
               分析
             </button>
-            <button className="border-b-2 border-orange-500 pb-1">资讯</button>
-          </div>
-          <div className="flex gap-2 mt-3">
-            <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-xs px-3 py-1 h-auto">
-              新闻
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              className="border-slate-600 text-slate-400 hover:text-xs px-3 py-1 h-auto bg-transparent"
+            <button 
+              className={`pb-1 ${activeTab === 'news' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
+              onClick={() => setActiveTab('news')}
             >
-              公告
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              className="border-slate-600 text-slate-400 hover:text-xs px-3 py-1 h-auto bg-transparent"
-            >
-              评级
-            </Button>
+              资讯
+            </button>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-4 max-h-96 overflow-y-auto">
-          {newsItems.map((item, index) => (
-            <div key={index} className="space-y-2 pb-3 border-b border-slate-800 last:border-b-0">
-              <p className="text-sm leading-relaxed hover:text-blue-400 cursor-pointer">{item.title}</p>
-              <div className="flex items-center gap-2 text-xs text-slate-500">
-                <span className="text-orange-400">{item.source}</span>
-                <span>{item.time}</span>
-              </div>
+          
+          {/* News sub-tabs - only show when news tab is active */}
+          {activeTab === 'news' && (
+            <div className="flex gap-2 mt-3">
+              <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-xs px-3 py-1 h-auto">
+                新闻
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-slate-600 text-slate-400 hover:text-xs px-3 py-1 h-auto bg-transparent"
+              >
+                公告
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-slate-600 text-slate-400 hover:text-xs px-3 py-1 h-auto bg-transparent"
+              >
+                评级
+              </Button>
             </div>
-          ))}
+          )}
+        </CardHeader>
+        <CardContent className={`${activeTab === 'analysis' ? 'p-0' : ''} max-h-96 overflow-y-auto`}>
+          {/* Market Tab Content */}
+          {activeTab === 'market' && (
+            <MarketContent indexCode={indexDetail.code} />
+          )}
+          
+          {/* Analysis Tab Content */}
+          {activeTab === 'analysis' && (
+            <div className="w-full h-96">
+              <iframe
+                src={`http://testdv.tfisec.cn/tradestock/analysis?theme=${resolvedTheme === 'dark' ? 'dark' : 'white'}&stock_code=${indexDetail.code}&set_code=13`}
+                className="w-full h-full border-0"
+                title="股票分析"
+              />
+            </div>
+          )}
+          
+          {/* News Tab Content */}
+          {activeTab === 'news' && (
+            <div className="space-y-4">
+              {newsItems.map((item, index) => (
+                <div key={index} className="space-y-2 pb-3 border-b border-slate-800 last:border-b-0">
+                  <p className="text-sm leading-relaxed hover:text-blue-400 cursor-pointer">{item.title}</p>
+                  <div className="flex items-center gap-2 text-xs text-slate-500">
+                    <span className="text-orange-400">{item.source}</span>
+                    <span>{item.time}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

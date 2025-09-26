@@ -1,0 +1,30 @@
+# Ignore node modules and build artifacts
+node_modules
+.pnpm
+.pnpm-store
+
+# Vite cache and build output
+.vite
+.dist
+out
+dist
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Git
+.git
+.gitignore
+
+# Misc
+*.swp
+*.swo

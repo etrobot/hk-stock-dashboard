@@ -63,9 +63,9 @@ export function OrderBook() {
   }
 
   return (
-    <Card className="bg-[#1A1D29] border-gray-800">
+    <Card className="bg-card border-border">
       <Tabs defaultValue="orderbook" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-[#11131B]">
+        <TabsList className="grid w-full grid-cols-3 bg-muted">
           <TabsTrigger value="orderbook" className="data-[state=active]:bg-[#FF5C00]">
             订单簿
           </TabsTrigger>
@@ -80,7 +80,7 @@ export function OrderBook() {
         <TabsContent value="orderbook" className="p-4">
           <div className="space-y-4">
             {/* 表头 */}
-            <div className="grid grid-cols-3 text-sm text-gray-400 border-b border-gray-700 pb-2">
+            <div className="grid grid-cols-3 text-sm text-muted-foreground border-b border-border pb-2">
               <div>价格(USD)</div>
               <div className="text-right">数量</div>
               <div className="text-right">累计</div>
@@ -89,14 +89,14 @@ export function OrderBook() {
             {/* 卖单 */}
             <div className="space-y-1">
               {orderBook.asks.slice().reverse().map((ask, index) => (
-                <div key={`ask-${index}`} className="grid grid-cols-3 text-sm hover:bg-gray-800/50 py-1">
-                  <div className="text-[#F44345] font-mono">
+                <div key={`ask-${index}`} className="grid grid-cols-3 text-sm hover:bg-muted/20 py-1">
+                  <div className="text-red-500 font-mono">
                     {ask.price.toFixed(2)}
                   </div>
-                  <div className="text-right font-mono">
+                  <div className="text-right font-mono text-foreground">
                     {formatNumber(ask.volume)}
                   </div>
-                  <div className="text-right text-gray-400 font-mono">
+                  <div className="text-right text-muted-foreground font-mono">
                     {formatNumber(ask.total)}
                   </div>
                 </div>
@@ -104,8 +104,8 @@ export function OrderBook() {
             </div>
 
             {/* 最新价格分隔线 */}
-            <div className="flex items-center justify-center py-2 border-y border-gray-700">
-              <span className="text-lg font-bold text-[#16BA71]">
+            <div className="flex items-center justify-center py-2 border-y border-border">
+              <span className="text-lg font-bold text-green-500">
                 $212.41 ↗
               </span>
             </div>
@@ -113,14 +113,14 @@ export function OrderBook() {
             {/* 买单 */}
             <div className="space-y-1">
               {orderBook.bids.map((bid, index) => (
-                <div key={`bid-${index}`} className="grid grid-cols-3 text-sm hover:bg-gray-800/50 py-1">
-                  <div className="text-[#16BA71] font-mono">
+                <div key={`bid-${index}`} className="grid grid-cols-3 text-sm hover:bg-muted/20 py-1">
+                  <div className="text-green-500 font-mono">
                     {bid.price.toFixed(2)}
                   </div>
-                  <div className="text-right font-mono">
+                  <div className="text-right font-mono text-foreground">
                     {formatNumber(bid.volume)}
                   </div>
-                  <div className="text-right text-gray-400 font-mono">
+                  <div className="text-right text-muted-foreground font-mono">
                     {formatNumber(bid.total)}
                   </div>
                 </div>
@@ -131,7 +131,7 @@ export function OrderBook() {
 
         <TabsContent value="recent" className="p-4">
           <div className="space-y-4">
-            <div className="grid grid-cols-3 text-sm text-gray-400 border-b border-gray-700 pb-2">
+            <div className="grid grid-cols-3 text-sm text-muted-foreground border-b border-border pb-2">
               <div>时间</div>
               <div className="text-right">价格(USD)</div>
               <div className="text-right">数量</div>
@@ -146,14 +146,14 @@ export function OrderBook() {
               const isPositive = Math.random() > 0.5
               
               return (
-                <div key={i} className="grid grid-cols-3 text-sm hover:bg-gray-800/50 py-1">
-                  <div className="text-gray-400 font-mono">
+                <div key={i} className="grid grid-cols-3 text-sm hover:bg-muted/20 py-1">
+                  <div className="text-muted-foreground font-mono">
                     {time.toLocaleTimeString()}
                   </div>
-                  <div className={`text-right font-mono ${isPositive ? 'text-[#16BA71]' : 'text-[#F44345]'}`}>
+                  <div className={`text-right font-mono ${isPositive ? 'text-green-500' : 'text-red-500'}`}>
                     {price.toFixed(2)}
                   </div>
-                  <div className="text-right font-mono">
+                  <div className="text-right font-mono text-foreground">
                     {formatNumber(volume)}
                   </div>
                 </div>
@@ -163,7 +163,7 @@ export function OrderBook() {
         </TabsContent>
 
         <TabsContent value="depth" className="p-4">
-          <div className="text-center text-gray-400 py-8">
+          <div className="text-center text-muted-foreground py-8">
             市场深度图表
             <br />
             <span className="text-sm">开发中...</span>

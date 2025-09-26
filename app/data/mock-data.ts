@@ -127,6 +127,14 @@ export const hkHotStocks: Stock[] = [
   { name: "中国平安", code: "02318", price: "45.30", change: "+0.80", percentage: "+1.80%", isPositive: true }
 ];
 
+export const hkDividendStocks: DividendStock[] = [
+  { name: "茂盛控股", code: "00022", price: "0.138", change: "-0.005", percentage: "-3.50%", isPositive: false, dividend: "174.640%" },
+  { name: "海王英特龙", code: "08329", price: "0.148", change: "-0.004", percentage: "-2.63%", isPositive: false, dividend: "106.080%" },
+  { name: "怡园酒业", code: "08146", price: "0.118", change: "-0.009", percentage: "-7.09%", isPositive: false, dividend: "102.540%" },
+  { name: "华晨中国", code: "01114", price: "3.98", change: "+0.11", percentage: "+2.84%", isPositive: true, dividend: "45.230%" },
+  { name: "亿都(国际)", code: "00259", price: "4.73", change: "-0.26", percentage: "-5.21%", isPositive: false, dividend: "39.110%" }
+];
+
 export const usIndices: MarketIndex[] = [
   {
     name: "道琼斯指数",

@@ -12,7 +12,7 @@ import USStockPage from "./pages/USStockPage"
 import CryptoPage from "./pages/CryptoPage"
 import { DetailedStockTablePage } from "./pages/DetailedStockTablePage"
 import { NewStockCenter } from "./components/new-stock-center"
-import { hkIndices, hkGainers, hkLosers, hkHotStocks, hkIndexDetail, cnIndexDetail, usIndexDetail, cryptoIndexDetail, hkSectors, cnSectors } from './data/mock-data'
+import { hkIndices, hkGainers, hkLosers, hkHotStocks, hkDividendStocks, hkIndexDetail, cnIndexDetail, usIndexDetail, cryptoIndexDetail, hkSectors, cnSectors } from './data/mock-data'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('hk')
@@ -21,8 +21,9 @@ function App() {
   const [selectedSector, setSelectedSector] = useState<string | null>(null)
 
   const navigate = useNavigate()
-  const handleStockClick = (stock: any) => {
+  const handleStockClick = (stock: any, tableTitle?: string) => {
     const code = stock?.code || stock?.symbol || ''
+    console.log('Stock clicked from table:', tableTitle, stock)
     navigate(`/stock/${encodeURIComponent(code)}`)
   }
 
@@ -66,7 +67,7 @@ function App() {
         }
         return (
           <>
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-6 ml-6">
               <Button 
                 variant="ghost" 
                 className={`${activeTab === '首页' ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
@@ -117,6 +118,8 @@ function App() {
                         gainers={hkGainers}
                         losers={hkLosers}
                         hotStocks={hkHotStocks}
+                        dividendStocks={hkDividendStocks}
+                        dividendTitle="高息股"
                         onStockClick={handleStockClick}
                         onShowMore={handleShowMore}
                       />

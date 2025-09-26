@@ -7,7 +7,7 @@ import { DetailedStockTablePage } from "./DetailedStockTablePage"
 import { useState } from "react"
 
 interface CNStockPageProps {
-  onStockClick?: (stock: any) => void;
+  onStockClick?: (stock: any, tableTitle?: string) => void;
 }
 
 export default function CNStockPage({ onStockClick }: CNStockPageProps) {

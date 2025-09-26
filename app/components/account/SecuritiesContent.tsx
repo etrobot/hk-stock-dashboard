@@ -23,15 +23,15 @@ import {
 export const SecuritiesContent = () => {
   return (
     <div className="space-y-4">
-      <h2 className="text-sm font-medium text-white">证券持仓</h2>
+      <h2 className="text-sm font-medium text-foreground">证券持仓</h2>
 
       {/* First row: Three tables side by side */}
       <div className="grid grid-cols-3 gap-4">
         {/* Assets Table */}
-        <Card className="bg-[#1A1D28] border-[#2D303D]">
+        <Card>
           <CardContent className="p-4">
-            <h3 className="text-white font-medium mb-2">资产</h3>
-            <Table className="text-xs text-gray-300">
+            <h3 className="text-card-foreground font-medium mb-2">资产</h3>
+            <Table className="text-xs">
               <TableHeader>
                 <TableRow>
                   <TableHead>项目</TableHead>
@@ -64,10 +64,10 @@ export const SecuritiesContent = () => {
         </Card>
 
         {/* Cash Details Table */}
-        <Card className="bg-[#1A1D28] border-[#2D303D]">
+        <Card>
           <CardContent className="p-4">
-            <h3 className="text-white font-medium mb-2">现金明细</h3>
-            <Table className="text-xs text-gray-300">
+            <h3 className="text-card-foreground font-medium mb-2">现金明细</h3>
+            <Table className="text-xs">
               <TableHeader>
                 <TableRow>
                   <TableHead>币种</TableHead>
@@ -93,10 +93,10 @@ export const SecuritiesContent = () => {
         </Card>
 
         {/* Withdrawable Cash Table */}
-        <Card className="bg-[#1A1D28] border-[#2D303D]">
+        <Card>
           <CardContent className="p-4">
-            <h3 className="text-white font-medium mb-2">现金可提</h3>
-            <Table className="text-xs text-gray-300">
+            <h3 className="text-card-foreground font-medium mb-2">现金可提</h3>
+            <Table className="text-xs">
               <TableHeader>
                 <TableRow>
                   <TableHead>币种</TableHead>
@@ -124,18 +124,18 @@ export const SecuritiesContent = () => {
 
       {/* Second row: Function icons */}
       <div className="flex gap-2">
-          <Button variant="ghost" className="text-white text-sm h-auto py-2 gap-1"><Upload className="w-4 h-4" />存入资金</Button>
-          <Button variant="ghost" className="text-white text-sm h-auto py-2 gap-1"><Download className="w-4 h-4" />提取资金</Button>
-          <Button variant="ghost" className="text-white text-sm h-auto py-2 gap-1"><ArrowLeftRight className="w-4 h-4" />货币兑换</Button>
-          <Button variant="ghost" className="text-white text-sm h-auto py-2 gap-1"><ArrowRightLeft className="w-4 h-4" />转入股票</Button>
-          <Button variant="ghost" className="text-white text-sm h-auto py-2 gap-1"><RefreshCw className="w-4 h-4" />资金调拨</Button>
-          <Button variant="ghost" className="text-white text-sm h-auto py-2 gap-1"><Ticket className="w-4 h-4" />新股认购</Button>
-          <Button variant="ghost" className="text-white text-sm h-auto py-2 gap-1"><FileText className="w-4 h-4" />我的结单</Button>
-          <Button variant="ghost" className="text-white text-sm h-auto py-2 gap-1"><Gift className="w-4 h-4" />卡券</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><Upload className="w-4 h-4" />存入资金</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><Download className="w-4 h-4" />提取资金</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><ArrowLeftRight className="w-4 h-4" />货币兑换</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><ArrowRightLeft className="w-4 h-4" />转入股票</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><RefreshCw className="w-4 h-4" />资金调拨</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><Ticket className="w-4 h-4" />新股认购</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><FileText className="w-4 h-4" />我的结单</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><Gift className="w-4 h-4" />卡券</Button>
       </div>
 
       {/* Third row: Tabs with tables */}
-      <Card className="bg-[#1A1D28] border-[#2D303D]">
+      <Card>
         <CardContent className="p-4">
           <Tabs defaultValue="holdings" className="w-full">
             <TabsList className="grid w-full grid-cols-5">

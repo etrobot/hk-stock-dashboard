@@ -8,7 +8,7 @@ import { DetailedStockTablePage } from "./DetailedStockTablePage"
 import { useState } from "react"
 
 interface USStockPageProps {
-  onStockClick?: (stock: any) => void;
+  onStockClick?: (stock: any, tableTitle?: string) => void;
 }
 
 export default function USStockPage({ onStockClick }: USStockPageProps) {
@@ -42,7 +42,7 @@ export default function USStockPage({ onStockClick }: USStockPageProps) {
 
   return (
     <>
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center space-x-6 ml-6">
         <Button 
           variant="ghost" 
           className={`${activeTab === '首页' ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}

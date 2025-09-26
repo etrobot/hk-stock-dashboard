@@ -10,11 +10,11 @@ interface StockTablesProps {
   hotStocks: Stock[];
   dividendStocks?: DividendStock[];
   dividendTitle?: string;
-  onStockClick?: (stock: any) => void;
+  onStockClick?: (stock: any, tableTitle?: string) => void;
   onShowMore?: (tableType: string) => void;
 }
 
-function StockTable({ title, data, showTTM = false, onStockClick, onShowMore }: { title: string; data: any[]; showTTM?: boolean; onStockClick?: (stock: any) => void; onShowMore?: (tableType: string) => void }) {
+function StockTable({ title, data, showTTM = false, onStockClick, onShowMore }: { title: string; data: any[]; showTTM?: boolean; onStockClick?: (stock: any, tableTitle?: string) => void; onShowMore?: (tableType: string) => void }) {
   return (
     <Card className="p-4 bg-card border-border">
       <div className="flex items-center justify-between mb-4">
@@ -43,7 +43,7 @@ function StockTable({ title, data, showTTM = false, onStockClick, onShowMore }: 
             <TableRow
               key={i}
               className="border-border hover:bg-muted/50 cursor-pointer"
-              onClick={() => onStockClick?.(stock)}
+              onClick={() => onStockClick?.(stock, title)}
             >
               <TableCell className="text-foreground font-mono">{stock.code}</TableCell>
               <TableCell className="text-foreground">{stock.name}</TableCell>

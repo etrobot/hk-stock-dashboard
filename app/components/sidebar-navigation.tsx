@@ -13,12 +13,15 @@ interface NavigationItem {
   to: string
 }
 
-const navigationItems: NavigationItem[] = [
+const mainNavigationItems: NavigationItem[] = [
   { label: '自选', to: '/watchlist', icon: (<Star className="w-4 h-4" />) },
   { label: '市场', to: '/market', icon: (<BarChart3 className="w-4 h-4" />) },
   { label: '账户', to: '/account', icon: (<User className="w-4 h-4" />) },
   // { label: '期权', to: '/options', icon: (<BadgeDollarSign className="w-4 h-4" />) },
   { label: '发现', to: '/discovery', icon: (<Compass className="w-4 h-4" />) },
+]
+
+const bottomNavigationItems: NavigationItem[] = [
   { label: '消息', to: '/messages', icon: (<MessageSquare className="w-4 h-4" />) },
   { label: '社区', to: '/community', icon: (<Users className="w-4 h-4" />) },
 ]
@@ -33,9 +36,9 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
   const [isCommunityPopupOpen, setIsCommunityPopupOpen] = useState(false)
 
   return (
-    <div className={cn("border-r border-gray-700 flex flex-col", className)}>
+    <div className={cn("border-r flex flex-col h-full", className)}>
       {/* Logo/Avatar section */}
-      <div className="p-2 border-b border-gray-700 relative">
+      <div className="p-2 border-b relative">
         <div className="flex items-center justify-between">
           <button 
             className="w-6 h-6 rounded-full bg-gray-600 flex items-center justify-center hover:ring-2 hover:ring-gray-500 transition-all"
@@ -59,10 +62,34 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
         />
       </div>
 
-      {/* Navigation items */}
+      {/* Main Navigation items */}
       <div className="flex-1 py-4">
         <div className="space-y-2">
-          {navigationItems.map((item) => (
+          {mainNavigationItems.map((item) => (
+            <div key={item.to} className="px-2">
+              <NavLink
+                to={item.to}
+                className={({ isActive }) =>
+                  cn(
+                    "flex flex-col items-center space-y-1 p-2 rounded-lg cursor-pointer transition-colors",
+                    isActive ? "bg-[#454C56] text-white" : "text-[#9FA0A9] hover:hover:bg-[#454C56]/80",
+                  )
+                }
+              >
+                <div className="w-4 h-4">
+                  {item.icon}
+                </div>
+                <span className="text-xs font-medium">{item.label}</span>
+              </NavLink>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom Navigation items */}
+      <div className="pb-4">
+        <div className="space-y-2">
+          {bottomNavigationItems.map((item) => (
             <div key={item.to} className="px-2">
               {item.to === '/messages' ? (
                 <button
@@ -72,8 +99,9 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
                     "text-[#9FA0A9] hover:bg-[#454C56]/50"
                   )}
                 >
-                  <div className="w-4 h-4">
+                  <div className="w-4 h-4 relative">
                     {item.icon}
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></div>
                   </div>
                   <span className="text-xs font-medium">{item.label}</span>
                 </button>
@@ -120,7 +148,7 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
       {/* Community Popup */}
       {isCommunityPopupOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-[90vw] h-[90vh] max-w-6xl max-h-[800px] flex flex-col shadow-2xl">
+          <div className="rounded-lg border w-[90vw] h-[90vh] max-w-6xl max-h-[800px] flex flex-col shadow-2xl">
             <div className="flex justify-between items-center p-4 border-b">
               <h3 className="text-lg font-semibold">社区</h3>
               <button

@@ -11,9 +11,9 @@ const AccountPage = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
   return (
-    <div className="min-h-screen bg-[#FFFFFF] text-black">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Main Content Area */}
-      <div className="bg-[#11131B] min-h-[calc(100vh-30px)] p-6">
+      <div className="bg-background min-h-[calc(100vh-30px)] p-6">
 
         {/* Main Content */}
         <div className="flex gap-2">
@@ -22,8 +22,8 @@ const AccountPage = () => {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <User className="w-4 h-4 text-[#3B78F1]" />
-                <span className="text-sm text-white">
+                <User className="w-4 h-4 text-primary" />
+                <span className="text-sm text-foreground">
                   {accountOverview.accountType}({accountOverview.accountNumber})
                 </span>
               </div>
@@ -35,22 +35,22 @@ const AccountPage = () => {
             className={`cursor-pointer transition-all duration-200 ${
               activeTab === 'overview' 
                 ? 'border-[#FF5C00]' 
-                : 'bg-[#1A1D28] border-[#2D303D] hover:border-[#FF5C00]'
+                : 'hover:border-[#FF5C00]'
             } mb-4`}
             onClick={() => setActiveTab('overview')}
           >
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <span className="text-xs text-[#9FA0A9]">总资产</span>
-                  <span className="text-xs text-[#9FA0A9]">·</span>
-                  <span className="text-xs text-[#9FA0A9]">{accountOverview.totalAssets.currency}</span>
-                  <svg className="w-3 h-3 text-[#8A8B96]" viewBox="0 0 12 12" fill="currentColor">
+                  <span className="text-xs text-muted-foreground">总资产</span>
+                  <span className="text-xs text-muted-foreground">·</span>
+                  <span className="text-xs text-muted-foreground">{accountOverview.totalAssets.currency}</span>
+                  <svg className="w-3 h-3 text-muted-foreground" viewBox="0 0 12 12" fill="currentColor">
                     <path d="M6 8l-3-3h6l-3 3z"/>
                   </svg>
                 </div>
               </div>
-              <div className="text-lg font-bold text-white mb-1">
+              <div className="text-lg font-bold text-card-foreground mb-1">
                 {accountOverview.totalAssets.value}
               </div>
             </CardContent>
@@ -61,19 +61,19 @@ const AccountPage = () => {
             className={`cursor-pointer transition-all duration-200 ${
               activeTab === 'securities' 
                 ? 'border-[#FF5C00]' 
-                : 'bg-[#1A1D28] border-[#2D303D] hover:border-[#FF5C00]'
+                : 'hover:border-[#FF5C00]'
             }`}
             onClick={() => setActiveTab('securities')}
           >
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <span className="text-xs text-[#9FA0A9]">证券持仓</span>
-                  <span className="text-xs text-[#9FA0A9]">·</span>
-                  <span className="text-xs text-[#9FA0A9]">HKD</span>
+                  <span className="text-xs text-muted-foreground">证券持仓</span>
+                  <span className="text-xs text-muted-foreground">·</span>
+                  <span className="text-xs text-muted-foreground">HKD</span>
                 </div>
               </div>
-              <div className="text-lg font-bold text-white mb-1">
+              <div className="text-lg font-bold text-card-foreground mb-1">
                 --
               </div>
             </CardContent>

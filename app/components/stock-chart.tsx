@@ -72,9 +72,9 @@ export function StockChart({ symbol }: StockChartProps) {
   }, [symbol, timeframe])
 
   return (
-    <Card className="bg-[#1A1D29] border-gray-800 p-4">
+    <Card className="bg-card border-border p-4">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">{symbol} K线图</h2>
+        <h2 className="text-lg font-semibold text-foreground">{symbol} K线图</h2>
       </div>
 
       <div className="h-[400px]">
@@ -82,20 +82,20 @@ export function StockChart({ symbol }: StockChartProps) {
       </div>
 
       {/* 图表工具栏 */}
-      <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
-        <div className="flex space-x-4 text-sm text-gray-400">
+      <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
+        <div className="flex space-x-4 text-sm text-muted-foreground">
           <span>成交量: 2.34亿</span>
           <span>成交额: 495.8亿</span>
           <span>换手率: 1.45%</span>
         </div>
         <div className="flex space-x-2">
-          <button className="text-sm text-gray-400 hover:text-white">
+          <button className="text-sm text-muted-foreground hover:text-foreground">
             技术指标
           </button>
-          <button className="text-sm text-gray-400 hover:text-white">
+          <button className="text-sm text-muted-foreground hover:text-foreground">
             画线工具
           </button>
-          <button className="text-sm text-gray-400 hover:text-white">
+          <button className="text-sm text-muted-foreground hover:text-foreground">
             全屏
           </button>
         </div>

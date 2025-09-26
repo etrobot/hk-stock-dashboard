@@ -3,6 +3,7 @@ import { Button } from "./ui/button"
 import ReactECharts from 'echarts-for-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTheme } from './theme-provider'
 
 interface TreeNode {
   name: string;
@@ -77,6 +78,7 @@ const mockSectorData: TreeNode[] = [
 
 export function SectorHeatmap() {
   const navigate = useNavigate()
+  const { resolvedTheme } = useTheme()
   const [chartData, setChartData] = useState<TreeNode[]>([])
 
   useEffect(() => {
@@ -243,7 +245,9 @@ export function SectorHeatmap() {
           <ReactECharts 
             option={option}
             style={{ height: '100%', width: '100%' }}
-            theme="dark"
+            theme={resolvedTheme}
+            opts={{ renderer: 'canvas' }}
+            notMerge={true}
           />
         </div>
       </Card>
