@@ -2,6 +2,7 @@
 
 import { ChevronRight } from 'lucide-react'
 import { cn } from '../lib/utils'
+import { useLanguage } from '../contexts/LanguageContext'
 
 interface AboutUsPageProps {
   isOpen: boolean
@@ -10,6 +11,8 @@ interface AboutUsPageProps {
 }
 
 export function AboutUsPage({ isOpen, onClose, className }: AboutUsPageProps) {
+  const { t } = useLanguage()
+  
   if (!isOpen) return null
 
   return (
@@ -28,7 +31,7 @@ export function AboutUsPage({ isOpen, onClose, className }: AboutUsPageProps) {
           <ChevronRight className="w-full h-full text-[#DBDBE0]" />
         </button>
         <div className="absolute left-1/2 top-[8px] transform -translate-x-1/2 text-[#DBDBE0] text-[8px] font-medium">
-          关于我们
+          {t('about.title')}
         </div>
       </div>
 
@@ -38,42 +41,42 @@ export function AboutUsPage({ isOpen, onClose, className }: AboutUsPageProps) {
           <div className="w-12 h-12 mx-auto bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
             <div className="text-white text-lg font-bold">HK</div>
           </div>
-          <div className="text-[#DBDBE0] text-[10px] font-medium">港股仪表盘</div>
-          <div className="text-[#8A8B96] text-[8px] font-normal">V1.0.1</div>
+          <div className="text-[#DBDBE0] text-[10px] font-medium">{t('about.app_name')}</div>
+          <div className="text-[#8A8B96] text-[8px] font-normal">{t('about.version')}</div>
         </div>
 
         {/* Description */}
         <div className="space-y-2">
           <div className="text-[#DBDBE0] text-[8px] font-normal leading-relaxed">
-            港股仪表盘是一款专业的港股行情分析工具，为投资者提供实时行情数据、技术分析图表和投资决策支持。
+            {t('about.description')}
           </div>
         </div>
 
         {/* Features */}
         <div className="space-y-2">
-          <div className="text-[#DBDBE0] text-[8px] font-medium">主要功能</div>
+          <div className="text-[#DBDBE0] text-[8px] font-medium">{t('about.features')}</div>
           <div className="space-y-1 text-[#8A8B96] text-[7px] font-normal">
-            <div>• 实时港股行情数据</div>
-            <div>• 专业技术分析图表</div>
-            <div>• 个股详细信息查询</div>
-            <div>• 自选股管理</div>
-            <div>• 多种主题模式</div>
+            <div>{t('about.feature_1')}</div>
+            <div>{t('about.feature_2')}</div>
+            <div>{t('about.feature_3')}</div>
+            <div>{t('about.feature_4')}</div>
+            <div>{t('about.feature_5')}</div>
           </div>
         </div>
 
         {/* Contact Info */}
         <div className="space-y-2">
-          <div className="text-[#DBDBE0] text-[8px] font-medium">联系我们</div>
+          <div className="text-[#DBDBE0] text-[8px] font-medium">{t('about.contact')}</div>
           <div className="space-y-1 text-[#8A8B96] text-[7px] font-normal">
-            <div>邮箱: support@hkdashboard.com</div>
-            <div>官网: www.hkdashboard.com</div>
+            <div>{t('about.email')}</div>
+            <div>{t('about.website')}</div>
           </div>
         </div>
 
         {/* Copyright */}
         <div className="pt-2 border-t border-[rgba(75,82,105,0.2)]">
           <div className="text-[#8A8B96] text-[6px] font-normal text-center">
-            © 2024 港股仪表盘. All rights reserved.
+            {t('about.copyright')}
           </div>
         </div>
       </div>

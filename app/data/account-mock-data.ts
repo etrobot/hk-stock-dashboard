@@ -160,15 +160,15 @@ export const benchmarkComparisons: BenchmarkComparison[] = [
 
 // Time period options for the chart
 export const timePeriods = [
-  { label: "近1周", value: "1w" },
-  { label: "近1月", value: "1m" },
-  { label: "年初至今", value: "ytd" },
-  { label: "自定义", value: "custom" }
+  { label: "period.recent_1w", value: "1w" },
+  { label: "period.recent_1m", value: "1m" },
+  { label: "period.ytd", value: "ytd" },
+  { label: "period.custom", value: "custom" }
 ];
 
 // Chart view options
 export const chartViews = [
-  { label: "收益率走势", value: "returns" },
-  { label: "总资产走势", value: "total-asset" },
-  { label: "收益日历", value: "calendar" }
+  { label: "account.return_trend", value: "returns" },
+  { label: "account.total_asset_trend", value: "total-asset" },
+  { label: "account.earnings_calendar", value: "calendar" }
 ];

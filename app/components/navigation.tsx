@@ -1,4 +1,5 @@
 import { Button } from "./ui/button"
+import { useLanguage } from "../contexts/LanguageContext"
 
 interface NavigationProps {
   currentPage: string;
@@ -6,11 +7,13 @@ interface NavigationProps {
 }
 
 export function Navigation({ currentPage, onPageChange }: NavigationProps) {
+  const { t } = useLanguage()
+  
   const pages = [
-    { id: 'hk', label: '港股' },
-    { id: 'us', label: '美股' },
-    { id: 'crypto', label: '加密货币' },
-    { id: 'cn', label: '沪深' }
+    { id: 'hk', label: t('market.hk') },
+    { id: 'us', label: t('market.us') },
+    { id: 'crypto', label: t('market.crypto') },
+    { id: 'cn', label: t('market.cn') }
   ];
 
   return (

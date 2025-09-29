@@ -4,6 +4,7 @@ import ReactECharts from 'echarts-for-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from './theme-provider'
+import { useLanguage } from '../contexts/LanguageContext'
 
 interface TreeNode {
   name: string;
@@ -79,6 +80,7 @@ const mockSectorData: TreeNode[] = [
 export function SectorHeatmap() {
   const navigate = useNavigate()
   const { resolvedTheme } = useTheme()
+  const { t } = useLanguage()
   const [chartData, setChartData] = useState<TreeNode[]>([])
 
   useEffect(() => {
@@ -139,8 +141,8 @@ export function SectorHeatmap() {
   const option = {
     title: {
       left: 'center',
-      text: '港股板块热力图',
-      subtext: '涨幅 > 0: 绿色; 跌幅 < 0: 红色; 无变化 = 0: 灰色',
+      text: t('heatmap.hk_sector_heatmap'),
+      subtext: t('heatmap.subtitle'),
       textStyle: {
         color: 'var(--foreground)',
         fontSize: 16
@@ -164,15 +166,15 @@ export function SectorHeatmap() {
 
         return [
           `<div style="font-weight: bold; margin-bottom: 4px;">${info.name}</div>`,
-          `市值: ${marketCap}<br/>`,
-          `前值: ${prevValue}<br/>`,
-          `涨跌幅: <span style="color: ${value[2] > 0 ? '#10b981' : value[2] < 0 ? '#ef4444' : '#6b7280'}">${change}</span>`
+          `${t('heatmap.market_cap')}: ${marketCap}<br/>`,
+          `${t('heatmap.previous_value')}: ${prevValue}<br/>`,
+          `${t('heatmap.change_percent')}: <span style="color: ${value[2] > 0 ? '#10b981' : value[2] < 0 ? '#ef4444' : '#6b7280'}">${change}</span>`
         ].join('')
       }
     },
     series: [
       {
-        name: '港股板块',
+        name: t('heatmap.hk_sectors'),
         type: 'treemap',
         top: 60,
         label: {
@@ -221,13 +223,13 @@ export function SectorHeatmap() {
       <Card className="p-4 bg-card border-border">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-4">
-            <h3 className="text-lg font-semibold text-foreground">热力图</h3>
+            <h3 className="text-lg font-semibold text-foreground">{t('heatmap.title_main')}</h3>
             <div className="flex items-center space-x-2">
               <Button variant="ghost" size="sm" className="text-foreground bg-primary/20">
-                行业
+                {t('heatmap.industry_btn')}
               </Button>
               <Button variant="ghost" size="sm" className="text-muted-foreground">
-                个股
+                {t('heatmap.individual_stocks_btn')}
               </Button>
             </div>
           </div>
@@ -237,7 +239,7 @@ export function SectorHeatmap() {
             className="text-muted-foreground hover:text-foreground"
             onClick={handleMoreClick}
           >
-            更多 →
+            {t('heatmap.more')} →
           </Button>
         </div>
 

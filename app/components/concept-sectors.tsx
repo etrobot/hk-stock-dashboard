@@ -1,9 +1,21 @@
-import { SectorData } from "../types/market"
+import { SectorData, MarketIndex } from "../types/market"
+import { MarketIndexItem } from "./market-index-item"
 
 interface ConceptSectorsProps {
   sectors: SectorData[]
   selectedSector: string | null
   onSectorSelect: (sectorName: string) => void
+}
+
+// 将 SectorData 转换为 MarketIndex 格式
+function convertSectorToMarketIndex(sector: SectorData): MarketIndex {
+  return {
+    name: sector.name,
+    value: sector.percentage, // 使用百分比作为主要值显示
+    change: sector.change,
+    percentage: sector.percentage.replace('%', ''), // 移除百分号，因为MarketIndexItem会自动添加
+    isPositive: sector.isPositive
+  }
 }
 
 export function ConceptSectors({ sectors, selectedSector, onSectorSelect }: ConceptSectorsProps) {
@@ -13,31 +25,18 @@ export function ConceptSectors({ sectors, selectedSector, onSectorSelect }: Conc
           {sectors.map((sector, i) => (
             <div
               key={i}
-              className={`p-3 rounded-lg cursor-pointer transition-all ${
+              className={`cursor-pointer transition-all rounded-lg ${
                 selectedSector === sector.name
-                  ? "bg-primary/10 border border-primary/20"
-                  : "bg-muted/30 hover:bg-muted/50 border border-transparent"
+                  ? "ring-2 ring-primary/50"
+                  : "hover:ring-1 hover:ring-muted-foreground/20"
               }`}
               onClick={() => onSectorSelect(sector.name)}
             >
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-foreground">{sector.name}</span>
-                <span
-                  className={`text-xs font-semibold ${
-                    sector.isPositive ? "text-chart-1" : "text-chart-2"
-                  }`}
-                >
-                  {sector.percentage}
-                </span>
-              </div>
-              <div className="flex items-center justify-between mt-1">
-                <span className="text-xs text-muted-foreground">
-                  {sector.isPositive ? "+" : ""}{sector.change}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  {sector.isPositive ? "↑" : "↓"}
-                </span>
-              </div>
+              <MarketIndexItem 
+                index={convertSectorToMarketIndex(sector)}
+                showBackground={false}
+                className="hover:bg-muted/30"
+              />
             </div>
           ))}
         </div>

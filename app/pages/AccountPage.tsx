@@ -4,8 +4,10 @@ import { User } from 'lucide-react';
 import { accountOverview } from '../data/account-mock-data';
 import { AccountOverview } from '../components/account/AccountOverview';
 import { SecuritiesContent } from '../components/account/SecuritiesContent';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const AccountPage = () => {
+  const { t } = useLanguage();
   const [selectedPeriod, setSelectedPeriod] = useState('ytd');
   const [selectedView, setSelectedView] = useState('returns');
   const [activeTab, setActiveTab] = useState('overview');
@@ -42,7 +44,7 @@ const AccountPage = () => {
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <span className="text-xs text-muted-foreground">总资产</span>
+                  <span className="text-xs text-muted-foreground">{t('account.total_assets')}</span>
                   <span className="text-xs text-muted-foreground">·</span>
                   <span className="text-xs text-muted-foreground">{accountOverview.totalAssets.currency}</span>
                   <svg className="w-3 h-3 text-muted-foreground" viewBox="0 0 12 12" fill="currentColor">
@@ -68,7 +70,7 @@ const AccountPage = () => {
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center space-x-2">
-                  <span className="text-xs text-muted-foreground">证券持仓</span>
+                  <span className="text-xs text-muted-foreground">{t('account.securities_position')}</span>
                   <span className="text-xs text-muted-foreground">·</span>
                   <span className="text-xs text-muted-foreground">HKD</span>
                 </div>

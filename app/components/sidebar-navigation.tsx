@@ -6,6 +6,7 @@ import { cn } from '../lib/utils'
 import { Star, BarChart3, User, Compass, SlidersHorizontal, MessageSquare, Users } from 'lucide-react'
 import { DropdownMenu } from './dropdown-menu-component'
 import { MessagePopup } from './message-popup'
+import { useLanguage } from '../contexts/LanguageContext'
 
 interface NavigationItem {
   label: string
@@ -13,18 +14,6 @@ interface NavigationItem {
   to: string
 }
 
-const mainNavigationItems: NavigationItem[] = [
-  { label: '自选', to: '/watchlist', icon: (<Star className="w-4 h-4" />) },
-  { label: '市场', to: '/market', icon: (<BarChart3 className="w-4 h-4" />) },
-  { label: '账户', to: '/account', icon: (<User className="w-4 h-4" />) },
-  // { label: '期权', to: '/options', icon: (<BadgeDollarSign className="w-4 h-4" />) },
-  { label: '发现', to: '/discovery', icon: (<Compass className="w-4 h-4" />) },
-]
-
-const bottomNavigationItems: NavigationItem[] = [
-  { label: '消息', to: '/messages', icon: (<MessageSquare className="w-4 h-4" />) },
-  { label: '社区', to: '/community', icon: (<Users className="w-4 h-4" />) },
-]
 
 interface SidebarNavigationProps {
   className?: string
@@ -34,6 +23,19 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isMessagePopupOpen, setIsMessagePopupOpen] = useState(false)
   const [isCommunityPopupOpen, setIsCommunityPopupOpen] = useState(false)
+  const { t } = useLanguage()
+
+  const mainNavigationItems: NavigationItem[] = [
+    { label: t('nav.watchlist'), to: '/watchlist', icon: (<Star className="w-4 h-4" />) },
+    { label: t('nav.market'), to: '/market', icon: (<BarChart3 className="w-4 h-4" />) },
+    { label: t('nav.account'), to: '/account', icon: (<User className="w-4 h-4" />) },
+    { label: t('nav.discovery'), to: '/discovery', icon: (<Compass className="w-4 h-4" />) },
+  ]
+
+  const bottomNavigationItems: NavigationItem[] = [
+    { label: t('nav.messages'), to: '/messages', icon: (<MessageSquare className="w-4 h-4" />) },
+    { label: t('nav.community'), to: '/community', icon: (<Users className="w-4 h-4" />) },
+  ]
 
   return (
     <div className={cn("border-r flex flex-col h-full", className)}>
@@ -150,7 +152,7 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="rounded-lg border w-[90vw] h-[90vh] max-w-6xl max-h-[800px] flex flex-col shadow-2xl">
             <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="text-lg font-semibold">社区</h3>
+              <h3 className="text-lg font-semibold">{t('nav.community')}</h3>
               <button
                 onClick={() => setIsCommunityPopupOpen(false)}
                 className="text-gray-500 hover:text-gray-700 text-xl"
@@ -162,7 +164,7 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
               <iframe
                 src="https://tfi.tfisec.cn/communityPC"
                 className="w-full h-full border-0"
-                title="社区"
+                title={t('nav.community')}
               />
             </div>
           </div>

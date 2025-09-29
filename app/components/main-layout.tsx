@@ -12,21 +12,27 @@ import { ThemeProvider } from './theme-provider'
 import { Toaster } from './ui/toaster'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import { ModeToggle } from './mode-toggle'
+import { LanguageToggle } from './language-toggle'
 import { TradingPopup } from './trading-popup'
 import { useState } from 'react'
 import DiscoveryPage from '../pages/DiscoveryPage'
 import HeatmapPage from '../pages/HeatmapPage'
+import { LanguageProvider, useLanguage } from '../contexts/LanguageContext'
 
-const PlaceholderPage = ({ title }: { title: string }) => (
-  <div className="flex-1 p-4 text-center text-foreground">
-    <h2 className="text-xl mb-4">{title}</h2>
-    <p className="text-muted-foreground">该页面正在开发中...</p>
-  </div>
-)
+const PlaceholderPage = ({ title }: { title: string }) => {
+  const { t } = useLanguage()
+  return (
+    <div className="flex-1 p-4 text-center text-foreground">
+      <h2 className="text-xl mb-4">{title}</h2>
+      <p className="text-muted-foreground">{t('page.developing')}</p>
+    </div>
+  )
+}
 
-export function MainLayout() {
+function MainLayoutContent() {
   const navigate = useNavigate()
   const [tradingPopupOpen, setTradingPopupOpen] = useState(false)
+  const { t } = useLanguage()
 
   const handleGoHome = () => {
     navigate('/market')
@@ -44,12 +50,8 @@ export function MainLayout() {
     }
   }
 
-  // const handleHistory = () => {
-  //   toast({ title: '历史', description: '历史功能开发中…' })
-  // }
-
   const handleSearch = () => {
-    toast({ title: '搜索', description: '搜索功能开发中…' })
+    toast({ title: t('toast.search.title'), description: t('toast.search.description') })
   }
 
   const handleQuickTrading = () => {
@@ -73,50 +75,52 @@ export function MainLayout() {
               <div className="absolute left-2 flex items-center gap-1.5">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="sm" aria-label="首页" onClick={handleGoHome}>
+                    <Button variant="ghost" size="sm" aria-label={t('common.home')} onClick={handleGoHome}>
                       <Home className="w-3.5 h-3.5" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>首页</TooltipContent>
+                  <TooltipContent>{t('common.home')}</TooltipContent>
                 </Tooltip>
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="sm" aria-label="前一页" onClick={handleGoBack}>
+                    <Button variant="ghost" size="sm" aria-label={t('common.previous_page')} onClick={handleGoBack}>
                       <ArrowLeft className="w-3.5 h-3.5" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>前一页</TooltipContent>
+                  <TooltipContent>{t('common.previous_page')}</TooltipContent>
                 </Tooltip>
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="sm" aria-label="后一页" onClick={handleGoForward}>
+                    <Button variant="ghost" size="sm" aria-label={t('common.next_page')} onClick={handleGoForward}>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>后一页</TooltipContent>
+                  <TooltipContent>{t('common.next_page')}</TooltipContent>
                 </Tooltip>
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="sm" aria-label="搜索" onClick={handleSearch}>
+                    <Button variant="ghost" size="sm" aria-label={t('common.search')} onClick={handleSearch}>
                       <Search className="w-3.5 h-3.5" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>搜索</TooltipContent>
+                  <TooltipContent>{t('common.search')}</TooltipContent>
                 </Tooltip>
               </div>
 
-              <span className="text-foreground text-xs font-medium">天风国际PC客户端</span>
+              <span className="text-foreground text-xs font-medium">{t('app.title')}</span>
               <div className="absolute right-4 flex items-center gap-2">
+                {/* 语言切换 */}
+                <LanguageToggle />
                 {/* 主题切换 */}
                 <ModeToggle />
                 <button 
                   onClick={handleQuickTrading}
                   className="bg-[#FF5C00] px-3 py-1 rounded text-xs font-medium hover:bg-[#e54f00] transition-colors"
                 >
-                  快捷交易
+                  {t('common.quick_trading')}
                 </button>
               </div>
             </div>
@@ -125,14 +129,14 @@ export function MainLayout() {
             <div className="flex-1 overflow-y-auto min-h-0">
               <Routes>
                 <Route path="/" element={<Navigate to="/market" replace />} />
-                <Route path="/watchlist" element={<StockDetailPage titleOverride="自选" />} />
+                <Route path="/watchlist" element={<StockDetailPage titleOverride={t('nav.watchlist')} />} />
                 <Route path="/market" element={<div className="bg-background text-foreground"><App /></div>} />
                 <Route path="/stock/:symbol" element={<StockDetailPage />} />
                 <Route path="/account" element={<AccountPage />} />
-                <Route path="/options" element={<PlaceholderPage title="期权" />} />
+                <Route path="/options" element={<PlaceholderPage title={t('nav.options')} />} />
                 <Route path="/discovery" element={<DiscoveryPage />} />
                 <Route path="/heatmap" element={<HeatmapPage />} />
-                <Route path="*" element={<PlaceholderPage title="页面未找到" />} />
+                <Route path="*" element={<PlaceholderPage title={t('page.not_found')} />} />
               </Routes>
             </div>
           </div>
@@ -144,5 +148,13 @@ export function MainLayout() {
         />
       </div>
     </ThemeProvider>
+  )
+}
+
+export function MainLayout() {
+  return (
+    <LanguageProvider>
+      <MainLayoutContent />
+    </LanguageProvider>
   )
 }

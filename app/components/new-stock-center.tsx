@@ -1,20 +1,22 @@
 import { upcomingStocks, listedNewStocks } from '../data/mock-data'
+import { useLanguage } from '../contexts/LanguageContext'
 
 export const NewStockCenter = () => {
+  const { t } = useLanguage()
   return (
     <div className="grid grid-cols-2 gap-6">
       <div className="bg-card rounded-lg p-6 border">
-        <h2 className="text-xl font-semibold mb-4">待上市</h2>
+        <h2 className="text-xl font-semibold mb-4">{t('new_stock.upcoming')}</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="border-b">
               <tr>
-                <th className="text-left py-2 px-3 whitespace-nowrap">序号</th>
-                <th className="text-left py-2 px-3 whitespace-nowrap">代码</th>
-                <th className="text-left py-2 px-3 whitespace-nowrap">名称</th>
-                <th className="text-right py-2 px-3 whitespace-nowrap">发行价</th>
-                <th className="text-right py-2 px-3 whitespace-nowrap">每手股数</th>
-                <th className="text-right py-2 px-3 whitespace-nowrap">最小申购金额</th>
+                <th className="text-left py-2 px-3 whitespace-nowrap">{t('new_stock.serial_number')}</th>
+                <th className="text-left py-2 px-3 whitespace-nowrap">{t('table.code')}</th>
+                <th className="text-left py-2 px-3 whitespace-nowrap">{t('table.name')}</th>
+                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.ipo_price')}</th>
+                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.lot_size')}</th>
+                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.min_subscription')}</th>
               </tr>
             </thead>
             <tbody>
@@ -34,17 +36,17 @@ export const NewStockCenter = () => {
       </div>
 
       <div className="bg-card rounded-lg p-6 border">
-        <h2 className="text-xl font-semibold mb-4">已上市</h2>
+        <h2 className="text-xl font-semibold mb-4">{t('new_stock.listed')}</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="border-b">
               <tr>
-                <th className="text-left py-2 px-3 whitespace-nowrap">序号</th>
-                <th className="text-left py-2 px-3 whitespace-nowrap">代码</th>
-                <th className="text-left py-2 px-3 whitespace-nowrap">名称</th>
-                <th className="text-right py-2 px-3 whitespace-nowrap">最新价</th>
-                <th className="text-right py-2 px-3 whitespace-nowrap">首日涨幅</th>
-                <th className="text-right py-2 px-3 whitespace-nowrap">暗盘涨跌额</th>
+                <th className="text-left py-2 px-3 whitespace-nowrap">{t('new_stock.serial_number')}</th>
+                <th className="text-left py-2 px-3 whitespace-nowrap">{t('table.code')}</th>
+                <th className="text-left py-2 px-3 whitespace-nowrap">{t('table.name')}</th>
+                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.latest_price')}</th>
+                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.first_day_change')}</th>
+                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.dark_market_change')}</th>
               </tr>
             </thead>
             <tbody>

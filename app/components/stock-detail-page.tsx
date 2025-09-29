@@ -8,8 +8,12 @@ import { IndexInfoPanel } from './index-info-panel'
 import { type StockData, mockStockData } from '../data/mockStockData'
 import { type IndexDetail } from '../types/market'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
+import { Button } from './ui/button'
 import { hkHotStocks } from '../data/mock-data'
 import { useNavigate } from 'react-router-dom'
+import { useLanguage } from '../contexts/LanguageContext'
+import { List, Grid3X3 } from 'lucide-react'
+import { StockGridItem } from './stock-grid-item'
 
 // Transform StockData to IndexDetail format
 function transformStockToIndex(stockData: StockData): IndexDetail {
@@ -27,14 +31,18 @@ function transformStockToIndex(stockData: StockData): IndexDetail {
     volume: stockData.turnover,
     avgPrice: ((stockData.high + stockData.low) / 2).toFixed(3),
     market: stockData.market,
-    status: '交易中'
+    status: 'stock_detail.status_trading'
   }
 }
+
 
 export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
   const params = useParams()
   const location = useLocation()
   const [stockData, setStockData] = useState<StockData>(mockStockData)
+  const [sidebarViewMode, setSidebarViewMode] = useState<'list' | 'grid'>('list')
+  const [selectedPeriod, setSelectedPeriod] = useState('daily')
+  const { t } = useLanguage()
 
   // Check if we're on the watchlist route
   const isWatchlistRoute = location.pathname === '/watchlist'
@@ -68,7 +76,7 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
   }, [])
 
   const navigate = useNavigate()
-  const rankingTitle = titleOverride ?? titleFromUrl ?? '股票排行'
+  const rankingTitle = titleOverride ?? titleFromUrl ?? t('stock_detail.ranking')
 
   // Handle sidebar item click based on route
   const handleSidebarItemClick = (stockCode: string) => {
@@ -84,61 +92,129 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
   return (
     <div className="flex h-screen bg-background">
       {/* Left Ranking Sidebar */}
-      <aside className="w-[260px] border-r border-border flex-shrink-0">
-        <div className="p-3 border-b border-border text-sm font-medium text-foreground">{rankingTitle}</div>
-        <div className="p-3">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-border">
-                <TableHead className="text-muted-foreground">名称代码</TableHead>
-                <TableHead className="text-muted-foreground">最新价</TableHead>
-                <TableHead className="text-muted-foreground">涨跌幅</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {hkHotStocks.slice(0, 20).map((s, idx) => (
-                <TableRow
-                  key={`${s.code}-${idx}`}
-                  className="border-border hover:bg-muted/20 cursor-pointer"
-                  onClick={() => handleSidebarItemClick(s.code)}
-                >
-                  <TableCell className="text-sm whitespace-nowrap">
-                    <div className="flex flex-col leading-tight">
-                      <span className="text-foreground">{s.name}</span>
-                      <span className="text-xs text-muted-foreground">{s.code}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-sm font-mono text-foreground">{s.price}</TableCell>
-                  <TableCell className={`text-sm font-mono ${s.percentage?.startsWith('+') ? 'text-green-500' : s.percentage?.startsWith('-') ? 'text-red-500' : 'text-muted-foreground'}`}>{s.percentage}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+      <aside className={`${sidebarViewMode === 'grid' ? 'flex-1' : 'w-[260px]'} border-r border-border flex-shrink-0 flex flex-col`}>
+        <div className="p-3 border-b border-border">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium text-foreground">{rankingTitle}</span>
+            <div className="flex items-center gap-1">
+              <Button
+                variant={sidebarViewMode === 'list' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setSidebarViewMode('list')}
+                className="h-6 w-6 p-0"
+              >
+                <List className="w-3 h-3" />
+              </Button>
+              <Button
+                variant={sidebarViewMode === 'grid' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setSidebarViewMode('grid')}
+                className="h-6 w-6 p-0"
+              >
+                <Grid3X3 className="w-3 h-3" />
+              </Button>
+            </div>
+          </div>
+        </div>
+        
+        <div className="flex-1 overflow-auto">
+          {sidebarViewMode === 'list' ? (
+            <div className="p-3">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-border">
+                    <TableHead className="text-muted-foreground">{t('stock_detail.name_code')}</TableHead>
+                    <TableHead className="text-muted-foreground">{t('stock_detail.latest_price')}</TableHead>
+                    <TableHead className="text-muted-foreground">{t('stock_detail.change_percent')}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {hkHotStocks.slice(0, 20).map((s, idx) => (
+                    <TableRow
+                      key={`${s.code}-${idx}`}
+                      className="border-border hover:bg-muted/20 cursor-pointer"
+                      onClick={() => handleSidebarItemClick(s.code)}
+                    >
+                      <TableCell className="text-sm whitespace-nowrap">
+                        <div className="flex flex-col leading-tight">
+                          <span className="text-foreground">{s.name}</span>
+                          <span className="text-xs text-muted-foreground">{s.code}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-sm font-mono text-foreground">{s.price}</TableCell>
+                      <TableCell className={`text-sm font-mono ${s.percentage?.startsWith('+') ? 'text-green-500' : s.percentage?.startsWith('-') ? 'text-red-500' : 'text-muted-foreground'}`}>{s.percentage}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <div className="p-3 h-full flex flex-col">
+              {/* Period Selector */}
+              <div className="flex-shrink-0 mb-3 pb-3 border-b border-border">
+                <div className="flex gap-1 flex-wrap">
+                  {[
+                    { key: 'daily', label: '日' },
+                    { key: 'weekly', label: '周' },
+                    { key: 'monthly', label: '月' },
+                    { key: 'quarterly', label: '季' },
+                    { key: 'yearly', label: '年' }
+                  ].map((period) => (
+                    <Button
+                      key={period.key}
+                      variant={selectedPeriod === period.key ? 'default' : 'ghost'}
+                      size="sm"
+                      className="h-6 px-2 text-xs"
+                      onClick={() => setSelectedPeriod(period.key)}
+                    >
+                      {period.label}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Grid Layout */}
+              <div className="flex-1 overflow-auto">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                  {hkHotStocks.slice(0, 20).map((s, idx) => (
+                    <StockGridItem
+                      key={`${s.code}-${idx}`}
+                      stock={s}
+                      selectedPeriod={selectedPeriod}
+                      onClick={() => handleSidebarItemClick(s.code)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col">
-        {/* Main Content */}
-        <div className="flex flex-1">
-          {/* Content Area */}
-          <div className="flex-1 flex flex-col p-4">
-            {/* Stock Price Header */}
-            <div className="mb-4">
-              <StockPriceHeader stockData={stockData} />
-            </div>
+      {/* Main Content Area - Only show in list mode */}
+      {sidebarViewMode === 'list' && (
+        <div className="flex-1 flex flex-col">
+          {/* Main Content */}
+          <div className="flex flex-1">
+            {/* Content Area */}
+            <div className="flex-1 flex flex-col p-4">
+              {/* Stock Price Header */}
+              <div className="mb-4">
+                <StockPriceHeader stockData={stockData} />
+              </div>
 
-            {/* Chart Area */}
-            <div className="mb-4">
-              <StockChart symbol={stockData.symbol} />
+              {/* Chart Area */}
+              <div className="mb-4">
+                <StockChart symbol={stockData.symbol} />
+              </div>
             </div>
-          </div>
-
-          {/* Right Info Panel */}
-          <div className="w-[360px] border-l border-border bg-background p-4">
-            <IndexInfoPanel indexDetail={transformStockToIndex(stockData)} />
           </div>
         </div>
+      )}
+
+      {/* Right Info Panel - Always visible */}
+      <div className="w-[360px] border-l border-border bg-background p-4 flex-shrink-0">
+        <IndexInfoPanel indexDetail={transformStockToIndex(stockData)} />
       </div>
     </div>
   )

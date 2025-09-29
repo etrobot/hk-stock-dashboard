@@ -6,14 +6,16 @@ import { Button } from "../components/ui/button"
 import { usIndices, usGainers, usLosers, usHotStocks, usDividendStocks, usSectors } from '../data/mock-data'
 import { DetailedStockTablePage } from "./DetailedStockTablePage"
 import { useState } from "react"
+import { useLanguage } from "../contexts/LanguageContext"
 
 interface USStockPageProps {
   onStockClick?: (stock: any, tableTitle?: string) => void;
 }
 
 export default function USStockPage({ onStockClick }: USStockPageProps) {
+  const { t } = useLanguage()
   const [showDetailedTable, setShowDetailedTable] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<string>('首页');
+  const [activeTab, setActiveTab] = useState<string>(t('tab.home'));
   const [selectedSector, setSelectedSector] = useState<string | null>(null);
 
   const handleShowMore = (tableType: string) => {
@@ -45,24 +47,24 @@ export default function USStockPage({ onStockClick }: USStockPageProps) {
       <div className="flex items-center space-x-6 ml-6">
         <Button 
           variant="ghost" 
-          className={`${activeTab === '首页' ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
-          onClick={() => handleTabChange('首页')}
+          className={`${activeTab === t('tab.home') ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
+          onClick={() => handleTabChange(t('tab.home'))}
         >
-          首页
+          {t('tab.home')}
         </Button>
         <Button 
           variant="ghost" 
-          className={`${activeTab === '概念板块' ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
-          onClick={() => handleTabChange('概念板块')}
+          className={`${activeTab === t('tab.concept_sectors') ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
+          onClick={() => handleTabChange(t('tab.concept_sectors'))}
         >
-          概念板块
+          {t('tab.concept_sectors')}
         </Button>
       </div>
       <div className="container mx-auto p-4 space-y-6">
-      {activeTab !== '概念板块' && <MarketIndices indices={usIndices} />}
+      {activeTab !== t('tab.concept_sectors') && <MarketIndices indices={usIndices} />}
 
         <div className="flex gap-6">
-          {activeTab === '概念板块' ? (
+          {activeTab === t('tab.concept_sectors') ? (
             <>
               <ConceptSectors 
                 sectors={usSectors}
@@ -71,7 +73,7 @@ export default function USStockPage({ onStockClick }: USStockPageProps) {
               />
               <div className="flex-1 min-w-0">
                 <DetailedStockTablePage 
-                  onBack={() => setActiveTab('首页')}
+                  onBack={() => setActiveTab(t('tab.home'))}
                 />
               </div>
             </>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { cn } from '../lib/utils'
+import { useLanguage } from '../contexts/LanguageContext'
 import {
   ArrowDownToLine,
   ArrowUpToLine,
@@ -50,77 +51,79 @@ function FeatureTile({ label, icon, iconColorClass, className }: FeatureItem & {
 }
 
 export default function DiscoveryPage() {
+  const { t } = useLanguage()
+  
   const sections: { title: string; items: FeatureItem[]; colorClass: string }[] = [
     {
-      title: '我的',
+      title: t('discovery.section.my'),
       colorClass: 'text-blue-500',
       items: [
-        { label: '入金', icon: <ArrowDownToLine className="w-5 h-5" /> },
-        { label: '新股认购', icon: <Sparkles className="w-5 h-5" /> },
-        { label: '现金理财', icon: <PiggyBank className="w-5 h-5" /> },
-        { label: '股票对比', icon: <GitCompare className="w-5 h-5" /> },
-        { label: '转股', icon: <RefreshCcw className="w-5 h-5" /> },
-        { label: '策略广场', icon: <Blocks className="w-5 h-5" /> },
-        { label: '货币兑换', icon: <Coins className="w-5 h-5" /> },
-        { label: '产业链', icon: <Blocks className="w-5 h-5" /> },
-        { label: '积分中心', icon: <Ticket className="w-5 h-5" /> },
+        { label: t('discovery.deposit'), icon: <ArrowDownToLine className="w-5 h-5" /> },
+        { label: t('discovery.ipo_subscription'), icon: <Sparkles className="w-5 h-5" /> },
+        { label: t('discovery.cash_management'), icon: <PiggyBank className="w-5 h-5" /> },
+        { label: t('discovery.stock_comparison'), icon: <GitCompare className="w-5 h-5" /> },
+        { label: t('discovery.stock_transfer'), icon: <RefreshCcw className="w-5 h-5" /> },
+        { label: t('discovery.strategy_square'), icon: <Blocks className="w-5 h-5" /> },
+        { label: t('discovery.currency_exchange'), icon: <Coins className="w-5 h-5" /> },
+        { label: t('discovery.industry_chain'), icon: <Blocks className="w-5 h-5" /> },
+        { label: t('discovery.points_center'), icon: <Ticket className="w-5 h-5" /> },
       ],
     },
     {
-      title: '交易',
+      title: t('discovery.section.trading'),
       colorClass: 'text-green-500',
       items: [
-        { label: '交易', icon: <ArrowUpToLine className="w-5 h-5" /> },
-        { label: '订单', icon: <History className="w-5 h-5" /> },
-        { label: '新股认购', icon: <Sparkles className="w-5 h-5" /> },
-        { label: '股票', icon: <BarChart3 className="w-5 h-5" /> },
-        { label: 'AH', icon: <Building2 className="w-5 h-5" /> },
-        { label: '企业服务', icon: <Briefcase className="w-5 h-5" /> },
-        { label: '现金理财', icon: <PiggyBank className="w-5 h-5" /> },
-        { label: '权限申请', icon: <Key className="w-5 h-5" /> },
-        { label: '加密货币', icon: <Coins className="w-5 h-5" /> },
+        { label: t('discovery.trading'), icon: <ArrowUpToLine className="w-5 h-5" /> },
+        { label: t('discovery.orders'), icon: <History className="w-5 h-5" /> },
+        { label: t('discovery.ipo_subscription'), icon: <Sparkles className="w-5 h-5" /> },
+        { label: t('discovery.stocks'), icon: <BarChart3 className="w-5 h-5" /> },
+        { label: t('discovery.ah_stocks'), icon: <Building2 className="w-5 h-5" /> },
+        { label: t('discovery.enterprise_services'), icon: <Briefcase className="w-5 h-5" /> },
+        { label: t('discovery.cash_management'), icon: <PiggyBank className="w-5 h-5" /> },
+        { label: t('discovery.permission_application'), icon: <Key className="w-5 h-5" /> },
+        { label: t('discovery.cryptocurrency'), icon: <Coins className="w-5 h-5" /> },
       ],
     },
     {
-      title: '资金',
+      title: t('discovery.section.funds'),
       colorClass: 'text-orange-500',
       items: [
-        { label: '入金', icon: <ArrowDownToLine className="w-5 h-5" /> },
-        { label: '出金', icon: <ArrowUpToLine className="w-5 h-5" /> },
-        { label: '银行管理', icon: <Landmark className="w-5 h-5" /> },
-        { label: '出入金记录', icon: <History className="w-5 h-5" /> },
-        { label: '货币兑换', icon: <Coins className="w-5 h-5" /> },
+        { label: t('discovery.deposit'), icon: <ArrowDownToLine className="w-5 h-5" /> },
+        { label: t('discovery.withdraw'), icon: <ArrowUpToLine className="w-5 h-5" /> },
+        { label: t('discovery.bank_management'), icon: <Landmark className="w-5 h-5" /> },
+        { label: t('discovery.deposit_withdraw_records'), icon: <History className="w-5 h-5" /> },
+        { label: t('discovery.currency_exchange'), icon: <Coins className="w-5 h-5" /> },
       ],
     },
     {
-      title: '增值服务',
+      title: t('discovery.section.value_added_services'),
       colorClass: 'text-purple-500',
       items: [
-        { label: '高级行情', icon: <BarChart3 className="w-5 h-5" /> },
-        { label: '我的卡券', icon: <Ticket className="w-5 h-5" /> },
-        { label: '股票对比', icon: <GitCompare className="w-5 h-5" /> },
-        { label: '产业链', icon: <Blocks className="w-5 h-5" /> },
-        { label: '脱水研报', icon: <FileText className="w-5 h-5" /> },
-        { label: '环球榜单', icon: <Globe className="w-5 h-5" /> },
-        { label: '智选榜单', icon: <Sparkles className="w-5 h-5" /> },
-        { label: '转股', icon: <RefreshCcw className="w-5 h-5" /> },
+        { label: t('discovery.premium_quotes'), icon: <BarChart3 className="w-5 h-5" /> },
+        { label: t('discovery.my_vouchers'), icon: <Ticket className="w-5 h-5" /> },
+        { label: t('discovery.stock_comparison'), icon: <GitCompare className="w-5 h-5" /> },
+        { label: t('discovery.industry_chain'), icon: <Blocks className="w-5 h-5" /> },
+        { label: t('discovery.research_reports'), icon: <FileText className="w-5 h-5" /> },
+        { label: t('discovery.global_rankings'), icon: <Globe className="w-5 h-5" /> },
+        { label: t('discovery.smart_rankings'), icon: <Sparkles className="w-5 h-5" /> },
+        { label: t('discovery.stock_transfer'), icon: <RefreshCcw className="w-5 h-5" /> },
       ],
     },
     {
-      title: '账户',
+      title: t('discovery.section.account'),
       colorClass: 'text-red-500',
       items: [
-        { label: '修改密码', icon: <Key className="w-5 h-5" /> },
-        { label: '设备', icon: <Smartphone className="w-5 h-5" /> },
-        { label: '设置', icon: <Settings className="w-5 h-5" /> },
-        { label: '实名制', icon: <User className="w-5 h-5" /> },
-        { label: '业务办理', icon: <FileText className="w-5 h-5" /> },
-        { label: '修改手机', icon: <Phone className="w-5 h-5" /> },
-        { label: '积分中心', icon: <Ticket className="w-5 h-5" /> },
-        { label: '帮助中心', icon: <HelpCircle className="w-5 h-5" /> },
-        { label: 'W-8续期', icon: <CalendarClock className="w-5 h-5" /> },
-        { label: '账户解冻', icon: <Unlock className="w-5 h-5" /> },
-        { label: '资料更新', icon: <FileText className="w-5 h-5" /> },
+        { label: t('discovery.change_password'), icon: <Key className="w-5 h-5" /> },
+        { label: t('discovery.devices'), icon: <Smartphone className="w-5 h-5" /> },
+        { label: t('discovery.settings'), icon: <Settings className="w-5 h-5" /> },
+        { label: t('discovery.real_name_verification'), icon: <User className="w-5 h-5" /> },
+        { label: t('discovery.business_handling'), icon: <FileText className="w-5 h-5" /> },
+        { label: t('discovery.change_phone'), icon: <Phone className="w-5 h-5" /> },
+        { label: t('discovery.points_center'), icon: <Ticket className="w-5 h-5" /> },
+        { label: t('discovery.help_center'), icon: <HelpCircle className="w-5 h-5" /> },
+        { label: t('discovery.w8_renewal'), icon: <CalendarClock className="w-5 h-5" /> },
+        { label: t('discovery.account_unfreeze'), icon: <Unlock className="w-5 h-5" /> },
+        { label: t('discovery.profile_update'), icon: <FileText className="w-5 h-5" /> },
       ],
     },
   ]
@@ -128,7 +131,7 @@ export default function DiscoveryPage() {
   return (
     <div className="h-full bg-background text-foreground">
       <div className="px-6 py-4 border-b border-border">
-        <h1 className="text-lg font-semibold">发现</h1>
+        <h1 className="text-lg font-semibold">{t('discovery.title')}</h1>
       </div>
 
       <div className="container mx-auto p-6 space-y-6">

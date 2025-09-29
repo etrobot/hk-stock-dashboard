@@ -1,32 +1,35 @@
 import { CapitalFlowChart } from './CapitalFlowChart'
+import { useLanguage } from '../contexts/LanguageContext'
 
 interface MarketContentProps {
   indexCode?: string;
 }
 
 export function MarketContent({ }: MarketContentProps) {
+  const { t } = useLanguage()
+  
   return (
     <div className="bg-background">
       {/* 资金流向趋势 */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-base font-semibold text-foreground">资金流向趋势</h3>
+          <h3 className="text-base font-semibold text-foreground">{t('capital_flow.title')}</h3>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span>单位：元</span>
-            <button className="text-muted-foreground hover:text-foreground">历史数据</button>
+            <span>{t('capital_flow.unit')}</span>
+            <button className="text-muted-foreground hover:text-foreground">{t('capital_flow.history')}</button>
           </div>
         </div>
         
         {/* 时间段选择 */}
         <div className="flex items-center gap-1 mb-3">
           <div className="bg-muted rounded-full px-4 py-1">
-            <button className="bg-background rounded-full px-3 py-1 text-xs text-foreground shadow-sm">5日</button>
+            <button className="bg-background rounded-full px-3 py-1 text-xs text-foreground shadow-sm">{t('capital_flow.5d')}</button>
           </div>
-          <button className="px-3 py-1 text-xs text-muted-foreground">20日</button>
-          <button className="px-3 py-1 text-xs text-muted-foreground">60日</button>
+          <button className="px-3 py-1 text-xs text-muted-foreground">{t('capital_flow.20d')}</button>
+          <button className="px-3 py-1 text-xs text-muted-foreground">{t('capital_flow.60d')}</button>
         </div>
         
-        <div className="text-xs text-muted-foreground mb-3">5日净流入：9.99亿</div>
+        <div className="text-xs text-muted-foreground mb-3">{t('capital_flow.net_inflow')}</div>
         
         {/* 资金成交统计 */}
         <div className="h-48 bg-muted/50 border border-border mb-3 flex items-center justify-center p-4">
@@ -71,15 +74,15 @@ export function MarketContent({ }: MarketContentProps) {
         <div className="flex items-center justify-center gap-6 text-xs">
           <div className="flex items-center gap-1">
             <div className="w-2 h-2 bg-red-500"></div>
-            <span className="text-muted-foreground">净流入</span>
+            <span className="text-muted-foreground">{t('capital_flow.net_inflow_legend')}</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-2 h-2 bg-green-500"></div>
-            <span className="text-muted-foreground">净流出</span>
+            <span className="text-muted-foreground">{t('capital_flow.net_outflow_legend')}</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-3 h-0.5 bg-blue-500"></div>
-            <span className="text-muted-foreground">收盘价</span>
+            <span className="text-muted-foreground">{t('capital_flow.close_price_legend')}</span>
           </div>
         </div>
       </div>
@@ -87,7 +90,7 @@ export function MarketContent({ }: MarketContentProps) {
       {/* 买卖盘十档 */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-base font-semibold text-foreground">买卖盘十档</h3>
+          <h3 className="text-base font-semibold text-foreground">{t('order_book.title')}</h3>
           <div className="w-6 h-6 bg-muted rounded text-xs flex items-center justify-center text-muted-foreground">10</div>
         </div>
         
@@ -135,14 +138,14 @@ export function MarketContent({ }: MarketContentProps) {
       {/* 买卖盘经纪 */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-base font-semibold text-foreground">买卖盘经纪</h3>
+          <h3 className="text-base font-semibold text-foreground">{t('order_book.broker_title')}</h3>
           <div className="w-6 h-6 bg-muted rounded text-xs flex items-center justify-center text-muted-foreground">10</div>
         </div>
         
         <div className="grid grid-cols-2 gap-4">
           {/* 买盘经纪 */}
           <div>
-            <h4 className="text-sm font-medium text-foreground mb-2">买盘经纪</h4>
+            <h4 className="text-sm font-medium text-foreground mb-2">{t('order_book.buy_broker')}</h4>
             {[
               { code: "9045", name: "瑞银" },
               { code: "9045", name: "花期银行" },
@@ -167,7 +170,7 @@ export function MarketContent({ }: MarketContentProps) {
           
           {/* 卖盘经纪 */}
           <div>
-            <h4 className="text-sm font-medium text-foreground mb-2">卖盘经纪</h4>
+            <h4 className="text-sm font-medium text-foreground mb-2">{t('order_book.sell_broker')}</h4>
             {[
               { code: "3288", name: "美林" },
               { code: "3288", name: "巴克莱亚洲" },

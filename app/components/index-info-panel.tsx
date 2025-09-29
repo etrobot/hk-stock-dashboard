@@ -5,6 +5,7 @@ import { IndexDetail } from "../types/market"
 import { MarketContent } from "./market-content"
 import { useState } from "react"
 import { useTheme } from "./theme-provider"
+import { useLanguage } from "../contexts/LanguageContext"
 
 interface IndexInfoPanelProps {
   indexDetail: IndexDetail;
@@ -13,6 +14,7 @@ interface IndexInfoPanelProps {
 export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
   const [activeTab, setActiveTab] = useState<'market' | 'analysis' | 'news'>('market')
   const { resolvedTheme } = useTheme()
+  const { t } = useLanguage()
   
   const newsItems = [
     {
@@ -80,29 +82,29 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-slate-400">最高</span>
+                <span className="text-slate-400">{t('index_panel.high')}</span>
                 <span className="">{indexDetail.high}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">今开</span>
+                <span className="text-slate-400">{t('index_panel.open')}</span>
                 <span className="">{indexDetail.open}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">成交额</span>
+                <span className="text-slate-400">{t('index_panel.volume')}</span>
                 <span className="">{indexDetail.volume}</span>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-slate-400">最低</span>
+                <span className="text-slate-400">{t('index_panel.low')}</span>
                 <span className="">{indexDetail.low}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">昨收</span>
+                <span className="text-slate-400">{t('index_panel.close')}</span>
                 <span className="">{indexDetail.close}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">平均价</span>
+                <span className="text-slate-400">{t('index_panel.avg_price')}</span>
                 <span className="">{indexDetail.avgPrice}</span>
               </div>
             </div>
@@ -110,7 +112,7 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
 
           <div className="pt-2 space-y-2 text-sm">
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">{indexDetail.market}相关</span>
+              <span className="text-slate-400">{indexDetail.market}{t('index_panel.related')}</span>
               <div className="flex items-center gap-2">
                 <span className="">{indexDetail.value}</span>
                 <span className={`${indexDetail.isPositive ? 'text-green-400' : 'text-red-400'}`}>
@@ -119,13 +121,13 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
               </div>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">期货</span>
+              <span className="text-slate-400">{t('index_panel.futures')}</span>
               <div className="flex items-center gap-2">
                 <span className="">{indexDetail.value}</span>
                 <span className={`${indexDetail.isPositive ? 'text-green-400' : 'text-red-400'}`}>
                   {indexDetail.change} {indexDetail.percentage}
                 </span>
-                <span className="text-blue-400">高水 5</span>
+                <span className="text-blue-400">{t('index_panel.premium')} 5</span>
               </div>
             </div>
           </div>
@@ -140,19 +142,19 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
               className={`pb-1 ${activeTab === 'market' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
               onClick={() => setActiveTab('market')}
             >
-              行情
+              {t('index_panel.market_tab')}
             </button>
             <button 
               className={`pb-1 ${activeTab === 'analysis' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
               onClick={() => setActiveTab('analysis')}
             >
-              分析
+              {t('index_panel.analysis_tab')}
             </button>
             <button 
               className={`pb-1 ${activeTab === 'news' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
               onClick={() => setActiveTab('news')}
             >
-              资讯
+              {t('index_panel.news_tab')}
             </button>
           </div>
           
@@ -160,21 +162,21 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
           {activeTab === 'news' && (
             <div className="flex gap-2 mt-3">
               <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-xs px-3 py-1 h-auto">
-                新闻
+                {t('index_panel.news_subtab')}
               </Button>
               <Button
                 size="sm"
                 variant="outline"
                 className="border-slate-600 text-slate-400 hover:text-xs px-3 py-1 h-auto bg-transparent"
               >
-                公告
+                {t('index_panel.announcement_subtab')}
               </Button>
               <Button
                 size="sm"
                 variant="outline"
                 className="border-slate-600 text-slate-400 hover:text-xs px-3 py-1 h-auto bg-transparent"
               >
-                评级
+                {t('index_panel.rating_subtab')}
               </Button>
             </div>
           )}
@@ -191,7 +193,7 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
               <iframe
                 src={`http://testdv.tfisec.cn/tradestock/analysis?theme=${resolvedTheme === 'dark' ? 'dark' : 'white'}&stock_code=${indexDetail.code}&set_code=13`}
                 className="w-full h-full border-0"
-                title="股票分析"
+                title={t('index_panel.stock_analysis_title')}
               />
             </div>
           )}

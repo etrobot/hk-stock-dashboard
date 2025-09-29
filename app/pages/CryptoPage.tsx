@@ -3,12 +3,14 @@ import { SectorHeatmap } from "../components/sector-heatmap"
 import { cryptoGainers as 加密货币涨幅榜, cryptoLosers as 加密货币跌幅榜, cryptoHotStocks as 加密货币热门币, cryptoDeFiStocks as 加密货币DeFi收益 } from '../data/mock-data'
 import { DetailedStockTablePage } from "./DetailedStockTablePage"
 import { useState } from "react"
+import { useLanguage } from "../contexts/LanguageContext"
 
 interface CryptoPageProps {
   onStockClick?: (stock: any, tableTitle?: string) => void;
 }
 
 export default function CryptoPage({ onStockClick }: CryptoPageProps) {
+  const { t } = useLanguage()
   const [showDetailedTable, setShowDetailedTable] = useState<string | null>(null);
 
   const handleShowMore = (tableType: string) => {
@@ -37,7 +39,7 @@ export default function CryptoPage({ onStockClick }: CryptoPageProps) {
               losers={加密货币跌幅榜}
               hotStocks={加密货币热门币}
               dividendStocks={加密货币DeFi收益}
-              dividendTitle="DeFi收益"
+              dividendTitle={t('crypto.defi_yield')}
               onStockClick={onStockClick}
               onShowMore={handleShowMore}
             />

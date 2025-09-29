@@ -6,9 +6,10 @@ import { cn } from '../lib/utils'
 import { ChevronRight, FileText, Gift, TrendingUp, CreditCard, Settings, LogOut } from 'lucide-react'
 import { SettingsDetailPage } from './settings-detail-page'
 import { LoginDialog } from './login-dialog'
+import { useLanguage } from '../contexts/LanguageContext'
 
 interface MenuItem {
-  label: string
+  labelKey: string
   hasArrow: boolean
   icon: React.ReactNode
   isActive?: boolean
@@ -20,20 +21,21 @@ interface DropdownMenuProps {
   className?: string
 }
 
-const menuItems: MenuItem[] = [
-  { label: '业务办理', hasArrow: true, icon: <FileText className="w-3 h-3" /> },
-  { label: '积分中心', hasArrow: true, icon: <Gift className="w-3 h-3" /> },
-  { label: '我的行情', hasArrow: true, isActive: true, icon: <TrendingUp className="w-3 h-3" /> },
-  { label: '我的卡券', hasArrow: true, icon: <CreditCard className="w-3 h-3" /> },
-  { label: '设置', hasArrow: false, icon: <Settings className="w-3 h-3" /> },
-  { label: '退出登陆', hasArrow: false, icon: <LogOut className="w-3 h-3" /> },
-]
-
 export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) {
   const navigate = useNavigate()
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [showSettingsDetail, setShowSettingsDetail] = useState(false)
   const [showLoginDialog, setShowLoginDialog] = useState(false)
+  const { t } = useLanguage()
+
+  const menuItems: MenuItem[] = [
+    { labelKey: 'dropdown.business', hasArrow: true, icon: <FileText className="w-3 h-3" /> },
+    { labelKey: 'dropdown.points', hasArrow: true, icon: <Gift className="w-3 h-3" /> },
+    { labelKey: 'dropdown.my_quotes', hasArrow: true, isActive: true, icon: <TrendingUp className="w-3 h-3" /> },
+    { labelKey: 'dropdown.my_cards', hasArrow: true, icon: <CreditCard className="w-3 h-3" /> },
+    { labelKey: 'dropdown.settings', hasArrow: false, icon: <Settings className="w-3 h-3" /> },
+    { labelKey: 'dropdown.logout', hasArrow: false, icon: <LogOut className="w-3 h-3" /> },
+  ]
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -57,12 +59,12 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
   }, [isOpen, onClose, showLoginDialog, showSettingsDetail])
 
   const handleMenuItemClick = (item: MenuItem) => {
-    if (item.label === '业务办理') {
+    if (item.labelKey === 'dropdown.business') {
       onClose()
       navigate('/discovery')
-    } else if (item.label === '设置') {
+    } else if (item.labelKey === 'dropdown.settings') {
       setShowSettingsDetail(true)
-    } else if (item.label === '退出登陆') {
+    } else if (item.labelKey === 'dropdown.logout') {
       setShowLoginDialog(true)
     }
     // Add other navigation logic here as needed
@@ -124,19 +126,19 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
         <div className="flex justify-between mt-2 text-center">
           <div className="flex-1">
             <div className="text-white text-[12px] font-normal">0</div>
-            <div className="text-[#72737A] text-[12px] font-normal">动态</div>
+            <div className="text-[#72737A] text-[12px] font-normal">{t('dropdown.updates')}</div>
           </div>
           <div className="flex-1">
             <div className="text-white text-[12px] font-normal">0</div>
-            <div className="text-[#72737A] text-[12px] font-normal">关注</div>
+            <div className="text-[#72737A] text-[12px] font-normal">{t('dropdown.following')}</div>
           </div>
           <div className="flex-1">
             <div className="text-white text-[12px] font-normal">0</div>
-            <div className="text-[#72737A] text-[12px] font-normal">粉丝</div>
+            <div className="text-[#72737A] text-[12px] font-normal">{t('dropdown.followers')}</div>
           </div>
           <div className="flex-1">
             <div className="text-white text-[12px] font-normal">0</div>
-            <div className="text-[#72737A] text-[12px] font-normal">收藏</div>
+            <div className="text-[#72737A] text-[12px] font-normal">{t('dropdown.favorites')}</div>
           </div>
         </div>
       </div>
@@ -154,7 +156,7 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
           >
             <div className="flex items-center space-x-3">
               {React.cloneElement(item.icon as React.ReactElement, { className: "w-5 h-5" })}
-              <span>{item.label}</span>
+              <span>{t(item.labelKey)}</span>
             </div>
             {item.hasArrow && (
               <ChevronRight className="w-3 h-3 text-[#DBDBE0]" />
