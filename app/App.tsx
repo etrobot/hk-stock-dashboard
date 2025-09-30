@@ -28,7 +28,12 @@ function App() {
   const handleStockClick = (stock: any, tableTitle?: string) => {
     const code = stock?.code || stock?.symbol || ''
     console.log('Stock clicked from table:', tableTitle, stock)
-    navigate(`/stock/${encodeURIComponent(code)}`)
+    const url = `/stock/${encodeURIComponent(code)}`
+    if (tableTitle) {
+      navigate(`${url}?title=${encodeURIComponent(tableTitle)}`)
+    } else {
+      navigate(url)
+    }
   }
 
   const handleShowMore = (tableType: string) => {

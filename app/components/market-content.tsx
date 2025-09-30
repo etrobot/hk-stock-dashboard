@@ -1,15 +1,35 @@
 import { CapitalFlowChart } from './CapitalFlowChart'
 import { useLanguage } from '../contexts/LanguageContext'
+import { StockGridItem } from './stock-grid-item'
+import { mockDetailedStocks } from '../data/mock-detailed-stocks'
 
 interface MarketContentProps {
   indexCode?: string;
 }
 
-export function MarketContent({ }: MarketContentProps) {
+export function MarketContent({ indexCode }: MarketContentProps) {
   const { t } = useLanguage()
+  
+  // Find stock data based on indexCode, fallback to first stock if not found
+  const selectedStock = indexCode 
+    ? mockDetailedStocks.find(stock => stock.code === indexCode) || mockDetailedStocks[0]
+    : mockDetailedStocks[0]
   
   return (
     <div className="bg-background">
+      {/* 股票网格项目 */}
+      <div className="mb-4">
+        <StockGridItem 
+          stock={{
+            name: selectedStock.name,
+            code: selectedStock.code,
+            price: selectedStock.price,
+            percentage: selectedStock.percentage
+          }}
+          selectedPeriod="daily"
+        />
+      </div>
+      
       {/* 资金流向趋势 */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
