@@ -4,12 +4,32 @@ import ReactECharts from 'echarts-for-react'
 import { useEffect, useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { IndexInfoPanel } from "../components/index-info-panel"
+import { IndexDetail } from "../types/market"
 
 interface TreeNode {
   name: string;
   id: string;
   value: number[];
   children?: TreeNode[];
+}
+
+// Mock index data for the info panel
+const mockIndexDetail: IndexDetail = {
+  code: "HSI",
+  name: "恒生指数",
+  market: "港股",
+  status: "开盘",
+  value: "17,234.56",
+  change: "+234.56",
+  percentage: "+1.38%",
+  isPositive: true,
+  high: "17,456.78",
+  low: "17,123.45",
+  open: "17,200.00",
+  close: "17,000.00",
+  volume: "1.2B",
+  avgPrice: "17,234.56"
 }
 
 // Mock sector data with market cap, previous value, and change percentage
@@ -242,16 +262,24 @@ export default function HeatmapPage() {
         </div>
       </div>
 
-      {/* Full-screen Heatmap */}
-      <Card className="flex-1 p-4 bg-card border-border">
-        <div className="h-full">
-          <ReactECharts 
-            option={option}
-            style={{ height: '100%', width: '100%' }}
-            theme="dark"
-          />
+      {/* Main Content - Heatmap with Right Panel */}
+      <div className="flex-1 flex gap-4">
+        {/* Heatmap Area */}
+        <Card className="flex-1 p-4 bg-card border-border">
+          <div className="h-full">
+            <ReactECharts 
+              option={option}
+              style={{ height: '100%', width: '100%' }}
+              theme="dark"
+            />
+          </div>
+        </Card>
+
+        {/* Right Panel - Index Info */}
+        <div className="w-80 flex-shrink-0">
+          <IndexInfoPanel indexDetail={mockIndexDetail} />
         </div>
-      </Card>
+      </div>
     </div>
   )
 }
