@@ -9,6 +9,8 @@ import { Switch } from './ui/switch'
 import { Dialog, DialogContent, DialogHeader } from './ui/dialog'
 import { Badge } from './ui/badge'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
+import { OrderTable } from './shared/OrderTable'
+import { TransactionTable } from './shared/TransactionTable'
 
 interface TradingPopupProps {
   open: boolean
@@ -91,6 +93,31 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
       realizedPnl: '0.00',
       todayPnl: '+2.80',
       positionRatio: '49.93%'
+    }
+  ]
+
+  // Mock orders data
+  const todayOrders = [
+    {
+      name: '汇丰控股',
+      orderTime: '2023-10-01 09:00',
+      orderPrice: '98.45',
+      avgPrice: '98.45',
+      orderQuantity: '1',
+      filledQuantity: '0',
+      direction: 'buy' as const,
+      status: 'pending' as const
+    }
+  ]
+
+  // Mock transactions data
+  const todayTransactions = [
+    {
+      name: '汇丰控股',
+      executionTime: '2023-10-01 09:05',
+      executionQuantity: '1',
+      direction: 'buy' as const,
+      executionAmount: '98.45'
     }
   ]
 
@@ -323,55 +350,73 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                 </div>
               </div>
 
-              {/* Holdings Table */}
+              {/* Holdings and Orders Tables */}
               <div className="space-y-2">
                 {/* Tab Navigation */}
-                <div className="flex gap-4 text-xs border-b border-border pb-2">
-                  <div className="border-b-2 border-[#FF5C00] pb-1 text-foreground">持仓</div>
-                  <div className="text-muted-foreground">订单(0)</div>
-                  <div className="text-muted-foreground">历史</div>
-                  <div className="ml-auto text-foreground">交易</div>
-                  <div className="text-muted-foreground">条件单</div>
-                </div>
+                <Tabs defaultValue="holdings" className="w-full">
+                  <TabsList className="bg-transparent p-0 border-b border-border rounded-none h-auto">
+                    <TabsTrigger value="holdings" className="rounded-none border-0 h-auto px-3 py-2 text-xs text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
+                      持仓
+                    </TabsTrigger>
+                    <TabsTrigger value="orders" className="rounded-none border-0 h-auto px-3 py-2 text-xs text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
+                      订单(0)
+                    </TabsTrigger>
+                    <TabsTrigger value="history" className="rounded-none border-0 h-auto px-3 py-2 text-xs text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
+                      历史
+                    </TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="holdings" className="mt-2">
+                    {/* Scrollable Holdings List */}
+                    <div className="overflow-x-auto">
+                      <div className="w-max">
+                        {/* Table Header */}
+                        <div className="grid grid-cols-12 gap-2 text-xs text-muted-foreground pb-1 whitespace-nowrap min-w-max">
+                          <div>操作</div>
+                          <div>代码</div>
+                          <div>名称</div>
+                          <div className="text-right">持有数量</div>
+                          <div className="text-right">可用数量</div>
+                          <div className="text-right">现价</div>
+                          <div className="text-right">平均成本价</div>
+                          <div className="text-right">市值</div>
+                          <div className="text-right">未实现盈亏比例</div>
+                          <div className="text-right">总盈亏金额</div>
+                          <div className="text-right">今日盈亏</div>
+                          <div className="text-right">持仓占比</div>
+                        </div>
 
-                {/* Scrollable Holdings List */}
-                <div className="overflow-x-auto">
-                  <div className="w-max">
-                    {/* Table Header */}
-                    <div className="grid grid-cols-12 gap-2 text-xs text-muted-foreground pb-1 whitespace-nowrap min-w-max">
-                      <div>操作</div>
-                      <div>代码</div>
-                      <div>名称</div>
-                      <div className="text-right">持有数量</div>
-                      <div className="text-right">可用数量</div>
-                      <div className="text-right">现价</div>
-                      <div className="text-right">平均成本价</div>
-                      <div className="text-right">市值</div>
-                      <div className="text-right">未实现盈亏比例</div>
-                      <div className="text-right">总盈亏金额</div>
-                      <div className="text-right">今日盈亏</div>
-                      <div className="text-right">持仓占比</div>
-                    </div>
-
-                    {/* Holdings Data */}
-                    {holdings.map((holding, index) => (
-                      <div key={index} className="grid grid-cols-12 gap-2 text-xs whitespace-nowrap">
-                        <div className="text-[#3B78F1]">交易</div>
-                        <div className="text-foreground">{holding.code}</div>
-                        <div className="text-foreground">{holding.name}</div>
-                        <div className="text-right text-foreground">{holding.holdingQty}</div>
-                        <div className="text-right text-foreground">{holding.availableQty}</div>
-                        <div className="text-right text-foreground">{holding.currentPrice}</div>
-                        <div className="text-right text-foreground">{holding.avgCost}</div>
-                        <div className="text-right text-foreground">{holding.marketValue}</div>
-                        <div className="text-right text-[#16BA71]">{holding.unrealizedPnlRatio}</div>
-                        <div className="text-right text-[#16BA71]">{holding.totalPnl}</div>
-                        <div className="text-right text-[#16BA71]">{holding.todayPnl}</div>
-                        <div className="text-right text-foreground">{holding.positionRatio}</div>
+                        {/* Holdings Data */}
+                        {holdings.map((holding, index) => (
+                          <div key={index} className="grid grid-cols-12 gap-2 text-xs whitespace-nowrap">
+                            <div className="text-[#3B78F1]">交易</div>
+                            <div className="text-foreground">{holding.code}</div>
+                            <div className="text-foreground">{holding.name}</div>
+                            <div className="text-right text-foreground">{holding.holdingQty}</div>
+                            <div className="text-right text-foreground">{holding.availableQty}</div>
+                            <div className="text-right text-foreground">{holding.currentPrice}</div>
+                            <div className="text-right text-foreground">{holding.avgCost}</div>
+                            <div className="text-right text-foreground">{holding.marketValue}</div>
+                            <div className="text-right text-[#16BA71]">{holding.unrealizedPnlRatio}</div>
+                            <div className="text-right text-[#16BA71]">{holding.totalPnl}</div>
+                            <div className="text-right text-[#16BA71]">{holding.todayPnl}</div>
+                            <div className="text-right text-foreground">{holding.positionRatio}</div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="orders" className="mt-2">
+                    <div className="overflow-x-auto">
+                      <OrderTable orders={todayOrders} className="text-xs" />
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="history" className="mt-2">
+                    <div className="overflow-x-auto">
+                      <TransactionTable transactions={todayTransactions} className="text-xs" />
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </div>
             </div>
           </div>

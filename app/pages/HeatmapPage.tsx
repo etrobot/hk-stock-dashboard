@@ -3,9 +3,10 @@ import { Button } from "../components/ui/button"
 import ReactECharts from 'echarts-for-react'
 import { useEffect, useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { IndexInfoPanel } from "../components/index-info-panel"
 import { IndexDetail } from "../types/market"
+import { Navigation } from "../components/navigation"
 
 interface TreeNode {
   name: string;
@@ -98,7 +99,18 @@ const mockSectorData: TreeNode[] = [
 
 export default function HeatmapPage() {
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [chartData, setChartData] = useState<TreeNode[]>([])
+  
+  // Get market from URL params, default to 'hk' if not provided
+  const marketFromUrl = searchParams.get('market') || 'hk'
+  const [currentPage, setCurrentPage] = useState(marketFromUrl)
+
+  const handlePageChange = (page: string) => {
+    setCurrentPage(page)
+    // Update URL params to reflect the new market
+    setSearchParams({ market: page })
+  }
 
   useEffect(() => {
     // Process data similar to the original example
@@ -151,10 +163,20 @@ export default function HeatmapPage() {
     processNodes(originList)
   }
 
+  const getMarketTitle = () => {
+    switch (currentPage) {
+      case 'hk': return '港股板块热力图'
+      case 'us': return '美股板块热力图'
+      case 'cn': return 'A股板块热力图'
+      case 'crypto': return '加密货币热力图'
+      default: return '板块热力图'
+    }
+  }
+
   const option = {
     title: {
       left: 'center',
-      text: '港股板块热力图',
+      text: getMarketTitle(),
       subtext: '涨幅 > 0: 绿色; 跌幅 < 0: 红色; 无变化 = 0: 灰色',
       textStyle: {
         color: 'var(--foreground)',
@@ -232,13 +254,17 @@ export default function HeatmapPage() {
   }
 
   const handleGoBack = () => {
-    navigate(-1)
+    navigate('/market')
   }
 
   return (
-    <div className="h-full flex flex-col p-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+    <div className="h-full flex flex-col">
+      {/* Navigation */}
+      <Navigation currentPage={currentPage} onPageChange={handlePageChange} />
+      
+      <div className="flex-1 flex flex-col p-4">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
           <Button 
             variant="ghost" 
@@ -279,6 +305,7 @@ export default function HeatmapPage() {
         <div className="w-80 flex-shrink-0">
           <IndexInfoPanel indexDetail={mockIndexDetail} />
         </div>
+      </div>
       </div>
     </div>
   )

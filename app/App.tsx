@@ -171,7 +171,7 @@ function App() {
                       />
                     </div>
                     <div className="w-80 flex-shrink-0">
-                      <SectorHeatmap />
+                      <SectorHeatmap currentMarket={currentPage} />
                     </div>
                   </>
                 )}

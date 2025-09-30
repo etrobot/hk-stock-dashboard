@@ -22,6 +22,8 @@ import {
 import { useState } from 'react';
 import { TradingPopup } from '../trading-popup';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { OrderTable } from '../shared/OrderTable';
+import { TransactionTable } from '../shared/TransactionTable';
 
 export const SecuritiesContent = () => {
   const { t } = useLanguage();
@@ -30,6 +32,43 @@ export const SecuritiesContent = () => {
   const handleTradeClick = () => {
     setIsTradingPopupOpen(true);
   };
+
+  // Mock data for orders and transactions
+  const todayOrders = [
+    {
+      name: '汇丰控股',
+      orderTime: '2023-10-01 09:00',
+      orderPrice: '108.00',
+      avgPrice: '108.00',
+      orderQuantity: '1',
+      filledQuantity: '0',
+      direction: 'buy' as const,
+      status: 'pending' as const
+    }
+  ];
+
+  const todayTransactions = [
+    {
+      name: '汇丰控股',
+      executionTime: '2023-10-01 09:05',
+      executionQuantity: '1',
+      direction: 'buy' as const,
+      executionAmount: '108.00'
+    }
+  ];
+
+  const historicalOrders = [
+    {
+      name: '中国平安',
+      orderTime: '2023-09-30 14:30',
+      orderPrice: '71.60',
+      avgPrice: '71.60',
+      orderQuantity: '1',
+      filledQuantity: '1',
+      direction: 'buy' as const,
+      status: 'filled' as const
+    }
+  ];
 
   return (
     <div className="space-y-4">
@@ -226,86 +265,17 @@ export const SecuritiesContent = () => {
 
             {/* Today's Orders Tab */}
             <TabsContent value="today-orders" className="mt-4 border-none p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{t('orders.name')}</TableHead>
-                    <TableHead>{t('orders.order_time')}</TableHead>
-                    <TableHead>{t('orders.order_price')}</TableHead>
-                    <TableHead>{t('orders.avg_price')}</TableHead>
-                    <TableHead>{t('orders.order_quantity')}</TableHead>
-                    <TableHead>{t('orders.filled_quantity')}</TableHead>
-                    <TableHead>{t('orders.direction')}</TableHead>
-                    <TableHead>{t('orders.status')}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>汇丰控股</TableCell>
-                    <TableCell>2023-10-01 09:00</TableCell>
-                    <TableCell>108.00</TableCell>
-                    <TableCell>108.00</TableCell>
-                    <TableCell>1</TableCell>
-                    <TableCell>0</TableCell>
-                    <TableCell>{t('orders.buy')}</TableCell>
-                    <TableCell>{t('orders.pending')}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+              <OrderTable orders={todayOrders} />
             </TabsContent>
 
             {/* Today's Transactions Tab */}
             <TabsContent value="today-transactions" className="mt-4 border-none p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{t('orders.name')}</TableHead>
-                    <TableHead>{t('transactions.execution_time')}</TableHead>
-                    <TableHead>{t('transactions.execution_quantity')}</TableHead>
-                    <TableHead>{t('orders.direction')}</TableHead>
-                    <TableHead>{t('transactions.execution_amount')}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>汇丰控股</TableCell>
-                    <TableCell>2023-10-01 09:05</TableCell>
-                    <TableCell>1</TableCell>
-                    <TableCell>{t('orders.buy')}</TableCell>
-                    <TableCell>108.00</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+              <TransactionTable transactions={todayTransactions} />
             </TabsContent>
 
             {/* Historical Orders Tab */}
             <TabsContent value="historical-orders" className="mt-4 border-none p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{t('orders.name')}</TableHead>
-                    <TableHead>{t('orders.order_time')}</TableHead>
-                    <TableHead>{t('orders.order_price')}</TableHead>
-                    <TableHead>{t('orders.avg_price')}</TableHead>
-                    <TableHead>{t('orders.order_quantity')}</TableHead>
-                    <TableHead>{t('orders.filled_quantity')}</TableHead>
-                    <TableHead>{t('orders.direction')}</TableHead>
-                    <TableHead>{t('orders.status')}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>中国平安</TableCell>
-                    <TableCell>2023-09-30 14:30</TableCell>
-                    <TableCell>71.60</TableCell>
-                    <TableCell>71.60</TableCell>
-                    <TableCell>1</TableCell>
-                    <TableCell>1</TableCell>
-                    <TableCell>{t('orders.buy')}</TableCell>
-                    <TableCell>{t('orders.filled')}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+              <OrderTable orders={historicalOrders} />
             </TabsContent>
 
             {/* Fund Flow Tab */}

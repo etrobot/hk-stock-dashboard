@@ -6,14 +6,14 @@ import App from '../App'
 import AccountPage from '../pages/AccountPage'
 import { Button } from './ui/button'
 import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip'
-import { Home, ArrowLeft, ArrowRight, Search } from 'lucide-react'
-import { toast } from '../hooks/use-toast'
+import { Home, ArrowLeft, ArrowRight } from 'lucide-react'
 import { ThemeProvider } from './theme-provider'
 import { Toaster } from './ui/toaster'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import { ModeToggle } from './mode-toggle'
 import { LanguageToggle } from './language-toggle'
 import { TradingPopup } from './trading-popup'
+import { SearchDropdown } from './search-dropdown'
 import { useState } from 'react'
 import DiscoveryPage from '../pages/DiscoveryPage'
 import HeatmapPage from '../pages/HeatmapPage'
@@ -50,9 +50,6 @@ function MainLayoutContent() {
     }
   }
 
-  const handleSearch = () => {
-    toast({ title: t('toast.search.title'), description: t('toast.search.description') })
-  }
 
   const handleQuickTrading = () => {
     setTradingPopupOpen(true)
@@ -100,14 +97,7 @@ function MainLayoutContent() {
                   <TooltipContent>{t('common.next_page')}</TooltipContent>
                 </Tooltip>
 
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="ghost" size="sm" aria-label={t('common.search')} onClick={handleSearch}>
-                      <Search className="w-3.5 h-3.5" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>{t('common.search')}</TooltipContent>
-                </Tooltip>
+                <SearchDropdown />
               </div>
 
               <span className="text-foreground text-xs font-medium">{t('app.title')}</span>

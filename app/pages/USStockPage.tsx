@@ -92,9 +92,9 @@ export default function USStockPage({ onStockClick }: USStockPageProps) {
                   onShowMore={handleShowMore}
                 />
               </div>
-              <div className="w-80 flex-shrink-0">
-                <SectorHeatmap />
-              </div>
+          <div className="w-80 flex-shrink-0">
+            <SectorHeatmap currentMarket="us" />
+          </div>
             </>
           )}
         </div>

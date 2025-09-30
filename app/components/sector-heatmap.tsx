@@ -77,7 +77,11 @@ const mockSectorData: TreeNode[] = [
   }
 ]
 
-export function SectorHeatmap() {
+interface SectorHeatmapProps {
+  currentMarket?: string;
+}
+
+export function SectorHeatmap({ currentMarket = 'hk' }: SectorHeatmapProps) {
   const navigate = useNavigate()
   const { resolvedTheme } = useTheme()
   const { t } = useLanguage()
@@ -91,7 +95,7 @@ export function SectorHeatmap() {
   }, [])
 
   const handleMoreClick = () => {
-    navigate('/heatmap')
+    navigate(`/heatmap?market=${currentMarket}`)
   }
 
   function convertData(originList: TreeNode[]) {

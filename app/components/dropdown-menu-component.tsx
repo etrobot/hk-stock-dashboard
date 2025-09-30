@@ -19,10 +19,11 @@ interface DropdownMenuProps {
   isOpen: boolean
   onClose: () => void
   onOpenStockDetail?: () => void
+  onOpenCommunityPopup?: () => void
   className?: string
 }
 
-export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, className }: DropdownMenuProps) {
+export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommunityPopup, className }: DropdownMenuProps) {
   const navigate = useNavigate()
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [showSettingsDetail, setShowSettingsDetail] = useState(false)
@@ -230,7 +231,13 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, className }: 
         </div>
         
         {/* Stats Section */}
-        <div className="flex justify-between mt-2 text-center">
+        <div 
+          className="flex justify-between mt-2 text-center cursor-pointer hover:bg-[#2A2F3A] rounded p-1 transition-colors"
+          onClick={() => {
+            onOpenCommunityPopup?.()
+            handleClose()
+          }}
+        >
           <div className="flex-1">
             <div className="text-white text-[12px] font-normal">0</div>
             <div className="text-[#72737A] text-[12px] font-normal">{t('dropdown.updates')}</div>

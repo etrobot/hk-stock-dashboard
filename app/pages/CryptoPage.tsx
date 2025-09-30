@@ -45,7 +45,7 @@ export default function CryptoPage({ onStockClick }: CryptoPageProps) {
             />
           </div>
           <div className="w-80 flex-shrink-0">
-            <SectorHeatmap />
+            <SectorHeatmap currentMarket="crypto" />
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { Star, BarChart3, User, Compass, SlidersHorizontal, MessageSquare, Users
 import { DropdownMenu } from './dropdown-menu-component'
 import { MessagePopup } from './message-popup'
 import { StockDetailDialog } from './stock-detail-dialog'
+import { CommunityPopup } from './community-popup'
 import { useLanguage } from '../contexts/LanguageContext'
 
 interface NavigationItem {
@@ -64,6 +65,7 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
           isOpen={isDropdownOpen} 
           onClose={() => setIsDropdownOpen(false)}
           onOpenStockDetail={() => setIsStockDetailOpen(true)}
+          onOpenCommunityPopup={() => setIsCommunityPopupOpen(true)}
         />
       </div>
 
@@ -151,28 +153,10 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
       />
 
       {/* Community Popup */}
-      {isCommunityPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="rounded-lg border w-[90vw] h-[90vh] max-w-6xl max-h-[800px] flex flex-col shadow-2xl">
-            <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="text-lg font-semibold">{t('nav.community')}</h3>
-              <button
-                onClick={() => setIsCommunityPopupOpen(false)}
-                className="text-gray-500 hover:text-gray-700 text-xl"
-              >
-                ×
-              </button>
-            </div>
-            <div className="flex-1">
-              <iframe
-                src="https://tfi.tfisec.cn/communityPC"
-                className="w-full h-full border-0"
-                title={t('nav.community')}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <CommunityPopup 
+        isOpen={isCommunityPopupOpen}
+        onClose={() => setIsCommunityPopupOpen(false)}
+      />
 
       {/* Stock Detail Dialog */}
       <StockDetailDialog 

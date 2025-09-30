@@ -46,7 +46,7 @@ export default function CNStockPage({ onStockClick }: CNStockPageProps) {
             />
           </div>
           <div className="w-80 flex-shrink-0">
-            <SectorHeatmap />
+            <SectorHeatmap currentMarket="cn" />
           </div>
         </div>
       </div>
