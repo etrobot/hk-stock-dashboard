@@ -67,7 +67,10 @@ export default function USStockPage({ onStockClick }: USStockPageProps) {
           {activeTab === t('tab.concept_sectors') ? (
             <>
               <ConceptSectors 
-                sectors={usSectors}
+                sectors={usSectors.map(sector => ({
+                  ...sector,
+                  value: "0.00" // Mock value for SectorData compatibility
+                }))}
                 selectedSector={selectedSector}
                 onSectorSelect={handleSectorSelect}
               />

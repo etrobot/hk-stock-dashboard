@@ -1,5 +1,5 @@
 import { Card } from "./ui/card";
-import { mockChartData } from "../data/mockStockData";
+
 
 // 生成基于 mockChartData 的K线数据
 function generateKLineData(stockCode: string, period: string, basePrice: number): any[] {

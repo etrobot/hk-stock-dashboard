@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { cn } from '../lib/utils'
 import { X } from 'lucide-react'
-import { useLanguage } from '../contexts/LanguageContext'
+
 
 interface StockDetailDialogProps {
   isOpen: boolean
@@ -14,7 +14,7 @@ interface StockDetailDialogProps {
 export function StockDetailDialog({ isOpen, onClose, className }: StockDetailDialogProps) {
   const [activeTab, setActiveTab] = useState<'hk' | 'us'>('hk')
   const dialogRef = useRef<HTMLDivElement>(null)
-  const { t } = useLanguage()
+
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

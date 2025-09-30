@@ -12,8 +12,13 @@ import { Button } from './ui/button'
 import { hkHotStocks } from '../data/mock-data'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
-import { List, Grid3X3 } from 'lucide-react'
+import { List, Grid3X3, ChevronDown, Plus, Settings, GripVertical } from 'lucide-react'
 import { StockGridItem } from './stock-grid-item'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from './ui/dropdown-menu'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
+import { Input } from './ui/input'
+import { Label } from './ui/label'
+import { toast } from 'sonner'
 
 // Transform StockData to IndexDetail format
 function transformStockToIndex(stockData: StockData): IndexDetail {
@@ -42,6 +47,15 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
   const [stockData, setStockData] = useState<StockData>(mockStockData)
   const [sidebarViewMode, setSidebarViewMode] = useState<'list' | 'grid'>('list')
   const [selectedPeriod, setSelectedPeriod] = useState('daily')
+  const [selectedFilter, setSelectedFilter] = useState('全部')
+  const [isCreateGroupOpen, setIsCreateGroupOpen] = useState(false)
+  const [isManageGroupOpen, setIsManageGroupOpen] = useState(false)
+  const [newGroupName, setNewGroupName] = useState('')
+  const [customGroups, setCustomGroups] = useState<string[]>(['自定义分组1'])
+  const [groupStocks, setGroupStocks] = useState<{[key: string]: typeof hkHotStocks}>({
+    '自定义分组1': hkHotStocks.slice(0, 10)
+  })
+  const [selectedGroup, setSelectedGroup] = useState<string>('自定义分组1')
   const { t } = useLanguage()
 
   // Check if we're on the watchlist route
@@ -101,13 +115,119 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
     }
   }
 
+  const handleCreateGroup = () => {
+    if (newGroupName.trim()) {
+      setCustomGroups(prev => [...prev, newGroupName.trim()])
+      setNewGroupName('')
+      setIsCreateGroupOpen(false)
+      setIsManageGroupOpen(true)
+    }
+  }
+
+  const handleDeleteGroup = (groupName: string) => {
+    setCustomGroups(prev => prev.filter(g => g !== groupName))
+    setGroupStocks(prev => {
+      const newGroupStocks = { ...prev }
+      delete newGroupStocks[groupName]
+      return newGroupStocks
+    })
+    if (selectedGroup === groupName && customGroups.length > 1) {
+      setSelectedGroup(customGroups.find(g => g !== groupName) || '')
+    }
+  }
+
+  const handleRemoveStockFromGroup = (stockCode: string) => {
+    setGroupStocks(prev => ({
+      ...prev,
+      [selectedGroup]: prev[selectedGroup]?.filter(stock => stock.code !== stockCode) || []
+    }))
+  }
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    e.dataTransfer.setData('text/plain', index.toString())
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+  }
+
+  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault()
+    const dragIndex = parseInt(e.dataTransfer.getData('text/plain'))
+    
+    if (dragIndex === dropIndex) return
+
+    setGroupStocks(prev => {
+      const currentStocks = [...(prev[selectedGroup] || [])]
+      const draggedStock = currentStocks[dragIndex]
+      
+      // Remove the dragged item
+      currentStocks.splice(dragIndex, 1)
+      // Insert at new position
+      currentStocks.splice(dropIndex, 0, draggedStock)
+      
+      return {
+        ...prev,
+        [selectedGroup]: currentStocks
+      }
+    })
+  }
+
+  const filterOptions = [
+    '全部',
+    '港股', 
+    '美股',
+    '加密货币',
+    ...customGroups
+  ]
+
   return (
     <div className="flex h-screen bg-background">
       {/* Left Ranking Sidebar */}
       <aside className={`${sidebarViewMode === 'grid' ? 'flex-1' : 'w-[260px]'} border-r border-border flex-shrink-0 flex flex-col`}>
         <div className="p-3 border-b border-border">
           <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-foreground">{rankingTitle}</span>
+            <div className="flex flex-col gap-2 flex-1">
+              <span className="text-sm font-medium text-foreground">{rankingTitle}</span>
+              {isWatchlistRoute && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-7 justify-between text-xs">
+                      {selectedFilter}
+                      <ChevronDown className="w-3 h-3 ml-1" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-40">
+                    {filterOptions.map((option) => (
+                      <DropdownMenuItem
+                        key={option}
+                        onClick={() => setSelectedFilter(option)}
+                        className="text-xs"
+                      >
+                        {option}
+                      </DropdownMenuItem>
+                    ))}
+                    <DropdownMenuSeparator />
+                    <Dialog open={isCreateGroupOpen} onOpenChange={setIsCreateGroupOpen}>
+                      <DialogTrigger asChild>
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                          <Plus className="w-3 h-3 mr-2" />
+                          创建分组
+                        </DropdownMenuItem>
+                      </DialogTrigger>
+                    </Dialog>
+                    <Dialog open={isManageGroupOpen} onOpenChange={setIsManageGroupOpen}>
+                      <DialogTrigger asChild>
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                          <Settings className="w-3 h-3 mr-2" />
+                          管理分组
+                        </DropdownMenuItem>
+                      </DialogTrigger>
+                    </Dialog>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
             <div className="flex items-center gap-1">
               <Button
                 variant={sidebarViewMode === 'list' ? 'default' : 'ghost'}
@@ -228,6 +348,152 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
       <div className="w-[360px] border-l border-border bg-background p-4 flex-shrink-0">
         <IndexInfoPanel indexDetail={transformStockToIndex(stockData)} />
       </div>
+
+      {/* Create Group Dialog */}
+      <Dialog open={isCreateGroupOpen} onOpenChange={setIsCreateGroupOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>创建分组</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="groupName">分组名称</Label>
+              <Input
+                id="groupName"
+                value={newGroupName}
+                onChange={(e) => setNewGroupName(e.target.value)}
+                placeholder="输入分组名称"
+                className="mt-1"
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setIsCreateGroupOpen(false)}>
+                取消
+              </Button>
+              <Button onClick={handleCreateGroup} disabled={!newGroupName.trim()}>
+                创建
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Manage Groups Dialog */}
+      <Dialog open={isManageGroupOpen} onOpenChange={setIsManageGroupOpen}>
+        <DialogContent className="sm:max-w-4xl max-h-[80vh]">
+          <DialogHeader>
+            <DialogTitle>管理分组</DialogTitle>
+          </DialogHeader>
+          <div className="flex h-[500px]">
+            {/* Left side - Group names */}
+            <div className="w-1/3 border-r pr-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-medium">分组列表</h3>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setIsManageGroupOpen(false)
+                    setIsCreateGroupOpen(true)
+                  }}
+                  className="h-7 px-2 text-xs"
+                >
+                  <Plus className="w-3 h-3 mr-1" />
+                  创建分组
+                </Button>
+              </div>
+              <div className="space-y-2">
+                {customGroups.map((group) => (
+                  <div 
+                    key={group} 
+                    className={`flex items-center justify-between p-2 border rounded cursor-pointer ${
+                      selectedGroup === group ? 'border-blue-200' : 'hover:bg-gray-100'
+                    }`}
+                    onClick={() => setSelectedGroup(group)}
+                  >
+                    <span className="text-sm">{group}</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleDeleteGroup(group)
+                      }}
+                      className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
+                    >
+                      ×
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side - Stock list */}
+            <div className="flex-1 pl-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-medium">股票列表 - {selectedGroup}</h3>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => toast.info("功能开发中...")}
+                  className="h-7 px-2 text-xs"
+                >
+                  <Plus className="w-3 h-3 mr-1" />
+                  添加
+                </Button>
+              </div>
+              <div className="border rounded">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-20">代码</TableHead>
+                      <TableHead>名称</TableHead>
+                      <TableHead>市场</TableHead>
+                      <TableHead className="w-16">操作</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {(groupStocks[selectedGroup] || []).map((stock, index) => (
+                      <TableRow 
+                        key={stock.code}
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, index)}
+                        onDragOver={handleDragOver}
+                        onDrop={(e) => handleDrop(e, index)}
+                        className="cursor-move hover:bg-muted/50"
+                      >
+                        <TableCell className="font-mono text-sm">
+                          <div className="flex items-center gap-2">
+                            <GripVertical className="w-3 h-3 text-muted-foreground" />
+                            {stock.code}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm">{stock.name}</TableCell>
+                        <TableCell className="text-sm">港股</TableCell>
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleRemoveStockFromGroup(stock.code)}
+                            className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
+                          >
+                            ×
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <Button onClick={() => setIsManageGroupOpen(false)}>
+              关闭
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

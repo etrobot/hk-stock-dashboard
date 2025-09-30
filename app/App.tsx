@@ -51,7 +51,7 @@ function App() {
     // Generate mock data for missing fields
     const baseValue = parseFloat(index.value.replace(/,/g, ''));
     const changeValue = parseFloat(index.change.replace(/[+,-]/g, ''));
-    const percentValue = parseFloat(index.percentage.replace(/[+%,\-]/g, ''));
+
     
     return {
       code: getIndexCode(index.name),

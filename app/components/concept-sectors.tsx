@@ -1,6 +1,6 @@
 import { MarketIndex } from "../types/market"
 import { MarketIndexItem } from "./market-index-item"
-import { mockChartData } from "../data/mockStockData"
+
 
 interface ConceptSectorsProps {
   sectors: MarketIndex[]
