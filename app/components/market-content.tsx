@@ -52,7 +52,7 @@ export function MarketContent({ indexCode }: MarketContentProps) {
         <div className="text-xs text-muted-foreground mb-3">{t('capital_flow.net_inflow')}</div>
         
         {/* 资金成交统计 */}
-        <div className="h-48 bg-muted/50 border border-border mb-3 flex items-center justify-center p-4">
+        <div className="h-48 bg-muted/50 mb-3 flex items-center justify-center p-4">
           <CapitalFlowChart
             totalInflow={18163.34}
             totalOutflow={23749.76}

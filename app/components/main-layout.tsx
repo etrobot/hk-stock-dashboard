@@ -6,7 +6,7 @@ import App from '../App'
 import AccountPage from '../pages/AccountPage'
 import { Button } from './ui/button'
 import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip'
-import { Home, ArrowLeft, ArrowRight } from 'lucide-react'
+import { Home, ArrowLeft, ArrowRight, Lock, Unlock } from 'lucide-react'
 import { ThemeProvider } from './theme-provider'
 import { Toaster } from './ui/toaster'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
@@ -18,6 +18,7 @@ import { useState } from 'react'
 import DiscoveryPage from '../pages/DiscoveryPage'
 import HeatmapPage from '../pages/HeatmapPage'
 import { LanguageProvider, useLanguage } from '../contexts/LanguageContext'
+import { TradingLockProvider, useTradingLock } from '../contexts/TradingLockContext'
 
 const PlaceholderPage = ({ title }: { title: string }) => {
   const { t } = useLanguage()
@@ -33,6 +34,7 @@ function MainLayoutContent() {
   const navigate = useNavigate()
   const [tradingPopupOpen, setTradingPopupOpen] = useState(false)
   const { t } = useLanguage()
+  const { isTradeUnlocked, showUnlockDialog, lockTrading } = useTradingLock()
 
   const handleGoHome = () => {
     navigate('/market')
@@ -53,6 +55,14 @@ function MainLayoutContent() {
 
   const handleQuickTrading = () => {
     setTradingPopupOpen(true)
+  }
+
+  const handleLockToggle = () => {
+    if (isTradeUnlocked) {
+      lockTrading()
+    } else {
+      showUnlockDialog()
+    }
   }
 
   return (
@@ -98,6 +108,7 @@ function MainLayoutContent() {
                 </Tooltip>
 
                 <SearchDropdown />
+
               </div>
 
               <span className="text-foreground text-xs font-medium">{t('app.title')}</span>
@@ -106,6 +117,21 @@ function MainLayoutContent() {
                 <LanguageToggle />
                 {/* 主题切换 */}
                 <ModeToggle />
+                 {/* 交易锁定状态 */}
+                 <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      aria-label={isTradeUnlocked ? '锁定交易' : '解锁交易'} 
+                      onClick={handleLockToggle}
+                      className={isTradeUnlocked ? 'text-green-500 hover:text-green-600' : 'text-red-500 hover:text-red-600'}
+                    >
+                      {isTradeUnlocked ? <Unlock className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{isTradeUnlocked ? '锁定交易' : '解锁交易'}</TooltipContent>
+                </Tooltip>
                 <button 
                   onClick={handleQuickTrading}
                   className="bg-[#FF5C00] px-3 py-1 rounded text-xs font-medium hover:bg-[#e54f00] transition-colors"
@@ -144,7 +170,9 @@ function MainLayoutContent() {
 export function MainLayout() {
   return (
     <LanguageProvider>
-      <MainLayoutContent />
+      <TradingLockProvider>
+        <MainLayoutContent />
+      </TradingLockProvider>
     </LanguageProvider>
   )
 }

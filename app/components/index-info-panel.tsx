@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "./ui/card"
+
 import { Button } from "./ui/button"
 import { Heart, TrendingUp } from "lucide-react"
 import { IndexDetail } from "../types/market"
@@ -51,24 +51,23 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
 
   return (
     <div className="space-y-4">
-      {/* Index Detail Card */}
-      <Card>
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-slate-400">{indexDetail.code}</span>
-              <span className="font-medium">{indexDetail.name}</span>
-            </div>
-            <Heart className="w-5 h-5 text-slate-400" />
+      {/* Index Detail */}
+      <div className="space-y-4 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-slate-400">{indexDetail.code}</span>
+            <span className="font-medium">{indexDetail.name}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <span className="bg-red-600 px-1 rounded">{indexDetail.market}</span>
-            <span>{indexDetail.status}</span>
-            <span className="bg-blue-600 px-1 rounded text-xs">L2</span>
-            <span className="bg-orange-600 px-1 rounded text-xs">文</span>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
+          <Heart className="w-5 h-5 text-slate-400" />
+        </div>
+        <div className="flex items-center gap-2 text-xs text-slate-400">
+          <span className="bg-red-600 px-1 rounded">{indexDetail.market}</span>
+          <span>{indexDetail.status}</span>
+          <span className="bg-blue-600 px-1 rounded text-xs">L2</span>
+          <span className="bg-orange-600 px-1 rounded text-xs">文</span>
+        </div>
+        
+        <div className="space-y-4">
           <div className="flex items-center gap-2">
             <span className={`text-2xl font-bold ${indexDetail.isPositive ? 'text-green-400' : 'text-red-400'}`}>
               {indexDetail.value}
@@ -131,57 +130,56 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Tabs Section */}
-      <Card>
-        <CardHeader className="pb-3">
-          <div className="flex items-center gap-4 text-sm">
-            <button 
-              className={`pb-1 ${activeTab === 'market' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
-              onClick={() => setActiveTab('market')}
+      <div className="space-y-4 p-4">
+        <div className="flex items-center gap-4 text-sm">
+          <button 
+            className={`pb-1 ${activeTab === 'market' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
+            onClick={() => setActiveTab('market')}
+          >
+            {t('index_panel.market_tab')}
+          </button>
+          <button 
+            className={`pb-1 ${activeTab === 'analysis' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
+            onClick={() => setActiveTab('analysis')}
+          >
+            {t('index_panel.analysis_tab')}
+          </button>
+          <button 
+            className={`pb-1 ${activeTab === 'news' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
+            onClick={() => setActiveTab('news')}
+          >
+            {t('index_panel.news_tab')}
+          </button>
+        </div>
+        
+        {/* News sub-tabs - only show when news tab is active */}
+        {activeTab === 'news' && (
+          <div className="flex gap-2 mt-3">
+            <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-xs px-3 py-1 h-auto">
+              {t('index_panel.news_subtab')}
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="border-slate-600 text-slate-400 hover:text-xs px-3 py-1 h-auto bg-transparent"
             >
-              {t('index_panel.market_tab')}
-            </button>
-            <button 
-              className={`pb-1 ${activeTab === 'analysis' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
-              onClick={() => setActiveTab('analysis')}
+              {t('index_panel.announcement_subtab')}
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              className="border-slate-600 text-slate-400 hover:text-xs px-3 py-1 h-auto bg-transparent"
             >
-              {t('index_panel.analysis_tab')}
-            </button>
-            <button 
-              className={`pb-1 ${activeTab === 'news' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
-              onClick={() => setActiveTab('news')}
-            >
-              {t('index_panel.news_tab')}
-            </button>
+              {t('index_panel.rating_subtab')}
+            </Button>
           </div>
-          
-          {/* News sub-tabs - only show when news tab is active */}
-          {activeTab === 'news' && (
-            <div className="flex gap-2 mt-3">
-              <Button size="sm" className="bg-orange-600 hover:bg-orange-700 text-xs px-3 py-1 h-auto">
-                {t('index_panel.news_subtab')}
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="border-slate-600 text-slate-400 hover:text-xs px-3 py-1 h-auto bg-transparent"
-              >
-                {t('index_panel.announcement_subtab')}
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="border-slate-600 text-slate-400 hover:text-xs px-3 py-1 h-auto bg-transparent"
-              >
-                {t('index_panel.rating_subtab')}
-              </Button>
-            </div>
-          )}
-        </CardHeader>
-        <CardContent className={`${activeTab === 'analysis' ? 'p-0' : ''} max-h-96 overflow-y-auto`}>
+        )}
+        
+        <div className={`${activeTab === 'analysis' ? 'p-0' : ''} max-h-96 overflow-y-auto`}>
           {/* Market Tab Content */}
           {activeTab === 'market' && (
             <MarketContent indexCode={indexDetail.code} />
@@ -212,8 +210,8 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
               ))}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

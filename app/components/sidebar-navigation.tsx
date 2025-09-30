@@ -9,6 +9,7 @@ import { MessagePopup } from './message-popup'
 import { StockDetailDialog } from './stock-detail-dialog'
 import { CommunityPopup } from './community-popup'
 import { useLanguage } from '../contexts/LanguageContext'
+import { useTradingLock } from '../contexts/TradingLockContext'
 
 interface NavigationItem {
   label: string
@@ -27,6 +28,14 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
   const [isCommunityPopupOpen, setIsCommunityPopupOpen] = useState(false)
   const [isStockDetailOpen, setIsStockDetailOpen] = useState(false)
   const { t } = useLanguage()
+  const { isTradeUnlocked, showUnlockDialog } = useTradingLock()
+
+  const handleAccountClick = (e: React.MouseEvent) => {
+    if (!isTradeUnlocked) {
+      e.preventDefault()
+      showUnlockDialog()
+    }
+  }
 
   const mainNavigationItems: NavigationItem[] = [
     { label: t('nav.watchlist'), to: '/watchlist', icon: (<Star className="w-4 h-4" />) },
@@ -76,6 +85,7 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
             <div key={item.to} className="px-2">
               <NavLink
                 to={item.to}
+                onClick={item.to === '/account' ? handleAccountClick : undefined}
                 className={({ isActive }) =>
                   cn(
                     "flex flex-col items-center space-y-1 p-2 rounded-lg cursor-pointer transition-colors",

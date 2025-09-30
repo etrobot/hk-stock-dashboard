@@ -11,6 +11,7 @@ import { Badge } from './ui/badge'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
 import { OrderTable } from './shared/OrderTable'
 import { TransactionTable } from './shared/TransactionTable'
+import { useTradingLock } from '../contexts/TradingLockContext'
 
 interface TradingPopupProps {
   open: boolean
@@ -31,11 +32,8 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
   const [triggerPrice, setTriggerPrice] = useState('199.99')
   const [conditionalQuantity, setConditionalQuantity] = useState('1000')
   
-  // 交易解锁相关状态
-  const [isTradeUnlocked, setIsTradeUnlocked] = useState(false)
-  const [showPasswordDialog, setShowPasswordDialog] = useState(false)
-  const [password, setPassword] = useState('')
-  const [passwordError, setPasswordError] = useState('')
+  // 使用全局交易解锁状态
+  const { isTradeUnlocked, showUnlockDialog } = useTradingLock()
 
   // Helpers: adjust price and quantity via +/- buttons
   const adjustPrice = (delta: number) => {
@@ -291,7 +289,7 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                     </Button>
                     {/* 解锁交易覆盖按钮 */}
                     <Button 
-                      onClick={() => setShowPasswordDialog(true)}
+                      onClick={showUnlockDialog}
                       className="absolute inset-0 flex-1 text-xs h-6 rounded-xl bg-[#FF5C00] hover:bg-[#e54f00] text-white z-10"
                     >
                       🔒 解锁交易
@@ -690,64 +688,6 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
         </TabsContent>
       </Tabs>
         </div>
-        
-        {/* 交易密码输入对话框 */}
-        <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-          <DialogContent className="sm:max-w-[400px] p-6">
-            <DialogHeader>
-              <h2 className="text-lg font-semibold text-center">输入交易密码</h2>
-            </DialogHeader>
-            <div className="space-y-4 mt-4">
-              <div className="space-y-2">
-                <Input
-                  type="password"
-                  placeholder="请输入6位交易密码"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value)
-                    setPasswordError('')
-                  }}
-                  maxLength={6}
-                  className="text-center text-lg tracking-widest"
-                  autoFocus
-                />
-                {passwordError && (
-                  <p className="text-sm text-red-500 text-center">{passwordError}</p>
-                )}
-              </div>
-              <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
-                  className="flex-1"
-                  onClick={() => {
-                    setShowPasswordDialog(false)
-                    setPassword('')
-                    setPasswordError('')
-                  }}
-                >
-                  取消
-                </Button>
-                <Button 
-                  className="flex-1 bg-[#FF5C00] hover:bg-[#e54f00]"
-                  onClick={() => {
-                    if (password === '123456') { // 简单的密码验证，实际应用中应该更安全
-                      setIsTradeUnlocked(true)
-                      setShowPasswordDialog(false)
-                      setPassword('')
-                      setPasswordError('')
-                    } else {
-                      setPasswordError('密码错误，请重新输入')
-                      setPassword('')
-                    }
-                  }}
-                  disabled={password.length !== 6}
-                >
-                  确认
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
       </DialogContent>
     </Dialog>
   )
