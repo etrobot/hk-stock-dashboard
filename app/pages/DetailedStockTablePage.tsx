@@ -6,6 +6,7 @@ import { ChevronUp, ChevronDown, List, Grid3X3, ArrowLeft } from "lucide-react";
 import { mockStockGridData } from "../data/mock-grid-data";
 import { mockDetailedStocks } from "../data/mock-detailed-stocks";
 import { StockGridItem } from "../components/stock-grid-item";
+import { useNavigate } from "react-router-dom";
 
 interface DetailedStockTablePageProps {
   onBack: () => void;
@@ -26,6 +27,7 @@ export function DetailedStockTablePage({ onBack }: DetailedStockTablePageProps) 
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [selectedPeriod, setSelectedPeriod] = useState('daily');
+  const navigate = useNavigate();
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -34,6 +36,15 @@ export function DetailedStockTablePage({ onBack }: DetailedStockTablePageProps) 
       setSortField(field);
       setSortDirection('desc');
     }
+  };
+
+  const handleStockDoubleClick = (stockCode: string) => {
+    navigate(`/stock/${encodeURIComponent(stockCode)}`);
+  };
+
+  const handleGridStockClick = (stockCode: string) => {
+    setViewMode('list');
+    navigate(`/stock/${encodeURIComponent(stockCode)}`);
   };
 
   const sortedStocks = [...mockDetailedStocks].sort((a, b) => {
@@ -135,7 +146,11 @@ export function DetailedStockTablePage({ onBack }: DetailedStockTablePageProps) 
                 </TableHeader>
                 <TableBody>
                   {sortedStocks.map((stock, index) => (
-                    <TableRow key={index} className="border-border hover:bg-muted/50">
+                    <TableRow 
+                      key={index} 
+                      className="border-border hover:bg-muted/50 cursor-pointer"
+                      onDoubleClick={() => handleStockDoubleClick(stock.code)}
+                    >
                       <TableCell className="text-foreground whitespace-nowrap">
                         <div className="flex flex-col">
                           <span className="font-medium">{stock.name}</span>
@@ -213,10 +228,7 @@ export function DetailedStockTablePage({ onBack }: DetailedStockTablePageProps) 
                     key={index} 
                     stock={stock} 
                     selectedPeriod={selectedPeriod}
-                    onClick={() => {
-                      // Handle stock selection if needed
-                      console.log('Selected stock:', stock);
-                    }}
+                    onClick={() => handleGridStockClick(stock.code)}
                   />
                 ))}
               </div>

@@ -4,6 +4,8 @@ interface MarketIndexItemProps {
   index: MarketIndex;
   showBackground?: boolean;
   className?: string;
+  onClick?: (index: MarketIndex) => void;
+  customChartData?: number[];
 }
 
 // 生成模拟趋势数据的函数
@@ -24,8 +26,8 @@ function generateTrendData(isPositive: boolean): number[] {
 }
 
 // 趋势图组件
-function TrendChart({ isPositive }: { isPositive: boolean }) {
-  const data = generateTrendData(isPositive);
+function TrendChart({ isPositive, customData }: { isPositive: boolean; customData?: number[] }) {
+  const data = customData || generateTrendData(isPositive);
   const width = 60;
   const height = 24;
   
@@ -75,7 +77,9 @@ function TrendChart({ isPositive }: { isPositive: boolean }) {
 export function MarketIndexItem({ 
   index, 
   showBackground = true, 
-  className = "" 
+  className = "",
+  onClick,
+  customChartData
 }: MarketIndexItemProps) {
   const backgroundColor = showBackground 
     ? (index.isPositive ? 'rgba(22, 186, 113, 0.16)' : 'rgba(244, 67, 69, 0.16)')
@@ -83,8 +87,9 @@ export function MarketIndexItem({
 
   return (
     <div 
-      className={`relative rounded-[4px] shadow-sm min-w-[250px] h-16 flex-shrink-0 overflow-hidden ${className}`}
+      className={`relative rounded-[4px] shadow-sm min-w-[250px] h-16 flex-shrink-0 overflow-hidden cursor-pointer hover:opacity-80 transition-opacity ${className}`}
       style={{ backgroundColor }}
+      onClick={() => onClick?.(index)}
     >
       {/* 内容区域 */}
       <div className="relative z-10 p-2 h-full">
@@ -116,7 +121,7 @@ export function MarketIndexItem({
           
           {/* 右侧趋势图 */}
           <div className="flex items-center h-full">
-            <TrendChart isPositive={index.isPositive} />
+            <TrendChart isPositive={index.isPositive} customData={customChartData} />
           </div>
         </div>
       </div>

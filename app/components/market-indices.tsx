@@ -4,9 +4,10 @@ import { MarketIndexItem } from "./market-index-item"
 interface MarketIndicesProps {
   indices: MarketIndex[];
   showBackground?: boolean;
+  onIndexClick?: (index: MarketIndex) => void;
 }
 
-export function MarketIndices({ indices, showBackground = true }: MarketIndicesProps) {
+export function MarketIndices({ indices, showBackground = true, onIndexClick }: MarketIndicesProps) {
   return (
     <div className="flex gap-4 p-4 overflow-x-auto">
       {indices.map((index, i) => (
@@ -14,6 +15,7 @@ export function MarketIndices({ indices, showBackground = true }: MarketIndicesP
           key={i} 
           index={index} 
           showBackground={showBackground}
+          onClick={onIndexClick}
         />
       ))}
     </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '../lib/utils'
 import { ChevronRight, FileText, Gift, TrendingUp, CreditCard, Settings, LogOut } from 'lucide-react'
@@ -18,15 +18,25 @@ interface MenuItem {
 interface DropdownMenuProps {
   isOpen: boolean
   onClose: () => void
+  onOpenStockDetail?: () => void
   className?: string
 }
 
-export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) {
+export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, className }: DropdownMenuProps) {
   const navigate = useNavigate()
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [showSettingsDetail, setShowSettingsDetail] = useState(false)
   const [showLoginDialog, setShowLoginDialog] = useState(false)
+  const [showMyQuotesDetail, setShowMyQuotesDetail] = useState(false)
   const { t } = useLanguage()
+
+  const handleClose = useCallback(() => {
+    // 重置所有内部状态
+    setShowSettingsDetail(false)
+    setShowLoginDialog(false)
+    setShowMyQuotesDetail(false)
+    onClose()
+  }, [onClose])
 
   const menuItems: MenuItem[] = [
     { labelKey: 'dropdown.business', hasArrow: true, icon: <FileText className="w-3 h-3" /> },
@@ -40,13 +50,13 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      // Don't close if login dialog is open
-      if (showLoginDialog || showSettingsDetail) {
+      // Don't close if any dialog is open
+      if (showLoginDialog || showSettingsDetail || showMyQuotesDetail) {
         return
       }
       
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        onClose()
+        handleClose()
       }
     }
 
@@ -56,14 +66,22 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
         document.removeEventListener('mousedown', handleClickOutside)
       }
     }
-  }, [isOpen, onClose, showLoginDialog, showSettingsDetail])
+  }, [isOpen, handleClose, showLoginDialog, showSettingsDetail, showMyQuotesDetail])
 
   const handleMenuItemClick = (item: MenuItem) => {
     if (item.labelKey === 'dropdown.business') {
-      onClose()
+      handleClose()
+      navigate('/discovery')
+    } else if (item.labelKey === 'dropdown.points') {
+      handleClose()
+      navigate('/discovery')
+    } else if (item.labelKey === 'dropdown.my_cards') {
+      handleClose()
       navigate('/discovery')
     } else if (item.labelKey === 'dropdown.settings') {
       setShowSettingsDetail(true)
+    } else if (item.labelKey === 'dropdown.my_quotes') {
+      setShowMyQuotesDetail(true)
     } else if (item.labelKey === 'dropdown.logout') {
       setShowLoginDialog(true)
     }
@@ -74,10 +92,15 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
     setShowSettingsDetail(false)
   }
 
+  const handleMyQuotesClose = () => {
+    setShowMyQuotesDetail(false)
+  }
+
   const handleLoginClose = () => {
     setShowLoginDialog(false)
-    onClose()
+    handleClose()
   }
+
 
   if (!isOpen) return null
 
@@ -95,9 +118,93 @@ export function DropdownMenu({ isOpen, onClose, className }: DropdownMenuProps) 
         onClose={handleSettingsClose}
         className={className}
       />
+
+
+      {/* My Quotes Detail Page */}
+      {showMyQuotesDetail && (
+        <div 
+          className={cn(
+            "absolute left-8 top-0 w-[250px] h-[436px] bg-[#222632] rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.6)] z-50",
+            className
+          )}
+        >
+          {/* Header */}
+          <div className="relative h-[40px] bg-[#222632] rounded-t-lg border-b border-[rgba(75,82,105,0.2)]">
+            <button
+              onClick={handleMyQuotesClose}
+              className="absolute left-[20px] top-[15px] w-[9px] h-[9px] transform rotate-180"
+            >
+              <ChevronRight className="w-full h-full text-[#DBDBE0]" />
+            </button>
+            <div className="absolute left-1/2 top-[12px] transform -translate-x-1/2 text-[#DBDBE0] text-[12px] font-medium">
+              {t('dropdown.my_quotes')}
+            </div>
+          </div>
+
+          <div className="p-4 space-y-3">
+            {/* Hong Kong Stocks Card */}
+            <div
+              onClick={() => {
+                onOpenStockDetail?.()
+                handleClose()
+              }}
+              className="block cursor-pointer"
+            >
+              <div className="relative overflow-hidden rounded-lg border border-gray-600 hover:shadow-md transition-shadow cursor-pointer">
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-3 text-white">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-gradient-to-br from-purple-400 to-purple-700 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">HK</span>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-xs">港股Lv2高级行情</h4>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
+                        <span className="text-xs text-yellow-200">已开通</span>
+                        <span className="text-xs text-yellow-200">剩余180天</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-2 text-xs text-white/80">
+                    查看历史订单 →
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* US Stocks Card */}
+            <div
+              onClick={() => {
+                onOpenStockDetail?.()
+                handleClose()
+              }}
+              className="block cursor-pointer"
+            >
+              <div className="relative overflow-hidden rounded-lg border border-gray-600 hover:shadow-md transition-shadow cursor-pointer">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-3 text-white">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-700 rounded-full flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">US</span>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-xs">美股Lv1高级行情</h4>
+                      <div className="mt-1">
+                        <span className="text-xs text-yellow-200">开通即享全美最佳买卖1档</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-2 text-xs text-white/80">
+                    查看历史订单 →
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
-      {/* Main Dropdown Menu - Only show when settings is not open */}
-      {!showSettingsDetail && (
+      {/* Main Dropdown Menu - Only show when settings and my quotes are not open */}
+      {!showSettingsDetail && !showMyQuotesDetail && (
         <div 
           ref={dropdownRef}
           className={cn(

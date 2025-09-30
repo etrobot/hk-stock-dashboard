@@ -89,6 +89,18 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
     }
   }
 
+  // Handle grid sidebar item click - switch to list view and navigate
+  const handleGridSidebarItemClick = (stockCode: string) => {
+    setSidebarViewMode('list')
+    if (isWatchlistRoute) {
+      // In watchlist route, only update the stock data without changing route
+      setStockData(prev => ({ ...prev, symbol: stockCode }))
+    } else {
+      // In other routes, navigate to the stock detail page
+      navigate(`/stock/${encodeURIComponent(stockCode)}`)
+    }
+  }
+
   return (
     <div className="flex h-screen bg-background">
       {/* Left Ranking Sidebar */}
@@ -181,7 +193,7 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
                       key={`${s.code}-${idx}`}
                       stock={s}
                       selectedPeriod={selectedPeriod}
-                      onClick={() => handleSidebarItemClick(s.code)}
+                      onClick={() => handleGridSidebarItemClick(s.code)}
                     />
                   ))}
                 </div>

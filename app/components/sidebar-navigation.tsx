@@ -6,6 +6,7 @@ import { cn } from '../lib/utils'
 import { Star, BarChart3, User, Compass, SlidersHorizontal, MessageSquare, Users } from 'lucide-react'
 import { DropdownMenu } from './dropdown-menu-component'
 import { MessagePopup } from './message-popup'
+import { StockDetailDialog } from './stock-detail-dialog'
 import { useLanguage } from '../contexts/LanguageContext'
 
 interface NavigationItem {
@@ -23,6 +24,7 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isMessagePopupOpen, setIsMessagePopupOpen] = useState(false)
   const [isCommunityPopupOpen, setIsCommunityPopupOpen] = useState(false)
+  const [isStockDetailOpen, setIsStockDetailOpen] = useState(false)
   const { t } = useLanguage()
 
   const mainNavigationItems: NavigationItem[] = [
@@ -60,7 +62,8 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
 
         <DropdownMenu 
           isOpen={isDropdownOpen} 
-          onClose={() => setIsDropdownOpen(false)} 
+          onClose={() => setIsDropdownOpen(false)}
+          onOpenStockDetail={() => setIsStockDetailOpen(true)}
         />
       </div>
 
@@ -170,6 +173,13 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
           </div>
         </div>
       )}
+
+      {/* Stock Detail Dialog */}
+      <StockDetailDialog 
+        isOpen={isStockDetailOpen}
+        onClose={() => setIsStockDetailOpen(false)}
+      />
+
     </div>
   )
 }

@@ -1,4 +1,56 @@
 import { Card } from "./ui/card";
+import { mockChartData } from "../data/mockStockData";
+
+// 生成基于 mockChartData 的K线数据
+function generateKLineData(stockCode: string, period: string, basePrice: number): any[] {
+  // 使用股票代码作为种子来保证一致性
+  const seed = stockCode.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const random = (index: number) => {
+    const x = Math.sin(seed + index) * 10000;
+    return x - Math.floor(x);
+  };
+
+  // 根据周期确定数据点数量和时间间隔
+  const periodConfig = {
+    daily: { count: 30, days: 1 },
+    weekly: { count: 20, days: 7 },
+    monthly: { count: 12, days: 30 },
+    quarterly: { count: 8, days: 90 },
+    yearly: { count: 5, days: 365 }
+  };
+
+  const config = periodConfig[period as keyof typeof periodConfig] || periodConfig.daily;
+  const data: any[] = [];
+  
+  for (let i = 0; i < config.count; i++) {
+    const date = new Date();
+    date.setDate(date.getDate() - (config.count - i) * config.days);
+    
+    // 基于基础价格生成随机波动
+    const priceVariation = basePrice * 0.1; // 10% 波动范围
+    const open = basePrice + (random(i * 4) - 0.5) * priceVariation;
+    const changeRange = priceVariation * 0.3;
+    const change1 = (random(i * 4 + 1) - 0.5) * changeRange;
+    const change2 = (random(i * 4 + 2) - 0.5) * changeRange;
+    const change3 = (random(i * 4 + 3) - 0.5) * changeRange;
+    
+    const close = open + change1;
+    const high = Math.max(open, close) + Math.abs(change2);
+    const low = Math.min(open, close) - Math.abs(change3);
+    const volume = Math.floor((random(i * 5) * 40000000) + 5000000); // 500万-4500万成交量
+
+    data.push({
+      date: date.toISOString(),
+      open: Math.max(0.01, open),
+      high: Math.max(0.01, high),
+      low: Math.max(0.01, low),
+      close: Math.max(0.01, close),
+      volume
+    });
+  }
+
+  return data;
+}
 
 // Enhanced K-line chart component with axes
 function MiniKLineChart({ data, period }: { data: any[], period: string }) {
@@ -214,7 +266,13 @@ interface StockGridItemProps {
 
 export function StockGridItem({ stock, selectedPeriod, onClick }: StockGridItemProps) {
   const isPositive = stock.percentage.startsWith('+');
-  const klineData = stock.klineData?.[selectedPeriod] || [];
+  let klineData = stock.klineData?.[selectedPeriod] || [];
+  
+  // 如果没有数据，使用生成的数据
+  if (!klineData || klineData.length === 0) {
+    const basePrice = parseFloat(stock.price.replace(/,/g, '')) || 100;
+    klineData = generateKLineData(stock.code, selectedPeriod, basePrice);
+  }
   
   return (
     <Card className="p-4 bg-card border-border hover:shadow-md transition-shadow cursor-pointer" onClick={onClick}>

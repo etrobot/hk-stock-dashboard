@@ -94,13 +94,13 @@ export const cnDividendStocks: DividendStock[] = [
   { name: "建设银行", code: "601939", price: "6.12", change: "+0.19", percentage: "+3.20%", isPositive: true, dividend: "5.8%" }
 ];
 
-export const cnSectors: SectorData[] = [
-  { name: "新能源", change: "+3.2%", percentage: "+3.2%", isPositive: true },
-  { name: "半导体", change: "+2.8%", percentage: "+2.8%", isPositive: true },
-  { name: "医药", change: "+1.5%", percentage: "+1.5%", isPositive: true },
-  { name: "银行", change: "-0.8%", percentage: "-0.8%", isPositive: false },
-  { name: "地产", change: "-2.1%", percentage: "-2.1%", isPositive: false },
-  { name: "钢铁", change: "-3.5%", percentage: "-3.5%", isPositive: false }
+export const cnSectors: MarketIndex[] = [
+  { name: "新能源", value: "6,234.56", change: "+3.2%", percentage: "3.2", isPositive: true },
+  { name: "半导体", value: "5,789.12", change: "+2.8%", percentage: "2.8", isPositive: true },
+  { name: "医药", value: "4,567.89", change: "+1.5%", percentage: "1.5", isPositive: true },
+  { name: "银行", value: "3,234.56", change: "-0.8%", percentage: "0.8", isPositive: false },
+  { name: "地产", value: "2,987.45", change: "-2.1%", percentage: "2.1", isPositive: false },
+  { name: "钢铁", value: "2,456.78", change: "-3.5%", percentage: "3.5", isPositive: false }
 ];
 
 export const hkGainers: Stock[] = [
@@ -198,13 +198,13 @@ export const usDividendStocks: DividendStock[] = [
   { name: "AT&T", code: "T", price: "$25.42", change: "+$0.18", percentage: "+0.71%", isPositive: true, dividend: "7.4%" }
 ];
 
-export const hkSectors: SectorData[] = [
-  { name: "科技", change: "+2.8%", percentage: "+2.8%", isPositive: true },
-  { name: "金融", change: "+1.2%", percentage: "+1.2%", isPositive: true },
-  { name: "地产", change: "-0.5%", percentage: "-0.5%", isPositive: false },
-  { name: "能源", change: "+3.1%", percentage: "+3.1%", isPositive: true },
-  { name: "医药", change: "+1.8%", percentage: "+1.8%", isPositive: true },
-  { name: "消费", change: "-1.2%", percentage: "-1.2%", isPositive: false }
+export const hkSectors: MarketIndex[] = [
+  { name: "科技", value: "15,234.56", change: "+2.8%", percentage: "2.8", isPositive: true },
+  { name: "金融", value: "12,456.78", change: "+1.2%", percentage: "1.2", isPositive: true },
+  { name: "地产", value: "8,789.12", change: "-0.5%", percentage: "0.5", isPositive: false },
+  { name: "能源", value: "9,876.54", change: "+3.1%", percentage: "3.1", isPositive: true },
+  { name: "医药", value: "11,234.89", change: "+1.8%", percentage: "1.8", isPositive: true },
+  { name: "消费", value: "10,567.23", change: "-1.2%", percentage: "1.2", isPositive: false }
 ];
 
 export const usSectors: SectorData[] = [
