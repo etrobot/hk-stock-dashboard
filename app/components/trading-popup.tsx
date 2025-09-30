@@ -16,6 +16,7 @@ interface TradingPopupProps {
 }
 
 export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
+  const [selectedAccount, setSelectedAccount] = useState('孖展账户12345678')
   const [stockCode, setStockCode] = useState('00005')
   const [orderType, setOrderType] = useState('限价单')
   const [price, setPrice] = useState('2')
@@ -101,9 +102,16 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
           <DialogHeader className="pb-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Badge className="text-xs px-2 py-1">
-                  保证金综合账户(1612)
-                </Badge>
+                <Select value={selectedAccount} onValueChange={setSelectedAccount}>
+                  <SelectTrigger className="bg-input text-xs h-6 px-2 border-0">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover border-border">
+                    <SelectItem value="孖展账户12345678" className="text-xs">孖展账户12345678</SelectItem>
+                    <SelectItem value="现金账户888888" className="text-xs">现金账户888888</SelectItem>
+                    <SelectItem value="VA账户12345678" className="text-xs">VA账户12345678</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </DialogHeader>
@@ -270,9 +278,6 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
             <div className="col-span-2 space-y-4">
               {/* Filter Buttons */}
               <div className="flex gap-2">
-                <Button variant="default" size="sm" className="bg-input text-foreground text-xs h-5 px-2">
-                  证券
-                </Button>
                 <Select value={market} onValueChange={setMarket}>
                   <SelectTrigger className="bg-input text-xs h-5 px-2">
                     <SelectValue placeholder="全部市场" />
@@ -282,7 +287,6 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                     <SelectItem value="港股" className="text-xs">港股</SelectItem>
                     <SelectItem value="美股" className="text-xs">美股</SelectItem>
                     <SelectItem value="沪深" className="text-xs">沪深</SelectItem>
-                    <SelectItem value="加密货币" className="text-xs">加密货币</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select value={currency} onValueChange={setCurrency}>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Card, CardContent } from '../components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { User } from 'lucide-react';
 import { accountOverview } from '../data/account-mock-data';
 import { AccountOverview } from '../components/account/AccountOverview';
@@ -11,6 +12,7 @@ const AccountPage = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('ytd');
   const [selectedView, setSelectedView] = useState('returns');
   const [activeTab, setActiveTab] = useState('overview');
+  const [accountType, setAccountType] = useState('孖展账户12345678');
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -25,9 +27,16 @@ const AccountPage = () => {
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <User className="w-4 h-4 text-primary" />
-                <span className="text-sm text-foreground">
-                  {accountOverview.accountType}({accountOverview.accountNumber})
-                </span>
+                <Select value={accountType} onValueChange={setAccountType}>
+                  <SelectTrigger className="bg-input text-foreground text-sm h-6 px-2 w-auto border-0">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover border-border">
+                    <SelectItem value="孖展账户12345678" className="text-sm">孖展账户12345678</SelectItem>
+                    <SelectItem value="现金账户88888888" className="text-sm">现金账户88888888</SelectItem>
+                    <SelectItem value="VA账户12345678" className="text-sm">VA账户12345678</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>

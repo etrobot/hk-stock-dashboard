@@ -195,9 +195,6 @@ export const EarningsCalendar = ({ selectedMonth }: EarningsCalendarProps) => {
             <div className="text-right">
               <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
                 <span>收益率</span>
-                <span>·</span>
-                <span>简单加权</span>
-                <ChevronDown className="w-3 h-3 text-muted-foreground" />
               </div>
               <div className="text-[11px] font-medium text-[#16BA71]">+0.29%</div>
             </div>
