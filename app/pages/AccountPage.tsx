@@ -5,6 +5,7 @@ import { User } from 'lucide-react';
 import { accountOverview } from '../data/account-mock-data';
 import { AccountOverview } from '../components/account/AccountOverview';
 import { SecuritiesContent } from '../components/account/SecuritiesContent';
+import { FundsContent } from '../components/account/FundsContent';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const AccountPage = () => {
@@ -73,7 +74,7 @@ const AccountPage = () => {
               activeTab === 'securities' 
                 ? 'border-[#FF5C00]' 
                 : 'hover:border-[#FF5C00]'
-            }`}
+            } mb-4`}
             onClick={() => setActiveTab('securities')}
           >
             <CardContent className="p-4">
@@ -86,6 +87,29 @@ const AccountPage = () => {
               </div>
               <div className="text-lg font-bold text-card-foreground mb-1">
                 --
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Funds Card */}
+          <Card 
+            className={`cursor-pointer transition-all duration-200 ${
+              activeTab === 'funds' 
+                ? 'border-[#FF5C00]' 
+                : 'hover:border-[#FF5C00]'
+            }`}
+            onClick={() => setActiveTab('funds')}
+          >
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-muted-foreground">{t('account.funds_position')}</span>
+                  <span className="text-xs text-muted-foreground">·</span>
+                  <span className="text-xs text-muted-foreground">CNY</span>
+                </div>
+              </div>
+              <div className="text-lg font-bold text-card-foreground mb-1">
+                15,428.65
               </div>
             </CardContent>
           </Card>
@@ -106,6 +130,10 @@ const AccountPage = () => {
 
             {activeTab === 'securities' && (
               <SecuritiesContent />
+            )}
+
+            {activeTab === 'funds' && (
+              <FundsContent />
             )}
           </div>
         </div>
