@@ -69,11 +69,11 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
         
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <span className={`text-2xl font-bold ${indexDetail.isPositive ? 'text-green-400' : 'text-red-400'}`}>
+            <span className={`text-xl font-bold ${indexDetail.isPositive ? 'text-chart-1' : 'text-chart-2'}`}>
               {indexDetail.value}
             </span>
             <TrendingUp className={`w-4 h-4 ${indexDetail.isPositive ? 'text-green-400' : 'text-red-400'}`} />
-            <span className={`text-sm ${indexDetail.isPositive ? 'text-green-400' : 'text-red-400'}`}>
+            <span className={`text-xs ${indexDetail.isPositive ? 'text-chart-1' : 'text-chart-2'}`}>
               {indexDetail.change} {indexDetail.percentage}
             </span>
           </div>

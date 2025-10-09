@@ -141,10 +141,10 @@ function App() {
                 {t('tab.new_stock_center')}
               </Button>
             </div>
-            <div className="container mx-auto p-4 space-y-6">
+            <div className="container mx-auto p-3 space-y-3">
             {activeTab === t('tab.home') && <MarketIndices indices={hkIndices} onIndexClick={handleIndexClick} />}
 
-              <div className="flex gap-6">
+              <div className="flex gap-4">
                 {activeTab === t('tab.concept_sectors') ? (
                   <>
                     <ConceptSectors 
@@ -175,7 +175,7 @@ function App() {
                         onShowMore={handleShowMore}
                       />
                     </div>
-                    <div className="w-80 flex-shrink-0">
+                    <div className="w-72 flex-shrink-0">
                       <SectorHeatmap currentMarket={currentPage} />
                     </div>
                   </>

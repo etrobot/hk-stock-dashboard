@@ -104,11 +104,16 @@ export const cnSectors: MarketIndex[] = [
 ];
 
 export const hkGainers: Stock[] = [
-  { name: "腾讯控股", code: "00700", price: "378.60", change: "+12.40", percentage: "+3.39%", isPositive: true },
-  { name: "阿里巴巴", code: "09988", price: "89.15", change: "+2.85", percentage: "+3.30%", isPositive: true },
-  { name: "美团", code: "03690", price: "156.80", change: "+4.60", percentage: "+3.02%", isPositive: true },
-  { name: "小米集团", code: "01810", price: "18.92", change: "+0.52", percentage: "+2.83%", isPositive: true },
-  { name: "比亚迪股份", code: "01211", price: "245.20", change: "+6.40", percentage: "+2.68%", isPositive: true }
+  { name: "新矿资源", code: "01231", price: "0.510", change: "+0.245", percentage: "+88.89%", isPositive: true },
+  { name: "奥星生命科学", code: "06118", price: "1.400", change: "+0.379", percentage: "+37.25%", isPositive: true },
+  { name: "惠陶集团", code: "08238", price: "0.410", change: "+0.090", percentage: "+28.13%", isPositive: true },
+  { name: "亚洲果业", code: "00073", price: "2.140", change: "+0.469", percentage: "+28.14%", isPositive: true },
+  { name: "恒生银行-R", code: "80011", price: "138.000", change: "+29.11", percentage: "+26.72%", isPositive: true },
+  { name: "恒生银行", code: "00011", price: "150.400", change: "+31.47", percentage: "+26.39%", isPositive: true },
+  { name: "欧化", code: "01711", price: "0.231", change: "+0.047", percentage: "+25.54%", isPositive: true },
+  { name: "东方大学城", code: "08067", price: "0.370", change: "+0.075", percentage: "+25.42%", isPositive: true },
+  { name: "金粤控股", code: "00070", price: "0.080", change: "+0.016", percentage: "+25.00%", isPositive: true },
+  { name: "金马能源", code: "06885", price: "1.560", change: "+0.281", percentage: "+21.88%", isPositive: true }
 ];
 
 export const hkLosers: Stock[] = [
@@ -116,7 +121,12 @@ export const hkLosers: Stock[] = [
   { name: "融创中国", code: "01918", price: "1.82", change: "-0.14", percentage: "-7.14%", isPositive: false },
   { name: "碧桂园", code: "02007", price: "0.95", change: "-0.07", percentage: "-6.86%", isPositive: false },
   { name: "中国金茂", code: "00817", price: "0.68", change: "-0.05", percentage: "-6.85%", isPositive: false },
-  { name: "世茂集团", code: "00813", price: "1.23", change: "-0.08", percentage: "-6.11%", isPositive: false }
+  { name: "世茂集团", code: "00813", price: "1.23", change: "-0.08", percentage: "-6.11%", isPositive: false },
+  { name: "富力地产", code: "02777", price: "2.45", change: "-0.16", percentage: "-6.13%", isPositive: false },
+  { name: "佳兆业集团", code: "01638", price: "0.42", change: "-0.03", percentage: "-6.67%", isPositive: false },
+  { name: "雅居乐集团", code: "03383", price: "3.14", change: "-0.21", percentage: "-6.26%", isPositive: false },
+  { name: "龙湖集团", code: "00960", price: "15.68", change: "-1.02", percentage: "-6.11%", isPositive: false },
+  { name: "旭辉控股", code: "00884", price: "1.89", change: "-0.12", percentage: "-5.97%", isPositive: false }
 ];
 
 export const hkHotStocks: Stock[] = [
@@ -124,7 +134,12 @@ export const hkHotStocks: Stock[] = [
   { name: "中国移动", code: "00941", price: "78.90", change: "+1.50", percentage: "+1.94%", isPositive: true },
   { name: "建设银行", code: "00939", price: "5.89", change: "+0.11", percentage: "+1.90%", isPositive: true },
   { name: "工商银行", code: "01398", price: "4.56", change: "+0.08", percentage: "+1.79%", isPositive: true },
-  { name: "中国平安", code: "02318", price: "45.30", change: "+0.80", percentage: "+1.80%", isPositive: true }
+  { name: "中国平安", code: "02318", price: "45.30", change: "+0.80", percentage: "+1.80%", isPositive: true },
+  { name: "腾讯控股", code: "00700", price: "378.60", change: "+6.40", percentage: "+1.72%", isPositive: true },
+  { name: "阿里巴巴", code: "09988", price: "89.15", change: "+1.45", percentage: "+1.65%", isPositive: true },
+  { name: "美团", code: "03690", price: "156.80", change: "+2.50", percentage: "+1.62%", isPositive: true },
+  { name: "小米集团", code: "01810", price: "18.92", change: "+0.30", percentage: "+1.61%", isPositive: true },
+  { name: "中国石油", code: "00857", price: "3.45", change: "+0.05", percentage: "+1.47%", isPositive: true }
 ];
 
 export const hkDividendStocks: DividendStock[] = [
@@ -132,7 +147,12 @@ export const hkDividendStocks: DividendStock[] = [
   { name: "海王英特龙", code: "08329", price: "0.148", change: "-0.004", percentage: "-2.63%", isPositive: false, dividend: "106.080%" },
   { name: "怡园酒业", code: "08146", price: "0.118", change: "-0.009", percentage: "-7.09%", isPositive: false, dividend: "102.540%" },
   { name: "华晨中国", code: "01114", price: "3.98", change: "+0.11", percentage: "+2.84%", isPositive: true, dividend: "45.230%" },
-  { name: "亿都(国际)", code: "00259", price: "4.73", change: "-0.26", percentage: "-5.21%", isPositive: false, dividend: "39.110%" }
+  { name: "亿都(国际)", code: "00259", price: "4.73", change: "-0.26", percentage: "-5.21%", isPositive: false, dividend: "39.110%" },
+  { name: "中国电信", code: "00728", price: "3.12", change: "+0.08", percentage: "+2.63%", isPositive: true, dividend: "18.750%" },
+  { name: "中国石化", code: "00386", price: "4.23", change: "+0.05", percentage: "+1.20%", isPositive: true, dividend: "16.890%" },
+  { name: "中国神华", code: "01088", price: "28.45", change: "+0.35", percentage: "+1.25%", isPositive: true, dividend: "15.230%" },
+  { name: "中国银行", code: "03988", price: "3.56", change: "+0.04", percentage: "+1.14%", isPositive: true, dividend: "14.670%" },
+  { name: "农业银行", code: "01288", price: "2.89", change: "+0.03", percentage: "+1.05%", isPositive: true, dividend: "13.540%" }
 ];
 
 export const usIndices: MarketIndex[] = [
