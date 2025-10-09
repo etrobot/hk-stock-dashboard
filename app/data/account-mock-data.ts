@@ -168,7 +168,7 @@ export const timePeriods = [
 
 // Chart view options
 export const chartViews = [
-  { label: "account.return_trend", value: "returns" },
+  // { label: "account.return_trend", value: "returns" },
   { label: "account.total_asset_trend", value: "total-asset" },
   { label: "account.earnings_calendar", value: "calendar" }
 ];

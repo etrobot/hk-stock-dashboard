@@ -67,7 +67,12 @@ export const cnGainers: Stock[] = [
   { name: "中国平安", code: "601318", price: "45.67", change: "+2.34", percentage: "+5.40%", isPositive: true },
   { name: "招商银行", code: "600036", price: "38.90", change: "+1.89", percentage: "+5.10%", isPositive: true },
   { name: "五粮液", code: "000858", price: "156.78", change: "+7.23", percentage: "+4.84%", isPositive: true },
-  { name: "比亚迪", code: "002594", price: "234.56", change: "+10.45", percentage: "+4.66%", isPositive: true }
+  { name: "比亚迪", code: "002594", price: "234.56", change: "+10.45", percentage: "+4.66%", isPositive: true },
+  { name: "腾讯控股", code: "000700", price: "378.60", change: "+16.80", percentage: "+4.64%", isPositive: true },
+  { name: "阿里巴巴", code: "009988", price: "89.15", change: "+3.95", percentage: "+4.63%", isPositive: true },
+  { name: "美团", code: "003690", price: "156.80", change: "+6.90", percentage: "+4.60%", isPositive: true },
+  { name: "小米集团", code: "001810", price: "18.92", change: "+0.83", percentage: "+4.58%", isPositive: true },
+  { name: "京东集团", code: "009618", price: "145.67", change: "+6.34", percentage: "+4.55%", isPositive: true }
 ];
 
 export const cnLosers: Stock[] = [
@@ -75,7 +80,12 @@ export const cnLosers: Stock[] = [
   { name: "保利地产", code: "600048", price: "8.90", change: "-0.56", percentage: "-5.92%", isPositive: false },
   { name: "华夏幸福", code: "600340", price: "5.67", change: "-0.34", percentage: "-5.66%", isPositive: false },
   { name: "融创中国", code: "01918", price: "3.45", change: "-0.23", percentage: "-6.25%", isPositive: false },
-  { name: "恒大集团", code: "03333", price: "1.23", change: "-0.12", percentage: "-8.89%", isPositive: false }
+  { name: "恒大集团", code: "03333", price: "1.23", change: "-0.12", percentage: "-8.89%", isPositive: false },
+  { name: "中国石化", code: "600028", price: "4.56", change: "-0.38", percentage: "-7.69%", isPositive: false },
+  { name: "中信证券", code: "600030", price: "25.78", change: "-1.89", percentage: "-6.83%", isPositive: false },
+  { name: "平安银行", code: "000001", price: "13.45", change: "-0.92", percentage: "-6.40%", isPositive: false },
+  { name: "中国人寿", code: "601628", price: "28.90", change: "-1.84", percentage: "-5.98%", isPositive: false },
+  { name: "格力电器", code: "000651", price: "35.67", change: "-2.23", percentage: "-5.88%", isPositive: false }
 ];
 
 export const cnHotStocks: Stock[] = [
@@ -83,7 +93,12 @@ export const cnHotStocks: Stock[] = [
   { name: "隆基绿能", code: "601012", price: "23.45", change: "+1.12", percentage: "+5.02%", isPositive: true },
   { name: "药明康德", code: "603259", price: "67.89", change: "+3.21", percentage: "+4.96%", isPositive: true },
   { name: "迈瑞医疗", code: "300760", price: "289.12", change: "+13.45", percentage: "+4.88%", isPositive: true },
-  { name: "海康威视", code: "002415", price: "34.56", change: "+1.56", percentage: "+4.73%", isPositive: true }
+  { name: "海康威视", code: "002415", price: "34.56", change: "+1.56", percentage: "+4.73%", isPositive: true },
+  { name: "东方财富", code: "300059", price: "18.90", change: "+0.85", percentage: "+4.71%", isPositive: true },
+  { name: "三一重工", code: "600031", price: "16.78", change: "+0.75", percentage: "+4.68%", isPositive: true },
+  { name: "立讯精密", code: "002475", price: "32.45", change: "+1.43", percentage: "+4.61%", isPositive: true },
+  { name: "恒瑞医药", code: "600276", price: "45.89", change: "+2.01", percentage: "+4.58%", isPositive: true },
+  { name: "顺丰控股", code: "002352", price: "67.23", change: "+2.94", percentage: "+4.57%", isPositive: true }
 ];
 
 export const cnDividendStocks: DividendStock[] = [
@@ -91,7 +106,12 @@ export const cnDividendStocks: DividendStock[] = [
   { name: "中国石油", code: "601857", price: "5.67", change: "+0.23", percentage: "+4.23%", isPositive: true, dividend: "7.8%" },
   { name: "农业银行", code: "601288", price: "3.45", change: "+0.08", percentage: "+2.38%", isPositive: true, dividend: "6.5%" },
   { name: "工商银行", code: "601398", price: "4.89", change: "+0.15", percentage: "+3.16%", isPositive: true, dividend: "6.2%" },
-  { name: "建设银行", code: "601939", price: "6.12", change: "+0.19", percentage: "+3.20%", isPositive: true, dividend: "5.8%" }
+  { name: "建设银行", code: "601939", price: "6.12", change: "+0.19", percentage: "+3.20%", isPositive: true, dividend: "5.8%" },
+  { name: "中国银行", code: "601988", price: "3.78", change: "+0.09", percentage: "+2.44%", isPositive: true, dividend: "5.5%" },
+  { name: "交通银行", code: "601328", price: "5.23", change: "+0.11", percentage: "+2.15%", isPositive: true, dividend: "5.2%" },
+  { name: "招商银行", code: "600036", price: "38.90", change: "+0.75", percentage: "+1.96%", isPositive: true, dividend: "4.8%" },
+  { name: "中国神华", code: "601088", price: "28.45", change: "+0.56", percentage: "+2.01%", isPositive: true, dividend: "4.5%" },
+  { name: "华夏银行", code: "600015", price: "7.89", change: "+0.15", percentage: "+1.94%", isPositive: true, dividend: "4.2%" }
 ];
 
 export const cnSectors: MarketIndex[] = [
@@ -187,35 +207,55 @@ export const usIndices: MarketIndex[] = [
 ];
 
 export const usGainers: Stock[] = [
-  { name: "苹果公司", code: "AAPL", price: "$149.80", change: "+$4.25", percentage: "+2.92%", isPositive: true },
-  { name: "微软", code: "MSFT", price: "$331.62", change: "+$8.47", percentage: "+2.62%", isPositive: true },
-  { name: "特斯拉", code: "TSLA", price: "$1,088.47", change: "+$25.63", percentage: "+2.41%", isPositive: true },
-  { name: "亚马逊", code: "AMZN", price: "$3,372.20", change: "+$67.85", percentage: "+2.05%", isPositive: true },
-  { name: "谷歌", code: "GOOGL", price: "$2,891.84", change: "+$52.16", percentage: "+1.84%", isPositive: true }
+  { name: "Xenetic Bi...", code: "XBIO", price: "$10.360", change: "+$5.410", percentage: "+141.49%", isPositive: true },
+  { name: "Nexalin Te...", code: "NXL", price: "$1.860", change: "+$0.923", percentage: "+98.25%", isPositive: true },
+  { name: "AlphaTON ...", code: "ATON", price: "$10.910", change: "+$5.334", percentage: "+95.52%", isPositive: true },
+  { name: "374Water", code: "SCWO", price: "$0.7000", change: "+$0.335", percentage: "+91.73%", isPositive: true },
+  { name: "Acurx Phar...", code: "ACXP", price: "$8.100", change: "+$3.818", percentage: "+88.81%", isPositive: true },
+  { name: "大自然药业", code: "UPC", price: "$9.460", change: "+$4.290", percentage: "+82.98%", isPositive: true },
+  { name: "Adaptimm...", code: "ADAP", price: "$0.2105", change: "+$0.0719", percentage: "+51.88%", isPositive: true },
+  { name: "XtI生物制药", code: "XTLB", price: "$2.050", change: "+$0.650", percentage: "+46.43%", isPositive: true },
+  { name: "TNL Media...", code: "TNMG", price: "$0.4800", change: "+$0.1500", percentage: "+45.50%", isPositive: true },
+  { name: "GT Biophar...", code: "GTBP", price: "$1.080", change: "+$0.328", percentage: "+43.67%", isPositive: true }
 ];
 
 export const usLosers: Stock[] = [
-  { name: "Meta", code: "META", price: "$338.54", change: "-$12.67", percentage: "-3.61%", isPositive: false },
-  { name: "奈飞", code: "NFLX", price: "$385.15", change: "-$13.28", percentage: "-3.33%", isPositive: false },
-  { name: "英伟达", code: "NVDA", price: "$284.91", change: "-$9.45", percentage: "-3.21%", isPositive: false },
-  { name: "AMD", code: "AMD", price: "$143.90", change: "-$4.52", percentage: "-3.05%", isPositive: false },
-  { name: "Zoom", code: "ZM", price: "$189.39", change: "-$5.67", percentage: "-2.91%", isPositive: false }
+  { name: "Centro El...", code: "CENN", price: "$0.2657", change: "-$0.3486", percentage: "-56.98%", isPositive: false },
+  { name: "Zeta Netw...", code: "ZNB", price: "$1.900", change: "-$1.501", percentage: "-44.12%", isPositive: false },
+  { name: "Envoy Med...", code: "COCH", price: "$0.9301", change: "-$0.6599", percentage: "-41.50%", isPositive: false },
+  { name: "Galecto", code: "GLTO", price: "$10.650", change: "-$7.272", percentage: "-40.57%", isPositive: false },
+  { name: "C3is", code: "CISS", price: "$2.580", change: "-$1.490", percentage: "-36.61%", isPositive: false },
+  { name: "一品威客", code: "EPWK", price: "$0.0753", change: "-$0.0347", percentage: "-31.55%", isPositive: false },
+  { name: "Turn Thera...", code: "TTRX", price: "$7.000", change: "-$3.000", percentage: "-30.00%", isPositive: false },
+  { name: "一盈证券", code: "GSIW", price: "$0.1614", change: "-$0.0686", percentage: "-29.83%", isPositive: false },
+  { name: "Phoenix As...", code: "PHOE", price: "$13.320", change: "-$3.480", percentage: "-20.71%", isPositive: false },
+  { name: "Femasys", code: "FEMY", price: "$0.5971", change: "-$0.1500", percentage: "-20.09%", isPositive: false }
 ];
 
 export const usHotStocks: Stock[] = [
-  { name: "GameStop", code: "GME", price: "$158.78", change: "+$15.23", percentage: "+10.61%", isPositive: true },
-  { name: "AMC娱乐", code: "AMC", price: "$22.46", change: "+$2.18", percentage: "+10.74%", isPositive: true },
-  { name: "Palantir", code: "PLTR", price: "$18.35", change: "+$1.67", percentage: "+10.01%", isPositive: true },
-  { name: "Rivian", code: "RIVN", price: "$103.69", change: "+$8.92", percentage: "+9.42%", isPositive: true },
-  { name: "Lucid Motors", code: "LCID", price: "$38.44", change: "+$3.12", percentage: "+8.84%", isPositive: true }
+  { name: "Xenetic Bi...", code: "XBIO", price: "$10.360", change: "+$5.410", percentage: "+141.49%", isPositive: true },
+  { name: "Nexalin Te...", code: "NXL", price: "$1.860", change: "+$0.923", percentage: "+98.25%", isPositive: true },
+  { name: "AlphaTON ...", code: "ATON", price: "$10.910", change: "+$5.334", percentage: "+95.52%", isPositive: true },
+  { name: "374Water", code: "SCWO", price: "$0.7000", change: "+$0.335", percentage: "+91.73%", isPositive: true },
+  { name: "Acurx Phar...", code: "ACXP", price: "$8.100", change: "+$3.818", percentage: "+88.81%", isPositive: true },
+  { name: "大自然药业", code: "UPC", price: "$9.460", change: "+$4.290", percentage: "+82.98%", isPositive: true },
+  { name: "Adaptimm...", code: "ADAP", price: "$0.2105", change: "+$0.0719", percentage: "+51.88%", isPositive: true },
+  { name: "XtI生物制药", code: "XTLB", price: "$2.050", change: "+$0.650", percentage: "+46.43%", isPositive: true },
+  { name: "TNL Media...", code: "TNMG", price: "$0.4800", change: "+$0.1500", percentage: "+45.50%", isPositive: true },
+  { name: "GT Biophar...", code: "GTBP", price: "$1.080", change: "+$0.328", percentage: "+43.67%", isPositive: true }
 ];
 
 export const usDividendStocks: DividendStock[] = [
-  { name: "可口可乐", code: "KO", price: "$56.23", change: "+$0.45", percentage: "+0.81%", isPositive: true, dividend: "3.1%" },
-  { name: "强生", code: "JNJ", price: "$161.19", change: "+$1.23", percentage: "+0.77%", isPositive: true, dividend: "2.6%" },
-  { name: "宝洁", code: "PG", price: "$156.39", change: "+$0.89", percentage: "+0.57%", isPositive: true, dividend: "2.4%" },
-  { name: "埃克森美孚", code: "XOM", price: "$61.94", change: "+$1.45", percentage: "+2.40%", isPositive: true, dividend: "5.8%" },
-  { name: "AT&T", code: "T", price: "$25.42", change: "+$0.18", percentage: "+0.71%", isPositive: true, dividend: "7.4%" }
+  { name: "茂盛控股", code: "00022", price: "$10.130", change: "+$0.237", percentage: "+2.38%", isPositive: true, dividend: "186.820%" },
+  { name: "怡园酒业", code: "08146", price: "$0.117", change: "+$0.001", percentage: "+0.86%", isPositive: true, dividend: "103.420%" },
+  { name: "海王英特龙", code: "08329", price: "$0.156", change: "$0.000", percentage: "0.00%", isPositive: true, dividend: "100.640%" },
+  { name: "华晨中国", code: "01114", price: "$4.168", change: "-$0.070", percentage: "-1.65%", isPositive: false, dividend: "43.170%" },
+  { name: "万宝盛华", code: "02180", price: "$5.420", change: "+$0.070", percentage: "+1.31%", isPositive: true, dividend: "35.240%" },
+  { name: "亿都(国际...", code: "00259", price: "$5.360", change: "-$0.110", percentage: "-2.01%", isPositive: false, dividend: "34.510%" },
+  { name: "平安好医生", code: "01833", price: "$17.600", change: "-$0.221", percentage: "-1.24%", isPositive: false, dividend: "28.540%" },
+  { name: "承达集团", code: "01568", price: "$0.750", change: "+$0.020", percentage: "+2.74%", isPositive: true, dividend: "26.670%" },
+  { name: "K W NELS...", code: "08411", price: "$0.077", change: "$0.000", percentage: "0.00%", isPositive: true, dividend: "25.970%" },
+  { name: "润华服务", code: "02455", price: "$0.710", change: "-$0.010", percentage: "-1.39%", isPositive: false, dividend: "25.350%" }
 ];
 
 export const hkSectors: MarketIndex[] = [

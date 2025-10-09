@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { cn } from '../lib/utils'
 import { Star, BarChart3, User, Compass, SlidersHorizontal, MessageSquare, Users } from 'lucide-react'
 import { DropdownMenu } from './dropdown-menu-component'
@@ -29,11 +29,14 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
   const [isStockDetailOpen, setIsStockDetailOpen] = useState(false)
   const { t } = useLanguage()
   const { isTradeUnlocked, showUnlockDialog } = useTradingLock()
+  const navigate = useNavigate()
 
   const handleAccountClick = (e: React.MouseEvent) => {
     if (!isTradeUnlocked) {
       e.preventDefault()
-      showUnlockDialog()
+      showUnlockDialog(() => {
+        navigate('/account')
+      })
     }
   }
 

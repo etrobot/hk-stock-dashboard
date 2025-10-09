@@ -127,12 +127,14 @@ export function SectorHeatmap({ currentMarket = 'hk' }: SectorHeatmapProps) {
   const { resolvedTheme } = useTheme()
   const { t } = useLanguage()
   const [chartData, setChartData] = useState<TreeNode[]>([])
+  const [isDataReady, setIsDataReady] = useState(false)
 
   useEffect(() => {
     // Process data similar to the original example
     const processedData = JSON.parse(JSON.stringify(mockSectorData))
     convertData(processedData)
     setChartData(processedData)
+    setIsDataReady(true)
   }, [])
 
   const handleMoreClick = () => {
@@ -213,7 +215,7 @@ export function SectorHeatmap({ currentMarket = 'hk' }: SectorHeatmapProps) {
           `<div style="font-weight: bold; margin-bottom: 4px;">${info.name}</div>`,
           `${t('heatmap.market_cap')}: ${marketCap}<br/>`,
           `${t('heatmap.previous_value')}: ${prevValue}<br/>`,
-          `${t('heatmap.change_percent')}: <span style="color: ${value[2] > 0 ? 'var(--chart-1)' : value[2] < 0 ? 'var(--chart-2)' : 'var(--muted-foreground)'}">${change}</span>`
+          `${t('heatmap.change_percent')}: <span style="color: ${value[2] > 0 ? '#22c55e' : value[2] < 0 ? '#ef4444' : '#6b7280'}">${change}</span>`
         ].join('')
       }
     },
@@ -252,9 +254,9 @@ export function SectorHeatmap({ currentMarket = 'hk' }: SectorHeatmapProps) {
             visualMin: -100,
             visualMax: 100,
             color: [
-              'var(--chart-2)',
-              'var(--muted-foreground)',
-              'var(--chart-1)'
+              '#ef4444', // Red for negative values
+              '#6b7280', // Gray for neutral
+              '#22c55e'  // Green for positive values
             ]
           }
         ],
@@ -289,13 +291,19 @@ export function SectorHeatmap({ currentMarket = 'hk' }: SectorHeatmapProps) {
         </div>
 
         <div className="h-96">
-          <ReactECharts 
-            option={option}
-            style={{ height: '100%', width: '100%' }}
-            theme={resolvedTheme}
-            opts={{ renderer: 'canvas' }}
-            notMerge={true}
-          />
+          {isDataReady && chartData.length > 0 ? (
+            <ReactECharts 
+              option={option}
+              style={{ height: '100%', width: '100%' }}
+              theme={resolvedTheme === 'dark' ? 'dark' : undefined}
+              opts={{ renderer: 'canvas' }}
+              notMerge={true}
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full text-muted-foreground">
+              {t('common.loading') || '加载中...'}
+            </div>
+          )}
         </div>
       </div>
     </div>

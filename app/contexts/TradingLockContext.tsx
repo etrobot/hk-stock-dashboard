@@ -7,7 +7,7 @@ import { Input } from '../components/ui/input'
 
 interface TradingLockContextType {
   isTradeUnlocked: boolean
-  showUnlockDialog: () => void
+  showUnlockDialog: (onSuccess?: () => void) => void
   lockTrading: () => void
 }
 
@@ -18,10 +18,12 @@ export function TradingLockProvider({ children }: { children: ReactNode }) {
   const [showPasswordDialog, setShowPasswordDialog] = useState(false)
   const [password, setPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
+  const [onSuccessCallback, setOnSuccessCallback] = useState<(() => void) | null>(null)
 
-  const showUnlockDialog = () => {
+  const showUnlockDialog = (onSuccess?: () => void) => {
     if (!isTradeUnlocked) {
       setShowPasswordDialog(true)
+      setOnSuccessCallback(onSuccess || null)
     }
   }
 
@@ -35,6 +37,12 @@ export function TradingLockProvider({ children }: { children: ReactNode }) {
       setShowPasswordDialog(false)
       setPassword('')
       setPasswordError('')
+      
+      // 执行成功回调
+      if (onSuccessCallback) {
+        onSuccessCallback()
+        setOnSuccessCallback(null)
+      }
     } else {
       setPasswordError('密码错误，请重新输入')
       setPassword('')
@@ -45,6 +53,7 @@ export function TradingLockProvider({ children }: { children: ReactNode }) {
     setShowPasswordDialog(false)
     setPassword('')
     setPasswordError('')
+    setOnSuccessCallback(null)
   }
 
   return (

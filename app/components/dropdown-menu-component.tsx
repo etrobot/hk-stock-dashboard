@@ -3,9 +3,10 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '../lib/utils'
-import { ChevronRight, FileText, Gift, TrendingUp, CreditCard, Settings, LogOut } from 'lucide-react'
+import { ChevronRight, FileText, Gift, TrendingUp, CreditCard, Settings, LogOut, HelpCircle } from 'lucide-react'
 import { SettingsDetailPage } from './settings-detail-page'
 import { LoginDialog } from './login-dialog'
+import { HelpCenterPopup } from './help-center-popup'
 import { useLanguage } from '../contexts/LanguageContext'
 
 interface MenuItem {
@@ -29,6 +30,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
   const [showSettingsDetail, setShowSettingsDetail] = useState(false)
   const [showLoginDialog, setShowLoginDialog] = useState(false)
   const [showMyQuotesDetail, setShowMyQuotesDetail] = useState(false)
+  const [showHelpCenter, setShowHelpCenter] = useState(false)
   const { t } = useLanguage()
 
   const handleClose = useCallback(() => {
@@ -36,6 +38,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
     setShowSettingsDetail(false)
     setShowLoginDialog(false)
     setShowMyQuotesDetail(false)
+    setShowHelpCenter(false)
     onClose()
   }, [onClose])
 
@@ -44,6 +47,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
     { labelKey: 'dropdown.points', hasArrow: true, icon: <Gift className="w-3 h-3" /> },
     { labelKey: 'dropdown.my_quotes', hasArrow: true, isActive: true, icon: <TrendingUp className="w-3 h-3" /> },
     { labelKey: 'dropdown.my_cards', hasArrow: true, icon: <CreditCard className="w-3 h-3" /> },
+    { labelKey: 'dropdown.help_center', hasArrow: false, icon: <HelpCircle className="w-3 h-3" /> },
     { labelKey: 'dropdown.settings', hasArrow: false, icon: <Settings className="w-3 h-3" /> },
     { labelKey: 'dropdown.logout', hasArrow: false, icon: <LogOut className="w-3 h-3" /> },
   ]
@@ -52,7 +56,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       // Don't close if any dialog is open
-      if (showLoginDialog || showSettingsDetail || showMyQuotesDetail) {
+      if (showLoginDialog || showSettingsDetail || showMyQuotesDetail || showHelpCenter) {
         return
       }
       
@@ -67,7 +71,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
         document.removeEventListener('mousedown', handleClickOutside)
       }
     }
-  }, [isOpen, handleClose, showLoginDialog, showSettingsDetail, showMyQuotesDetail])
+  }, [isOpen, handleClose, showLoginDialog, showSettingsDetail, showMyQuotesDetail, showHelpCenter])
 
   const handleMenuItemClick = (item: MenuItem) => {
     if (item.labelKey === 'dropdown.business') {
@@ -79,6 +83,8 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
     } else if (item.labelKey === 'dropdown.my_cards') {
       handleClose()
       navigate('/discovery')
+    } else if (item.labelKey === 'dropdown.help_center') {
+      setShowHelpCenter(true)
     } else if (item.labelKey === 'dropdown.settings') {
       setShowSettingsDetail(true)
     } else if (item.labelKey === 'dropdown.my_quotes') {
@@ -102,6 +108,10 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
     handleClose()
   }
 
+  const handleHelpCenterClose = () => {
+    setShowHelpCenter(false)
+  }
+
 
   if (!isOpen) return null
 
@@ -117,6 +127,13 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
       <SettingsDetailPage 
         isOpen={showSettingsDetail} 
         onClose={handleSettingsClose}
+        className={className}
+      />
+
+      {/* Help Center Popup */}
+      <HelpCenterPopup 
+        isOpen={showHelpCenter}
+        onClose={handleHelpCenterClose}
         className={className}
       />
 
@@ -204,8 +221,8 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
         </div>
       )}
       
-      {/* Main Dropdown Menu - Only show when settings and my quotes are not open */}
-      {!showSettingsDetail && !showMyQuotesDetail && (
+      {/* Main Dropdown Menu - Only show when settings, my quotes, and help center are not open */}
+      {!showSettingsDetail && !showMyQuotesDetail && !showHelpCenter && (
         <div 
           ref={dropdownRef}
           className={cn(

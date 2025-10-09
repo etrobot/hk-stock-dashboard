@@ -63,6 +63,7 @@ const translations: Record<Language, Record<string, string>> = {
     'market.us': '美股',
     'market.crypto': '加密货币',
     'market.cn': '沪深',
+    'market.funds': '基金',
     
     // 主页标签
     'tab.home': '首页',
@@ -312,6 +313,7 @@ const translations: Record<Language, Record<string, string>> = {
     'dropdown.following': '关注',
     'dropdown.followers': '粉丝',
     'dropdown.favorites': '收藏',
+    'dropdown.help_center': '帮助中心',
     
     // 发现页面
     'discovery.title': '发现',
@@ -382,6 +384,22 @@ const translations: Record<Language, Record<string, string>> = {
     'index_panel.announcement_subtab': '公告',
     'index_panel.rating_subtab': '评级',
     'index_panel.stock_analysis_title': '股票分析',
+    
+    // 基金相关
+    'funds.serial_number': '序号',
+    'funds.isin': 'ISIN',
+    'funds.name': '名称',
+    'funds.period_1m': '近一月',
+    'funds.period_3m': '近三月',
+    'funds.period_6m': '近六月',
+    'funds.period_1y': '近一年',
+    'funds.period_3y': '近三年',
+    'funds.period_ytd': '年初至今',
+    'funds.period_since_inception': '成立至今',
+    'funds.sharpe_ratio': '夏普比率',
+    'funds.min_purchase': '起购金额',
+    'funds.currency': '币种',
+    'funds.annual_management_fee': '年度管理费',
   },
   en: {
     // 导航相关
@@ -398,6 +416,7 @@ const translations: Record<Language, Record<string, string>> = {
     'market.us': 'US Stocks',
     'market.crypto': 'Crypto',
     'market.cn': 'A Shares',
+    'market.funds': 'Funds',
     
     // 主页标签
     'tab.home': 'Home',
@@ -647,6 +666,7 @@ const translations: Record<Language, Record<string, string>> = {
     'dropdown.following': 'Following',
     'dropdown.followers': 'Followers',
     'dropdown.favorites': 'Favorites',
+    'dropdown.help_center': 'Help Center',
     
     // 发现页面
     'discovery.title': 'Discovery',
@@ -717,5 +737,21 @@ const translations: Record<Language, Record<string, string>> = {
     'index_panel.announcement_subtab': 'Announcements',
     'index_panel.rating_subtab': 'Ratings',
     'index_panel.stock_analysis_title': 'Stock Analysis',
+    
+    // 基金相关
+    'funds.serial_number': 'No.',
+    'funds.isin': 'ISIN',
+    'funds.name': 'Name',
+    'funds.period_1m': '1M',
+    'funds.period_3m': '3M',
+    'funds.period_6m': '6M',
+    'funds.period_1y': '1Y',
+    'funds.period_3y': '3Y',
+    'funds.period_ytd': 'YTD',
+    'funds.period_since_inception': 'Since Inception',
+    'funds.sharpe_ratio': 'Sharpe Ratio',
+    'funds.min_purchase': 'Min Purchase',
+    'funds.currency': 'Currency',
+    'funds.annual_management_fee': 'Annual Mgmt Fee',
   }
 }

@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import CNStockPage from "./pages/CNStockPage"
 import USStockPage from "./pages/USStockPage"
 import CryptoPage from "./pages/CryptoPage"
+import FundsPage from "./pages/FundsPage"
 import { DetailedStockTablePage } from "./pages/DetailedStockTablePage"
 import { NewStockCenter } from "./components/new-stock-center"
 import { hkIndices, hkGainers, hkLosers, hkHotStocks, hkDividendStocks, hkIndexDetail, cnIndexDetail, usIndexDetail, cryptoIndexDetail, hkSectors, cnSectors } from './data/mock-data'
@@ -106,6 +107,8 @@ function App() {
         return <USStockPage onStockClick={handleStockClick} />
       case 'crypto':
         return <CryptoPage onStockClick={handleStockClick} />
+      case 'funds':
+        return <FundsPage />
       case 'hk':
       case 'more':
       default:
@@ -194,14 +197,27 @@ function App() {
         {renderPageContent()}
       </main>
       <aside className="w-80 max-w-80 flex-shrink-0 border-l border-border bg-card/30 overflow-y-auto max-h-screen">
-        <IndexInfoPanel indexDetail={
-          selectedIndexDetail || (
-            currentPage === 'cn' ? cnIndexDetail :
-            currentPage === 'us' ? usIndexDetail :
-            currentPage === 'crypto' ? cryptoIndexDetail :
-            hkIndexDetail
-          )
-        } />
+        {currentPage === 'funds' ? (
+          <div className="h-full p-4">
+            <div className="h-full rounded-md border bg-background">
+              <iframe
+                src="http://tfi.ifund.mobi:84/app?securityCode=850006"
+                className="w-full h-full rounded-md"
+                title="Fund Details"
+                frameBorder="0"
+              />
+            </div>
+          </div>
+        ) : (
+          <IndexInfoPanel indexDetail={
+            selectedIndexDetail || (
+              currentPage === 'cn' ? cnIndexDetail :
+              currentPage === 'us' ? usIndexDetail :
+              currentPage === 'crypto' ? cryptoIndexDetail :
+              hkIndexDetail
+            )
+          } />
+        )}
       </aside>
     </div>
   )

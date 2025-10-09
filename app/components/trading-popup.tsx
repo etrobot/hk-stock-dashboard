@@ -289,7 +289,7 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                     </Button>
                     {/* 解锁交易覆盖按钮 */}
                     <Button 
-                      onClick={showUnlockDialog}
+                      onClick={() => showUnlockDialog()}
                       className="absolute inset-0 flex-1 text-xs h-6 rounded-xl bg-[#FF5C00] hover:bg-[#e54f00] text-white z-10"
                     >
                       🔒 解锁交易
