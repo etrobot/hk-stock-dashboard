@@ -97,7 +97,7 @@ const AccountPage = () => {
             </CardContent>
           </Card>
 
-          <Card 
+          {/* <Card 
             className={`cursor-pointer transition-all duration-200 ${
               activeTab === 'funds' 
                 ? 'border-[#FF5C00]' 
@@ -115,7 +115,7 @@ const AccountPage = () => {
                 {isMasked ? '****' : '15,428.65'}
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
 
         <div className="w-full min-w-0">

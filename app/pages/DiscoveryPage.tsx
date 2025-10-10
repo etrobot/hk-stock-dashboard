@@ -55,21 +55,6 @@ export default function DiscoveryPage() {
   
   const sections: { title: string; items: FeatureItem[]; colorClass: string }[] = [
     {
-      title: t('discovery.section.my'),
-      colorClass: 'text-blue-500',
-      items: [
-        { label: t('discovery.deposit'), icon: <ArrowDownToLine className="w-5 h-5" /> },
-        { label: t('discovery.ipo_subscription'), icon: <Sparkles className="w-5 h-5" /> },
-        { label: t('discovery.cash_management'), icon: <PiggyBank className="w-5 h-5" /> },
-        { label: t('discovery.stock_comparison'), icon: <GitCompare className="w-5 h-5" /> },
-        { label: t('discovery.stock_transfer'), icon: <RefreshCcw className="w-5 h-5" /> },
-        { label: t('discovery.strategy_square'), icon: <Blocks className="w-5 h-5" /> },
-        { label: t('discovery.currency_exchange'), icon: <Coins className="w-5 h-5" /> },
-        { label: t('discovery.industry_chain'), icon: <Blocks className="w-5 h-5" /> },
-        { label: t('discovery.points_center'), icon: <Ticket className="w-5 h-5" /> },
-      ],
-    },
-    {
       title: t('discovery.section.trading'),
       colorClass: 'text-green-500',
       items: [
@@ -130,10 +115,6 @@ export default function DiscoveryPage() {
 
   return (
     <div className="h-full bg-background text-foreground">
-      <div className="px-6 py-4 border-b border-border">
-        <h1 className="text-lg font-semibold">{t('discovery.title')}</h1>
-      </div>
-
       <div className="container mx-auto p-6 space-y-6">
         {sections.map((section) => (
           <Card key={section.title}>

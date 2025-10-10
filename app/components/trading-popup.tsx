@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, ChevronDown, Info } from 'lucide-react'
+import { X, ChevronDown, Info, Lock } from 'lucide-react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
@@ -115,7 +115,7 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:!max-w-[84rem] max-h-[90vh] overflow-y-auto p-0 bg-background">
-        <div className="p-3">
+        <div className="p-3 relative">
           {/* Header */}
           <DialogHeader className="pb-3">
             <div className="flex items-center justify-between">
@@ -140,9 +140,9 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
     <TabsTrigger value="trade" className="rounded-none border-0 h-auto px-3 py-2 text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
       交易
     </TabsTrigger>
-    <TabsTrigger value="conditional" className="rounded-none border-0 h-auto px-3 py-2 text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
+    {/* <TabsTrigger value="conditional" className="rounded-none border-0 h-auto px-3 py-2 text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
       条件单
-    </TabsTrigger>
+    </TabsTrigger> */}
   </TabsList>
   <TabsContent value="trade" className="mt-3">
 
@@ -234,34 +234,13 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
               </div>
 
               {/* Buy/Sell Buttons */}
-              <div className="relative flex gap-2 pt-4">
-                {isTradeUnlocked ? (
-                  <>
-                    <Button className="flex-1 text-xs h-6 rounded-xl bg-[#F44345] hover:bg-[#d63b3d] text-white">
-                      买入
-                    </Button>
-                    <Button className="flex-1 text-xs h-6 rounded-xl bg-[#16BA71] hover:bg-[#10975c] text-white">
-                      卖出
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    {/* 隐藏的买入卖出按钮 */}
-                    <Button disabled className="flex-1 text-xs h-6 rounded-xl bg-gray-300 text-gray-500 cursor-not-allowed">
-                      买入
-                    </Button>
-                    <Button disabled className="flex-1 text-xs h-6 rounded-xl bg-gray-300 text-gray-500 cursor-not-allowed">
-                      卖出
-                    </Button>
-                    {/* 解锁交易覆盖按钮 */}
-                    <Button 
-                      onClick={() => showUnlockDialog()}
-                      className="absolute inset-0 flex-1 text-xs h-6 rounded-xl bg-[#FF5C00] hover:bg-[#e54f00] text-white z-10"
-                    >
-                      🔒 解锁交易
-                    </Button>
-                  </>
-                )}
+              <div className="flex gap-2 pt-4">
+                <Button className="flex-1 text-xs h-6 rounded-xl bg-[#F44345] hover:bg-[#d63b3d] text-white">
+                  买入
+                </Button>
+                <Button className="flex-1 text-xs h-6 rounded-xl bg-[#16BA71] hover:bg-[#10975c] text-white">
+                  卖出
+                </Button>
               </div>
             </div>
 
@@ -669,6 +648,17 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
           </div>
         </TabsContent>
       </Tabs>
+        
+        {!isTradeUnlocked && (
+          <div className="absolute inset-0 bg-background/70 z-50 flex items-center justify-center">
+            <Button
+              className="rounded-full w-16 h-16 p-0 bg-[#FF5C00] hover:bg-[#e54f00]"
+              onClick={() => showUnlockDialog()}
+            >
+              <Lock className="w-7 h-7 text-white" />
+            </Button>
+          </div>
+        )}
         </div>
       </DialogContent>
     </Dialog>

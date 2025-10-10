@@ -140,8 +140,8 @@ function MainLayoutContent() {
               </div>
             </div>
 
-            {/* 页面内容 - 固定高度，无全局滚动 */}
-            <div className="flex-1 overflow-hidden min-h-0">
+            {/* 页面内容 - 支持垂直滚动 */}
+            <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0">
               <Routes>
                 <Route path="/" element={<Navigate to="/market" replace />} />
                 <Route path="/watchlist" element={<StockDetailPage titleOverride={t('nav.watchlist')} />} />

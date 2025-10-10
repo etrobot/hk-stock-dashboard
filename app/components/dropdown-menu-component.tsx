@@ -254,18 +254,6 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
             handleClose()
           }}
         >
-          <div className="flex-1">
-            <div className="text-white text-[12px] font-normal">0</div>
-            <div className="text-[#72737A] text-[12px] font-normal">{t('dropdown.updates')}</div>
-          </div>
-          <div className="flex-1">
-            <div className="text-white text-[12px] font-normal">0</div>
-            <div className="text-[#72737A] text-[12px] font-normal">{t('dropdown.following')}</div>
-          </div>
-          <div className="flex-1">
-            <div className="text-white text-[12px] font-normal">0</div>
-            <div className="text-[#72737A] text-[12px] font-normal">{t('dropdown.followers')}</div>
-          </div>
         </div>
       </div>
 

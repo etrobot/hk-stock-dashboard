@@ -13,9 +13,9 @@ export function Navigation({ currentPage, onPageChange }: NavigationProps) {
   const [pages, setPages] = useState([
     { id: 'hk', label: t('market.hk') },
     { id: 'us', label: t('market.us') },
-    { id: 'crypto', label: t('market.crypto') },
+    // { id: 'crypto', label: t('market.crypto') },
     { id: 'cn', label: t('market.cn') },
-    { id: 'funds', label: t('market.funds') }
+    // { id: 'funds', label: t('market.funds') }
   ]);
 
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);

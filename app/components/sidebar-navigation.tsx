@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { cn } from '../lib/utils'
-import { Star, BarChart3, User, Compass, SlidersHorizontal, MessageSquare, Users } from 'lucide-react'
+import { Star, BarChart3, User, Compass, SlidersHorizontal, MessageSquare } from 'lucide-react'
 import { DropdownMenu } from './dropdown-menu-component'
 import { MessagePopup } from './message-popup'
 import { StockDetailDialog } from './stock-detail-dialog'
@@ -49,7 +49,7 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
 
   const bottomNavigationItems: NavigationItem[] = [
     { label: t('nav.messages'), to: '/messages', icon: (<MessageSquare className="w-4 h-4" />) },
-    { label: t('nav.community'), to: '/community', icon: (<Users className="w-4 h-4" />) },
+    // { label: t('nav.community'), to: '/community', icon: (<Users className="w-4 h-4" />) },
   ]
 
   return (
