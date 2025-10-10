@@ -266,10 +266,6 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
             <div className="text-white text-[12px] font-normal">0</div>
             <div className="text-[#72737A] text-[12px] font-normal">{t('dropdown.followers')}</div>
           </div>
-          <div className="flex-1">
-            <div className="text-white text-[12px] font-normal">0</div>
-            <div className="text-[#72737A] text-[12px] font-normal">{t('dropdown.favorites')}</div>
-          </div>
         </div>
       </div>
 

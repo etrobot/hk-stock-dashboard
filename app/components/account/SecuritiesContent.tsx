@@ -22,15 +22,66 @@ import {
 import { useState } from 'react';
 import { TradingPopup } from '../trading-popup';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { OrderTable } from '../shared/OrderTable';
 import { TransactionTable } from '../shared/TransactionTable';
 
 export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
   const { t } = useLanguage();
   const [isTradingPopupOpen, setIsTradingPopupOpen] = useState(false);
+  const [isIframeOpen, setIsIframeOpen] = useState(false);
+  const [iframeUrl, setIframeUrl] = useState('');
+  const [iframeTitle, setIframeTitle] = useState('');
 
   const handleTradeClick = () => {
     setIsTradingPopupOpen(true);
+  };
+
+  // Get current theme (you may need to adjust this based on your theme implementation)
+  const getCurrentTheme = () => {
+    // Check if dark mode is enabled - adjust based on your theme provider
+    const isDark = document.documentElement.classList.contains('dark');
+    return isDark ? 'dark' : 'light';
+  };
+
+  const openIframe = (url: string, title: string) => {
+    const theme = getCurrentTheme();
+    const urlWithTheme = url.replace('{theme}', theme);
+    setIframeUrl(urlWithTheme);
+    setIframeTitle(title);
+    setIsIframeOpen(true);
+  };
+
+  const handleDepositFunds = () => {
+    openIframe('https://testdv.tfisec.cn/eddaweb/deposit?theme={theme}', t('actions.deposit_funds'));
+  };
+
+  const handleWithdrawFunds = () => {
+    openIframe('https://tfi.tfisec.cn/eddaweb/withdrawal?theme={theme}', t('actions.withdraw_funds'));
+  };
+
+  const handleCurrencyExchange = () => {
+    openIframe('https://testdv.tfisec.cn/eddaweb/fundAllocation?theme={theme}', t('actions.currency_exchange'));
+  };
+
+  const handleTransferToStocks = () => {
+    openIframe('https://testdv.tfisec.cn/businessweb/transferStock/home?theme={theme}', t('actions.transfer_to_stocks'));
+  };
+
+  const handleFundTransfer = () => {
+    openIframe('https://testdv.tfisec.cn/eddaweb/fundAllocation?theme={theme}', t('actions.fund_transfer'));
+  };
+
+  const handleIpoSubscription = () => {
+    openIframe('http://testdv.tfisec.cn/nic/home?entry=true&theme={theme}&active=1', t('actions.ipo_subscription'));
+  };
+
+  const handleMyStatements = () => {
+    openIframe('https://testdv.guokinghk.com/tradestock/profitLoss?theme={theme}', t('actions.my_statements'));
+  };
+
+  const handleVouchers = () => {
+    openIframe('http://testdv.tfisec.cn/equityweb/myCoupon?theme={theme}', t('actions.vouchers'));
   };
 
   // Mock data for orders and transactions
@@ -173,14 +224,14 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
 
       {/* Second row: Function icons */}
       <div className="flex gap-2">
-          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><Upload className="w-4 h-4" />{t('actions.deposit_funds')}</Button>
-          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><Download className="w-4 h-4" />{t('actions.withdraw_funds')}</Button>
-          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><ArrowLeftRight className="w-4 h-4" />{t('actions.currency_exchange')}</Button>
-          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><ArrowRightLeft className="w-4 h-4" />{t('actions.transfer_to_stocks')}</Button>
-          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><RefreshCw className="w-4 h-4" />{t('actions.fund_transfer')}</Button>
-          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><Ticket className="w-4 h-4" />{t('actions.ipo_subscription')}</Button>
-          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><FileText className="w-4 h-4" />{t('actions.my_statements')}</Button>
-          <Button variant="ghost" className="text-sm h-auto py-2 gap-1"><Gift className="w-4 h-4" />{t('actions.vouchers')}</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1" onClick={handleDepositFunds}><Upload className="w-4 h-4" />{t('actions.deposit_funds')}</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1" onClick={handleWithdrawFunds}><Download className="w-4 h-4" />{t('actions.withdraw_funds')}</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1" onClick={handleCurrencyExchange}><ArrowLeftRight className="w-4 h-4" />{t('actions.currency_exchange')}</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1" onClick={handleTransferToStocks}><ArrowRightLeft className="w-4 h-4" />{t('actions.transfer_to_stocks')}</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1" onClick={handleFundTransfer}><RefreshCw className="w-4 h-4" />{t('actions.fund_transfer')}</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1" onClick={handleIpoSubscription}><Ticket className="w-4 h-4" />{t('actions.ipo_subscription')}</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1" onClick={handleMyStatements}><FileText className="w-4 h-4" />{t('actions.my_statements')}</Button>
+          <Button variant="ghost" className="text-sm h-auto py-2 gap-1" onClick={handleVouchers}><Gift className="w-4 h-4" />{t('actions.vouchers')}</Button>
       </div>
 
       {/* Third row: Tabs with tables */}
@@ -312,6 +363,26 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
         open={isTradingPopupOpen} 
         onOpenChange={setIsTradingPopupOpen} 
       />
+
+      {/* Iframe Dialog */}
+      <Dialog open={isIframeOpen} onOpenChange={setIsIframeOpen}>
+        <DialogContent className="max-w-5xl w-full h-[80vh] p-0">
+          <DialogHeader className="p-4 pb-2">
+            <DialogTitle>{iframeTitle}</DialogTitle>
+          </DialogHeader>
+          <div className="flex-1 p-4 pt-0">
+            {iframeUrl && (
+              <iframe
+                src={iframeUrl}
+                className="w-full h-full border-0 rounded-md"
+                title={iframeTitle}
+                allow="payment; microphone; camera; encrypted-media; fullscreen"
+                sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
