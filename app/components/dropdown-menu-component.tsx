@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '../lib/utils'
-import { ChevronRight, FileText, Gift, TrendingUp, CreditCard, Settings, LogOut, HelpCircle } from 'lucide-react'
+import { ChevronRight, FileText, TrendingUp, CreditCard, Settings, LogOut, HelpCircle } from 'lucide-react'
 import { SettingsDetailPage } from './settings-detail-page'
 import { LoginDialog } from './login-dialog'
 import { HelpCenterPopup } from './help-center-popup'
@@ -44,7 +44,6 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
 
   const menuItems: MenuItem[] = [
     { labelKey: 'dropdown.business', hasArrow: true, icon: <FileText className="w-3 h-3" /> },
-    { labelKey: 'dropdown.points', hasArrow: true, icon: <Gift className="w-3 h-3" /> },
     { labelKey: 'dropdown.my_quotes', hasArrow: true, isActive: true, icon: <TrendingUp className="w-3 h-3" /> },
     { labelKey: 'dropdown.my_cards', hasArrow: true, icon: <CreditCard className="w-3 h-3" /> },
     { labelKey: 'dropdown.help_center', hasArrow: false, icon: <HelpCircle className="w-3 h-3" /> },

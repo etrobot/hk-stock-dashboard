@@ -26,7 +26,6 @@ export function MarketIndices({ indices, showBackground = true, onIndexClick }: 
         <span className="mx-2">恒生指数 26643.88 <span className="text-green-600 dark:text-green-300">+21.00 +0.08%</span></span>
         <span className="mx-2">国企指数 9466.93 <span className="text-green-600 dark:text-green-300">+12.81 +0.14%</span></span>
         <span className="mx-2">恒生科技指数 6372.68 <span className="text-green-600 dark:text-green-300">+48.43 +0.77%</span></span>
-        <span className="mx-2">恒指当月期货 26686◆ <span className="text-yellow-600 dark:text-yellow-300">高水 42</span></span>
       </div>
     </>
   )

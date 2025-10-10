@@ -25,7 +25,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { OrderTable } from '../shared/OrderTable';
 import { TransactionTable } from '../shared/TransactionTable';
 
-export const FundsContent = () => {
+export const FundsContent = ({ isMasked }: { isMasked?: boolean }) => {
   const { t } = useLanguage();
   const [isTradingPopupOpen, setIsTradingPopupOpen] = useState(false);
 
@@ -90,19 +90,19 @@ export const FundsContent = () => {
               <TableBody>
                 <TableRow>
                   <TableCell>{t('funds.total_market_value')}</TableCell>
-                  <TableCell>15,428.65</TableCell>
+                  <TableCell>{isMasked ? '****' : '15,428.65'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>{t('funds.available_funds')}</TableCell>
-                  <TableCell>2,312.63</TableCell>
+                  <TableCell>{isMasked ? '****' : '2,312.63'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>{t('funds.pending_orders')}</TableCell>
-                  <TableCell>1,285.00</TableCell>
+                  <TableCell>{isMasked ? '****' : '1,285.00'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>{t('funds.frozen_funds')}</TableCell>
-                  <TableCell>0.00</TableCell>
+                  <TableCell>{isMasked ? '****' : '0.00'}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -184,9 +184,9 @@ export const FundsContent = () => {
       </div>
 
       {/* Third row: Tabs with tables */}
-      <Card>
-        <CardContent className="p-4">
-          <Tabs defaultValue="holdings" className="w-full">
+      <Card className="shrink-0 overflow-hidden">
+        <CardContent className="p-4 overflow-x-auto">
+          <Tabs defaultValue="holdings" className="min-w-[900px]">
             <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="holdings">{t('tabs.fund_holdings')}</TabsTrigger>
               <TabsTrigger value="today-orders">{t('tabs.today_orders')}</TabsTrigger>
@@ -225,15 +225,15 @@ export const FundsContent = () => {
                       </Button>
                     </TableCell>
                     <TableCell>110022</TableCell>
-                    <TableCell>易方达蓝筹精选混合</TableCell>
+                    <TableCell>{t('fund_names.yfd_bluechip') || '易方达蓝筹精选混合'}</TableCell>
                     <TableCell>5,000</TableCell>
                     <TableCell>1.2850</TableCell>
                     <TableCell>1.0540</TableCell>
-                    <TableCell>6,425.00</TableCell>
-                    <TableCell className="text-green-600">+21.90%</TableCell>
-                    <TableCell className="text-green-600">+1,155.00</TableCell>
-                    <TableCell className="text-green-600">+128.50</TableCell>
-                    <TableCell>41.6%</TableCell>
+                    <TableCell>{isMasked ? '****' : '6,425.00'}</TableCell>
+                    <TableCell className="text-green-600">{isMasked ? '****' : '+21.90%'}</TableCell>
+                    <TableCell className="text-green-600">{isMasked ? '****' : '+1,155.00'}</TableCell>
+                    <TableCell className="text-green-600">{isMasked ? '****' : '+128.50'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '41.6%'}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
@@ -246,15 +246,15 @@ export const FundsContent = () => {
                       </Button>
                     </TableCell>
                     <TableCell>510300</TableCell>
-                    <TableCell>华夏沪深300ETF</TableCell>
+                    <TableCell>{t('fund_names.huaxia_hs300') || '华夏沪深300ETF'}</TableCell>
                     <TableCell>2,000</TableCell>
                     <TableCell>4.2180</TableCell>
                     <TableCell>4.1560</TableCell>
-                    <TableCell>8,436.00</TableCell>
-                    <TableCell className="text-green-600">+1.49%</TableCell>
-                    <TableCell className="text-green-600">+124.00</TableCell>
-                    <TableCell className="text-green-600">+84.32</TableCell>
-                    <TableCell>54.7%</TableCell>
+                    <TableCell>{isMasked ? '****' : '8,436.00'}</TableCell>
+                    <TableCell className="text-green-600">{isMasked ? '****' : '+1.49%'}</TableCell>
+                    <TableCell className="text-green-600">{isMasked ? '****' : '+124.00'}</TableCell>
+                    <TableCell className="text-green-600">{isMasked ? '****' : '+84.32'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '54.7%'}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
@@ -267,15 +267,15 @@ export const FundsContent = () => {
                       </Button>
                     </TableCell>
                     <TableCell>003816</TableCell>
-                    <TableCell>中欧先进制造股票A</TableCell>
+                    <TableCell>{t('fund_names.ce_manufacturing_a') || '中欧先进制造股票A'}</TableCell>
                     <TableCell>400</TableCell>
                     <TableCell>1.4230</TableCell>
                     <TableCell>1.6250</TableCell>
-                    <TableCell>569.20</TableCell>
-                    <TableCell className="text-red-600">-12.43%</TableCell>
-                    <TableCell className="text-red-600">-80.80</TableCell>
-                    <TableCell className="text-red-600">-8.52</TableCell>
-                    <TableCell>3.7%</TableCell>
+                    <TableCell>{isMasked ? '****' : '569.20'}</TableCell>
+                    <TableCell className="text-red-600">{isMasked ? '****' : '-12.43%'}</TableCell>
+                    <TableCell className="text-red-600">{isMasked ? '****' : '-80.80'}</TableCell>
+                    <TableCell className="text-red-600">{isMasked ? '****' : '-8.52'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '3.7%'}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -315,7 +315,7 @@ export const FundsContent = () => {
                     <TableCell>{t('fund_flow.fund_purchase')}</TableCell>
                     <TableCell>+1,285.00</TableCell>
                     <TableCell>2,312.63</TableCell>
-                    <TableCell>CNY</TableCell>
+                    <TableCell>{t('currency.cny')}</TableCell>
                     <TableCell>{t('fund_flow.fund_subscription')}</TableCell>
                   </TableRow>
                   <TableRow>
@@ -323,7 +323,7 @@ export const FundsContent = () => {
                     <TableCell>{t('fund_flow.fund_redemption')}</TableCell>
                     <TableCell>-2,078.00</TableCell>
                     <TableCell>1,027.63</TableCell>
-                    <TableCell>CNY</TableCell>
+                    <TableCell>{t('currency.cny')}</TableCell>
                     <TableCell>{t('fund_flow.partial_redemption')}</TableCell>
                   </TableRow>
                 </TableBody>

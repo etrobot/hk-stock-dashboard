@@ -4,6 +4,7 @@ import { Button } from '../ui/button';
 interface TotalAssetTrendProps {
   selectedPeriod: string;
   onPeriodChange: (period: string) => void;
+  isMasked?: boolean;
 }
 
 const timePeriods = [
@@ -15,7 +16,8 @@ const timePeriods = [
 
 export const TotalAssetTrend = ({
   selectedPeriod,
-  onPeriodChange
+  onPeriodChange,
+  isMasked
 }: TotalAssetTrendProps) => {
   return (
     <>
@@ -47,7 +49,7 @@ export const TotalAssetTrend = ({
             <span>HKD</span>
           </div>
           <div className="text-sm font-bold text-foreground" style={{ fontFamily: 'D', fontSize: '14px' }}>
-            408.92
+            {isMasked ? '****' : '408.92'}
           </div>
         </div>
         
@@ -57,7 +59,7 @@ export const TotalAssetTrend = ({
             <span>当日收益</span>
           </div>
           <div className="text-sm font-bold text-green-500" style={{ fontFamily: 'D', fontSize: '14px' }}>
-            +0.65
+            {isMasked ? '****' : '+0.65'}
           </div>
         </div>
       </div>
@@ -104,17 +106,17 @@ export const TotalAssetTrend = ({
 
             {/* Y-axis labels */}
             <div className="absolute right-2 top-0 h-full flex flex-col justify-between text-xs text-muted-foreground py-4" style={{ fontFamily: 'D', fontSize: '8px' }}>
-              <span>424.6</span>
+              <span>{isMasked ? '****' : '424.6'}</span>
               <span></span>
               <span></span>
               <span></span>
-              <span>302.01%</span>
+              <span>{isMasked ? '****' : '302.01%'}</span>
             </div>
 
             {/* X-axis labels */}
             <div className="absolute bottom-2 left-0 right-8 flex justify-between text-xs text-muted-foreground" style={{ fontFamily: 'D', fontSize: '8px' }}>
-              <span>2025/01/01</span>
-              <span>2025/07/11</span>
+              <span>{isMasked ? '****' : '2025/01/01'}</span>
+              <span>{isMasked ? '****' : '2025/07/11'}</span>
             </div>
           </div>
         </CardContent>

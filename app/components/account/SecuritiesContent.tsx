@@ -25,7 +25,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { OrderTable } from '../shared/OrderTable';
 import { TransactionTable } from '../shared/TransactionTable';
 
-export const SecuritiesContent = () => {
+export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
   const { t } = useLanguage();
   const [isTradingPopupOpen, setIsTradingPopupOpen] = useState(false);
 
@@ -90,19 +90,19 @@ export const SecuritiesContent = () => {
               <TableBody>
                 <TableRow>
                   <TableCell>{t('securities.market_value')}</TableCell>
-                  <TableCell>268.65</TableCell>
+                  <TableCell>{isMasked ? '****' : '268.65'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>{t('securities.available_funds')}</TableCell>
-                  <TableCell>312.63</TableCell>
+                  <TableCell>{isMasked ? '****' : '312.63'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>{t('securities.in_transit_assets')}</TableCell>
-                  <TableCell>2.51</TableCell>
+                  <TableCell>{isMasked ? '****' : '2.51'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>{t('securities.frozen_funds')}</TableCell>
-                  <TableCell>0.69</TableCell>
+                  <TableCell>{isMasked ? '****' : '0.69'}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -126,15 +126,15 @@ export const SecuritiesContent = () => {
               <TableBody>
                 <TableRow>
                   <TableCell>{t('securities.total_cash')} · HKD</TableCell>
-                  <TableCell>-183.31</TableCell>
+                  <TableCell>{isMasked ? '****' : '-183.31'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>HKD</TableCell>
-                  <TableCell>-183.31</TableCell>
+                  <TableCell>{isMasked ? '****' : '-183.31'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>USD</TableCell>
-                  <TableCell>0.00</TableCell>
+                  <TableCell>{isMasked ? '****' : '0.00'}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -155,11 +155,11 @@ export const SecuritiesContent = () => {
               <TableBody>
                 <TableRow>
                   <TableCell>HKD</TableCell>
-                  <TableCell>0.00</TableCell>
+                  <TableCell>{isMasked ? '****' : '0.00'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>USD</TableCell>
-                  <TableCell>0.00</TableCell>
+                  <TableCell>{isMasked ? '****' : '0.00'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>CNH</TableCell>
@@ -229,13 +229,13 @@ export const SecuritiesContent = () => {
                     <TableCell>汇丰控股</TableCell>
                     <TableCell>2</TableCell>
                     <TableCell>2</TableCell>
-                    <TableCell>108.000</TableCell>
-                    <TableCell>62.15</TableCell>
-                    <TableCell>216.00</TableCell>
-                    <TableCell>+73.77%</TableCell>
-                    <TableCell>+91.70</TableCell>
-                    <TableCell>-1.20</TableCell>
-                    <TableCell>52.37%</TableCell>
+                    <TableCell>{isMasked ? '****' : '108.000'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '62.15'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '216.00'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '+73.77%'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '+91.70'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '-1.20'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '52.37%'}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>
@@ -251,13 +251,13 @@ export const SecuritiesContent = () => {
                     <TableCell>中国平安</TableCell>
                     <TableCell>1</TableCell>
                     <TableCell>1</TableCell>
-                    <TableCell>52.450</TableCell>
-                    <TableCell>71.60</TableCell>
-                    <TableCell>52.45</TableCell>
-                    <TableCell>-26.75%</TableCell>
-                    <TableCell>-19.15</TableCell>
-                    <TableCell>+0.15</TableCell>
-                    <TableCell>12.72%</TableCell>
+                    <TableCell>{isMasked ? '****' : '52.450'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '71.60'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '52.45'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '-26.75%'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '-19.15'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '+0.15'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '12.72%'}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>

@@ -400,6 +400,68 @@ const translations: Record<Language, Record<string, string>> = {
     'funds.min_purchase': '起购金额',
     'funds.currency': '币种',
     'funds.annual_management_fee': '年度管理费',
+
+    // 货币
+    'currency.usd': '美元',
+    'currency.hkd': '港元',
+    'currency.cny': '人民币',
+
+    // 账户
+    'account.funds_position': '基金持仓',
+
+    // 基金页
+    'funds.assets': '资产',
+    'funds.item': '项目',
+    'funds.amount': '金额',
+    'funds.total_market_value': '总市值',
+    'funds.available_funds': '可用资金',
+    'funds.pending_orders': '待成交',
+    'funds.frozen_funds': '冻结资金',
+    'funds.risk_level': '风险水平',
+    'funds.moderate': '中等',
+    'funds.performance_summary': '绩效摘要',
+    'funds.period': '周期',
+    'funds.return_rate': '收益率',
+    'funds.today_return': '今日收益率',
+    'funds.total_return': '总收益率',
+    'funds.profit_loss': '盈亏金额',
+    'funds.allocation': '基金配置',
+    'funds.fund_type': '基金类型',
+    'funds.proportion': '占比',
+    'funds.equity_funds': '股票型',
+    'funds.bond_funds': '债券型',
+    'funds.money_market': '货币型',
+
+    // 标签
+    'tabs.fund_holdings': '基金持仓',
+
+    // 操作
+    'actions.fund_purchase': '基金申购',
+    'actions.fund_redemption': '基金赎回',
+    'actions.fund_conversion': '基金转换',
+    'actions.fixed_investment': '定投',
+    'actions.fund_rankings': '基金排行',
+    'actions.fund_statements': '基金结单',
+    'actions.fund_rewards': '基金奖励',
+
+    // 基金持仓表头
+    'fund_holdings.operation': '操作',
+    'fund_holdings.fund_code': '基金代码',
+    'fund_holdings.fund_name': '基金名称',
+    'fund_holdings.shares': '份额',
+    'fund_holdings.nav': '单位净值',
+    'fund_holdings.cost_nav': '成本净值',
+    'fund_holdings.market_value': '市值',
+    'fund_holdings.profit_loss_ratio': '盈亏比例',
+    'fund_holdings.profit_loss_amount': '盈亏金额',
+    'fund_holdings.today_profit_loss': '今日盈亏',
+    'fund_holdings.position_ratio': '持仓占比',
+
+    // 资金流水
+    'fund_flow.fund_purchase': '基金申购',
+    'fund_flow.fund_redemption': '基金赎回',
+    'fund_flow.fund_subscription': '基金认购',
+    'fund_flow.partial_redemption': '部分赎回',
   },
   en: {
     // 导航相关
@@ -753,5 +815,67 @@ const translations: Record<Language, Record<string, string>> = {
     'funds.min_purchase': 'Min Purchase',
     'funds.currency': 'Currency',
     'funds.annual_management_fee': 'Annual Mgmt Fee',
+
+    // Currency
+    'currency.usd': 'USD',
+    'currency.hkd': 'HKD',
+    'currency.cny': 'CNY',
+
+    // Account
+    'account.funds_position': 'Funds Position',
+
+    // Funds Page
+    'funds.assets': 'Assets',
+    'funds.item': 'Item',
+    'funds.amount': 'Amount',
+    'funds.total_market_value': 'Total Market Value',
+    'funds.available_funds': 'Available Funds',
+    'funds.pending_orders': 'Pending Orders',
+    'funds.frozen_funds': 'Frozen Funds',
+    'funds.risk_level': 'Risk Level',
+    'funds.moderate': 'Moderate',
+    'funds.performance_summary': 'Performance Summary',
+    'funds.period': 'Period',
+    'funds.return_rate': 'Return Rate',
+    'funds.today_return': 'Today Return',
+    'funds.total_return': 'Total Return',
+    'funds.profit_loss': 'P&L Amount',
+    'funds.allocation': 'Allocation',
+    'funds.fund_type': 'Fund Type',
+    'funds.proportion': 'Proportion',
+    'funds.equity_funds': 'Equity',
+    'funds.bond_funds': 'Bond',
+    'funds.money_market': 'Money Market',
+
+    // Tabs
+    'tabs.fund_holdings': 'Fund Holdings',
+
+    // Actions
+    'actions.fund_purchase': 'Fund Purchase',
+    'actions.fund_redemption': 'Fund Redemption',
+    'actions.fund_conversion': 'Fund Conversion',
+    'actions.fixed_investment': 'Recurring Investment',
+    'actions.fund_rankings': 'Fund Rankings',
+    'actions.fund_statements': 'Fund Statements',
+    'actions.fund_rewards': 'Fund Rewards',
+
+    // Fund Holdings table headers
+    'fund_holdings.operation': 'Operation',
+    'fund_holdings.fund_code': 'Fund Code',
+    'fund_holdings.fund_name': 'Fund Name',
+    'fund_holdings.shares': 'Shares',
+    'fund_holdings.nav': 'NAV',
+    'fund_holdings.cost_nav': 'Cost NAV',
+    'fund_holdings.market_value': 'Market Value',
+    'fund_holdings.profit_loss_ratio': 'P&L %',
+    'fund_holdings.profit_loss_amount': 'P&L Amount',
+    'fund_holdings.today_profit_loss': 'Today P&L',
+    'fund_holdings.position_ratio': 'Position %',
+
+    // Fund Flow
+    'fund_flow.fund_purchase': 'Fund Purchase',
+    'fund_flow.fund_redemption': 'Fund Redemption',
+    'fund_flow.fund_subscription': 'Fund Subscription',
+    'fund_flow.partial_redemption': 'Partial Redemption',
   }
 }

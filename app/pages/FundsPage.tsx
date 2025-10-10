@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table"
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/tabs"
 
 // 基金数据类型
 interface FundData {
@@ -41,7 +42,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+290.98%",
     sharpeRatio: "1.376",
     minPurchase: "-",
-    currency: "美元",
+    currency: "usd",
     annualManagementFee: "1.50%"
   },
   {
@@ -57,7 +58,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+59.80%",
     sharpeRatio: "1.462",
     minPurchase: "-",
-    currency: "港元",
+    currency: "hkd",
     annualManagementFee: "1.75%"
   },
   {
@@ -73,7 +74,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+87.11%",
     sharpeRatio: "-",
     minPurchase: "-",
-    currency: "美元",
+    currency: "usd",
     annualManagementFee: "0.99%"
   },
   {
@@ -89,7 +90,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+40.97%",
     sharpeRatio: "-",
     minPurchase: "-",
-    currency: "美元",
+    currency: "usd",
     annualManagementFee: "0.99%"
   },
   {
@@ -105,7 +106,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+16.33%",
     sharpeRatio: "0.788",
     minPurchase: "-",
-    currency: "港元",
+    currency: "hkd",
     annualManagementFee: "1.80%"
   },
   {
@@ -121,7 +122,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+224.21%",
     sharpeRatio: "0.800",
     minPurchase: "-",
-    currency: "美元",
+    currency: "usd",
     annualManagementFee: "1.80%"
   },
   {
@@ -137,7 +138,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+136.10%",
     sharpeRatio: "1.989",
     minPurchase: "-",
-    currency: "港元",
+    currency: "hkd",
     annualManagementFee: "1.50%"
   },
   {
@@ -153,7 +154,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+137.20%",
     sharpeRatio: "1.996",
     minPurchase: "-",
-    currency: "美元",
+    currency: "usd",
     annualManagementFee: "1.50%"
   },
   {
@@ -169,7 +170,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+93.06%",
     sharpeRatio: "0.921",
     minPurchase: "-",
-    currency: "港元",
+    currency: "hkd",
     annualManagementFee: "1.50%"
   },
   {
@@ -185,7 +186,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+88.14%",
     sharpeRatio: "0.747",
     minPurchase: "-",
-    currency: "港元",
+    currency: "hkd",
     annualManagementFee: "1.75%"
   },
   {
@@ -201,7 +202,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+52.91%",
     sharpeRatio: "0.152",
     minPurchase: "-",
-    currency: "港元",
+    currency: "hkd",
     annualManagementFee: "1.80%"
   },
   {
@@ -217,7 +218,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+35.11%",
     sharpeRatio: "0.167",
     minPurchase: "-",
-    currency: "美元",
+    currency: "usd",
     annualManagementFee: "1.80%"
   },
   {
@@ -233,7 +234,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+127.57%",
     sharpeRatio: "1.328",
     minPurchase: "-",
-    currency: "港元",
+    currency: "hkd",
     annualManagementFee: "1.50%"
   },
   {
@@ -249,7 +250,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+147.66%",
     sharpeRatio: "0.251",
     minPurchase: "-",
-    currency: "港元",
+    currency: "hkd",
     annualManagementFee: "1.25%"
   },
   {
@@ -265,7 +266,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+150.30%",
     sharpeRatio: "0.262",
     minPurchase: "-",
-    currency: "美元",
+    currency: "usd",
     annualManagementFee: "1.25%"
   },
   {
@@ -281,7 +282,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+286.90%",
     sharpeRatio: "1.146",
     minPurchase: "-",
-    currency: "港元",
+    currency: "hkd",
     annualManagementFee: "1.50%"
   },
   {
@@ -297,7 +298,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+81.10%",
     sharpeRatio: "1.165",
     minPurchase: "-",
-    currency: "美元",
+    currency: "usd",
     annualManagementFee: "1.50%"
   },
   {
@@ -313,7 +314,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+144.50%",
     sharpeRatio: "0.746",
     minPurchase: "-",
-    currency: "美元",
+    currency: "usd",
     annualManagementFee: "1.50%"
   },
   {
@@ -329,7 +330,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+302.20%",
     sharpeRatio: "1.341",
     minPurchase: "-",
-    currency: "美元",
+    currency: "usd",
     annualManagementFee: "1.50%"
   },
   {
@@ -345,7 +346,7 @@ const fundsData: FundData[] = [
     periodSinceInception: "+85.63%",
     sharpeRatio: "0.444",
     minPurchase: "-",
-    currency: "港元",
+    currency: "hkd",
     annualManagementFee: "1.75%"
   }
 ];
@@ -364,6 +365,19 @@ export default function FundsPage() {
 
   return (
     <div className="h-full p-4 overflow-auto">
+      <Tabs defaultValue="all" className="mb-3">
+        <TabsList>
+          <TabsTrigger value="all">全部</TabsTrigger>
+          <TabsTrigger value="equity">股票型</TabsTrigger>
+          <TabsTrigger value="bond">债券型</TabsTrigger>
+          <TabsTrigger value="realestate">房地产型</TabsTrigger>
+          <TabsTrigger value="commodity">商品型</TabsTrigger>
+          <TabsTrigger value="money">货币型</TabsTrigger>
+          <TabsTrigger value="allocation">配置型</TabsTrigger>
+          <TabsTrigger value="index">指数型</TabsTrigger>
+          <TabsTrigger value="other">其他型</TabsTrigger>
+        </TabsList>
+      </Tabs>
       <div className="rounded-md border">
         <Table>
         <TableHeader>
@@ -413,7 +427,7 @@ export default function FundsPage() {
               </TableCell>
               <TableCell className="text-muted-foreground">{fund.sharpeRatio}</TableCell>
               <TableCell className="text-muted-foreground">{fund.minPurchase}</TableCell>
-              <TableCell>{fund.currency}</TableCell>
+              <TableCell>{t(`currency.${fund.currency}`)}</TableCell>
               <TableCell>{fund.annualManagementFee}</TableCell>
             </TableRow>
           ))}

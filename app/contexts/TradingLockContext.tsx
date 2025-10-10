@@ -4,6 +4,7 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 import { Dialog, DialogContent, DialogHeader } from '../components/ui/dialog'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
+import { useTheme } from '../components/theme-provider'
 
 interface TradingLockContextType {
   isTradeUnlocked: boolean
@@ -16,9 +17,13 @@ const TradingLockContext = createContext<TradingLockContextType | undefined>(und
 export function TradingLockProvider({ children }: { children: ReactNode }) {
   const [isTradeUnlocked, setIsTradeUnlocked] = useState(false)
   const [showPasswordDialog, setShowPasswordDialog] = useState(false)
+  const [showResetDialog, setShowResetDialog] = useState(false)
+  const [account, setAccount] = useState('')
   const [password, setPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [onSuccessCallback, setOnSuccessCallback] = useState<(() => void) | null>(null)
+  const { resolvedTheme } = useTheme()
+  const themeParam = resolvedTheme === 'dark' ? 'dark' : 'white'
 
   const showUnlockDialog = (onSuccess?: () => void) => {
     if (!isTradeUnlocked) {
@@ -73,6 +78,15 @@ export function TradingLockProvider({ children }: { children: ReactNode }) {
           <div className="space-y-4 mt-4">
             <div className="space-y-2">
               <Input
+                type="text"
+                placeholder="请输入交易账号"
+                value={account}
+                onChange={(e) => {
+                  setAccount(e.target.value)
+                }}
+                className="text-center text-lg tracking-widest"
+              />
+              <Input
                 type="password"
                 placeholder="请输入6位交易密码"
                 value={password}
@@ -92,6 +106,11 @@ export function TradingLockProvider({ children }: { children: ReactNode }) {
               {passwordError && (
                 <p className="text-sm text-red-500 text-center">{passwordError}</p>
               )}
+              <div className="text-center">
+                <Button variant="link" className="p-0 h-auto" onClick={() => setShowResetDialog(true)}>
+                  忘记密码？
+                </Button>
+              </div>
             </div>
             <div className="flex gap-3">
               <Button 
@@ -109,6 +128,17 @@ export function TradingLockProvider({ children }: { children: ReactNode }) {
                 确认
               </Button>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+        <DialogContent className="w-[90vw] max-w-[960px] p-0">
+          <div className="w-full aspect-[10/16]">
+            <iframe
+              src={`http://testdv.tfisec.cn/businessweb/editPwd?theme=${themeParam}`}
+              className="w-full h-full"
+            />
           </div>
         </DialogContent>
       </Dialog>

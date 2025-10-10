@@ -5,7 +5,6 @@ import { X, ChevronDown, Info } from 'lucide-react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
-import { Switch } from './ui/switch'
 import { Dialog, DialogContent, DialogHeader } from './ui/dialog'
 import { Badge } from './ui/badge'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
@@ -24,13 +23,13 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
   const [orderType, setOrderType] = useState('限价单')
   const [price, setPrice] = useState('2')
   const [quantity, setQuantity] = useState('2')
-  const [preMarketEnabled, setPreMarketEnabled] = useState(false)
   const [market, setMarket] = useState('全部')
   const [currency, setCurrency] = useState('USD')
   
   // 条件单相关状态
-  const [triggerPrice, setTriggerPrice] = useState('199.99')
   const [conditionalQuantity, setConditionalQuantity] = useState('1000')
+  const [priceConditionType, setPriceConditionType] = useState('股价条件')
+  const [priceLevel, setPriceLevel] = useState('卖五')
   
   // 使用全局交易解锁状态
   const { isTradeUnlocked, showUnlockDialog } = useTradingLock()
@@ -52,12 +51,6 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
   }
 
   // 条件单价格和数量调整
-  const adjustTriggerPrice = (delta: number) => {
-    const cur = parseFloat(triggerPrice)
-    const current = isNaN(cur) ? 0 : cur
-    const next = Math.max(0, current + delta)
-    setTriggerPrice(next.toFixed(2))
-  }
 
   const adjustConditionalQuantity = (delta: number) => {
     const cur = parseInt(conditionalQuantity, 10)
@@ -228,21 +221,6 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                 </div>
               </div>
 
-              {/* Pre-market Trading */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <label className="text-xs text-foreground">盘前竞价</label>
-                    <Info className="w-3 h-3 text-muted-foreground" />
-                  </div>
-                  <Switch 
-                    checked={preMarketEnabled}
-                    onCheckedChange={setPreMarketEnabled}
-                    className="data-[state=checked]:bg-[#FF5C00]"
-                  />
-                </div>
-              </div>
-
               {/* Account Balance Info */}
               <div className="space-y-3 pt-4">
                 <div className="flex justify-between">
@@ -260,10 +238,6 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                 <div className="flex justify-between">
                   <span className="text-xs text-muted-foreground">最大可买</span>
                   <span className="text-xs text-foreground">{accountData.maxBuyable}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-xs text-muted-foreground">可卖空</span>
-                  <span className="text-xs text-foreground">{accountData.shortSellable}</span>
                 </div>
               </div>
 
@@ -472,25 +446,41 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                 </div>
               </div>
 
-              {/* 股价条件 */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-foreground">股价条件</span>
                   <ChevronDown className="w-3 h-3 text-muted-foreground rotate-90" />
                 </div>
-                
                 <div className="bg-input rounded p-3 flex items-center gap-2">
-                  <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-accent" onClick={() => adjustTriggerPrice(-0.01)}>-</Button>
-                  <div className="flex-1">
-                    <Input 
-                      value={triggerPrice}
-                      onChange={(e) => setTriggerPrice(e.target.value)}
-                      placeholder="触发价格"
-                      inputMode="decimal"
-                      className="bg-transparent border-0 text-xs h-6 px-2 text-center"
-                    />
-                  </div>
-                  <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-accent" onClick={() => adjustTriggerPrice(0.01)}>+</Button>
+                  <Select value={priceConditionType} onValueChange={setPriceConditionType}>
+                    <SelectTrigger className="bg-input text-xs h-6 px-2">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover border-border">
+                      <SelectItem value="股价条件" className="text-xs">股价条件</SelectItem>
+                      <SelectItem value="日涨幅条件" className="text-xs">日涨幅条件</SelectItem>
+                      <SelectItem value="回落卖出" className="text-xs">回落卖出</SelectItem>
+                      <SelectItem value="止盈止损" className="text-xs">止盈止损</SelectItem>
+                      <SelectItem value="按时卖出" className="text-xs">按时卖出</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select value={priceLevel} onValueChange={setPriceLevel}>
+                    <SelectTrigger className="bg-input text-xs h-6 px-2">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-popover border-border">
+                      <SelectItem value="卖五" className="text-xs">卖五</SelectItem>
+                      <SelectItem value="卖四" className="text-xs">卖四</SelectItem>
+                      <SelectItem value="卖三" className="text-xs">卖三</SelectItem>
+                      <SelectItem value="卖二" className="text-xs">卖二</SelectItem>
+                      <SelectItem value="卖一" className="text-xs">卖一</SelectItem>
+                      <SelectItem value="买一" className="text-xs">买一</SelectItem>
+                      <SelectItem value="买二" className="text-xs">买二</SelectItem>
+                      <SelectItem value="买三" className="text-xs">买三</SelectItem>
+                      <SelectItem value="买四" className="text-xs">买四</SelectItem>
+                      <SelectItem value="买五" className="text-xs">买五</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 

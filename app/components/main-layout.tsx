@@ -66,8 +66,7 @@ function MainLayoutContent() {
   }
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col">
         <div className="flex flex-1 min-h-0">
           {/* 左侧导航 - 固定 */}
           <div className="flex-shrink-0 h-full">
@@ -163,16 +162,17 @@ function MainLayoutContent() {
           onOpenChange={setTradingPopupOpen} 
         />
       </div>
-    </ThemeProvider>
   )
 }
 
 export function MainLayout() {
   return (
     <LanguageProvider>
-      <TradingLockProvider>
-        <MainLayoutContent />
-      </TradingLockProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <TradingLockProvider>
+          <MainLayoutContent />
+        </TradingLockProvider>
+      </ThemeProvider>
     </LanguageProvider>
   )
 }
