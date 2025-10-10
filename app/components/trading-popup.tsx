@@ -191,11 +191,6 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                       inputMode="decimal"
                       className="text-xs h-6 px-3 bg-input"
                     />
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                      <div className="w-3 h-3 rounded-full border border-muted-foreground flex items-center justify-center">
-                        <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
-                      </div>
-                    </div>
                   </div>
                   <Button variant="ghost" size="icon" className="h-6 w-6 bg-input hover:bg-accent" onClick={() => adjustPrice(0.010)}>+</Button>
                 </div>
@@ -213,9 +208,6 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                       inputMode="numeric"
                       className="text-xs h-6 px-3 bg-input"
                     />
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                      <div className="w-3 h-3 text-muted-foreground text-xs">%</div>
-                    </div>
                   </div>
                   <Button variant="ghost" size="icon" className="h-6 w-6 bg-input hover:bg-accent" onClick={() => adjustQuantity(1)}>+</Button>
                 </div>

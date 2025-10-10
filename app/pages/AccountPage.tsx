@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Card, CardContent } from '../components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { User, Eye, EyeOff } from 'lucide-react';
+import { User, Eye, EyeOff, Lock } from 'lucide-react';
 import { accountOverview } from '../data/account-mock-data';
 import { AccountOverview } from '../components/account/AccountOverview';
 import { SecuritiesContent } from '../components/account/SecuritiesContent';
 import { FundsContent } from '../components/account/FundsContent';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useTradingLock } from '../contexts/TradingLockContext';
+import { Button } from '../components/ui/button';
 
 const AccountPage = () => {
   const { t } = useLanguage();
@@ -16,15 +18,12 @@ const AccountPage = () => {
   const [accountType, setAccountType] = useState('孖展账户12345678');
   const [selectedCurrency, setSelectedCurrency] = useState('HKD');
   const [isMasked, setIsMasked] = useState(false);
+  const { isTradeUnlocked, showUnlockDialog } = useTradingLock();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Main Content Area */}
-      <div className="bg-background min-h-[calc(100vh-30px)] p-6">
-
-        {/* Main Content */}
+      <div className="bg-background min-h-[calc(100vh-30px)] p-6 relative">
         <div className="flex gap-2">
-        {/* Left Column - Clickable Cards */}
         <div className="w-96 shrink-0">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
@@ -44,7 +43,6 @@ const AccountPage = () => {
             </div>
           </div>
           
-          {/* Account Overview Card */}
           <Card 
             className={`cursor-pointer transition-all duration-200 ${
               activeTab === 'overview' 
@@ -79,7 +77,6 @@ const AccountPage = () => {
             </CardContent>
           </Card>
 
-          {/* Securities Card */}
           <Card 
             className={`cursor-pointer transition-all duration-200 ${
               activeTab === 'securities' 
@@ -100,7 +97,6 @@ const AccountPage = () => {
             </CardContent>
           </Card>
 
-          {/* Funds Card */}
           <Card 
             className={`cursor-pointer transition-all duration-200 ${
               activeTab === 'funds' 
@@ -122,10 +118,8 @@ const AccountPage = () => {
           </Card>
         </div>
 
-        {/* Right Column - Dynamic Content */}
         <div className="w-full min-w-0">
           <div className="space-y-4">
-            {/* Content based on selected card */}
             {activeTab === 'overview' && (
               <AccountOverview
                 selectedPeriod={selectedPeriod}
@@ -146,6 +140,17 @@ const AccountPage = () => {
           </div>
         </div>
         </div>
+
+        {!isTradeUnlocked && (
+          <div className="absolute inset-0 bg-background/70 z-20 flex items-center justify-center">
+            <Button
+              className="rounded-full w-16 h-16 p-0 bg-[#FF5C00] hover:bg-[#e54f00]"
+              onClick={() => showUnlockDialog()}
+            >
+              <Lock className="w-7 h-7 text-white" />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
