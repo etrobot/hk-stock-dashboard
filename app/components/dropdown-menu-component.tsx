@@ -8,6 +8,7 @@ import { SettingsDetailPage } from './settings-detail-page'
 import { LoginDialog } from './login-dialog'
 import { HelpCenterPopup } from './help-center-popup'
 import { useLanguage } from '../contexts/LanguageContext'
+import { OrderHistoryDialog } from './order-history-dialog'
 
 interface MenuItem {
   labelKey: string
@@ -31,6 +32,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
   const [showLoginDialog, setShowLoginDialog] = useState(false)
   const [showMyQuotesDetail, setShowMyQuotesDetail] = useState(false)
   const [showHelpCenter, setShowHelpCenter] = useState(false)
+  const [showOrderHistory, setShowOrderHistory] = useState(false)
   const { t } = useLanguage()
 
   const handleClose = useCallback(() => {
@@ -111,6 +113,10 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
     setShowHelpCenter(false)
   }
 
+  const handleOrderHistoryClose = () => {
+    setShowOrderHistory(false)
+  }
+
 
   if (!isOpen) return null
 
@@ -134,6 +140,11 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
         isOpen={showHelpCenter}
         onClose={handleHelpCenterClose}
         className={className}
+      />
+
+      <OrderHistoryDialog 
+        isOpen={showOrderHistory}
+        onClose={handleOrderHistoryClose}
       />
 
 
@@ -182,9 +193,12 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
                       </div>
                     </div>
                   </div>
-                  <div className="mt-2 text-xs text-white/80">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setShowOrderHistory(true) }}
+                    className="mt-2 text-xs text-white/80 underline"
+                  >
                     查看历史订单 →
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
@@ -210,9 +224,12 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
                       </div>
                     </div>
                   </div>
-                  <div className="mt-2 text-xs text-white/80">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setShowOrderHistory(true) }}
+                    className="mt-2 text-xs text-white/80 underline"
+                  >
                     查看历史订单 →
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
