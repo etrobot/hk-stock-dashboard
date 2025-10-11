@@ -2,7 +2,8 @@ import { Card } from "./ui/card";
 
 
 // 生成基于 mockChartData 的K线数据
-function generateKLineData(stockCode: string, period: string, basePrice: number): any[] {
+type KLinePoint = { date: string; open: number; high: number; low: number; close: number; volume: number }
+function generateKLineData(stockCode: string, period: string, basePrice: number): KLinePoint[] {
   // 使用股票代码作为种子来保证一致性
   const seed = stockCode.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const random = (index: number) => {
@@ -20,7 +21,7 @@ function generateKLineData(stockCode: string, period: string, basePrice: number)
   };
 
   const config = periodConfig[period as keyof typeof periodConfig] || periodConfig.daily;
-  const data: any[] = [];
+  const data: KLinePoint[] = [];
   
   for (let i = 0; i < config.count; i++) {
     const date = new Date();
@@ -53,7 +54,7 @@ function generateKLineData(stockCode: string, period: string, basePrice: number)
 }
 
 // Enhanced K-line chart component with axes
-function MiniKLineChart({ data, period }: { data: any[], period: string }) {
+function MiniKLineChart({ data, period }: { data: KLinePoint[], period: string }) {
   const width = 280;
   const height = 140; // Increased to accommodate axes
   const paddingLeft = 40;
@@ -258,10 +259,17 @@ function MiniKLineChart({ data, period }: { data: any[], period: string }) {
   );
 }
 
+type StockSummary = {
+  code: string
+  name: string
+  price: string
+  percentage: string
+  klineData?: Record<string, KLinePoint[]>
+}
 interface StockGridItemProps {
-  stock: any;
-  selectedPeriod: string;
-  onClick?: () => void;
+  stock: StockSummary
+  selectedPeriod: string
+  onClick?: () => void
 }
 
 export function StockGridItem({ stock, selectedPeriod, onClick }: StockGridItemProps) {

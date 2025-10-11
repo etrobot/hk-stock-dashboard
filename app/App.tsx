@@ -26,7 +26,8 @@ function App() {
   const [activeTab, setActiveTab] = useState<string>(t('tab.home'))
 
   const navigate = useNavigate()
-  const handleStockClick = (stock: any, tableTitle?: string) => {
+  type ClickableStock = { code?: string; symbol?: string }
+  const handleStockClick = (stock: ClickableStock, tableTitle?: string) => {
     const code = stock?.code || stock?.symbol || ''
     console.log('Stock clicked from table:', tableTitle, stock)
     const url = `/stock/${encodeURIComponent(code)}`

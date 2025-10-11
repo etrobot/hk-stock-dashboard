@@ -205,7 +205,7 @@ export function SectorHeatmap({ currentMarket = 'hk' }: SectorHeatmapProps) {
       textStyle: {
         color: 'var(--popover-foreground)'
       },
-      formatter: function (info: any) {
+      formatter: function (info: { name: string; value: number[] }) {
         const value = info.value
         const marketCap = value[0] ? `${(value[0] / 1000).toFixed(1)}B` : '-'
         const prevValue = value[1] ? `${(value[1] / 1000).toFixed(1)}B` : '-'

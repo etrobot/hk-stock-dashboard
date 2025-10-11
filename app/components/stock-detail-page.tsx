@@ -12,13 +12,12 @@ import { Button } from './ui/button'
 import { hkHotStocks } from '../data/mock-data'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
-import { List, Grid3X3, ChevronDown, Plus, Settings, GripVertical } from 'lucide-react'
-import { StockGridItem } from './stock-grid-item'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from './ui/dropdown-menu'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
+import { GripVertical,Plus } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { toast } from 'sonner'
+import { AsideList } from './aside-list'
 
 // Transform StockData to IndexDetail format
 function transformStockToIndex(stockData: StockData): IndexDetail {
@@ -67,7 +66,8 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
 
   // Sync symbol from route params if present
   useEffect(() => {
-    const symbolParam = (params as any)?.symbol as string | undefined
+    const p = params as unknown as { symbol?: string }
+    const symbolParam = p?.symbol
     if (symbolParam) {
       setStockData(prev => ({ ...prev, symbol: symbolParam }))
     }
@@ -173,155 +173,26 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
     })
   }
 
-  const filterOptions = [
-    '全部',
-    '港股', 
-    '美股',
-    '加密货币',
-    ...customGroups
-  ]
 
   return (
     <div className="flex h-screen bg-background">
-      {/* Left Ranking Sidebar */}
-      <aside className={`${sidebarViewMode === 'grid' ? 'flex-1' : 'w-[260px]'} border-r border-border flex-shrink-0 flex flex-col`}>
-        <div className="p-3 border-b border-border">
-          <div className="flex justify-between items-center">
-            <div className="flex flex-col gap-2 flex-1">
-              <span className="text-sm font-medium text-foreground">{rankingTitle}</span>
-              {isWatchlistRoute && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="h-7 justify-between text-xs">
-                      {selectedFilter}
-                      <ChevronDown className="w-3 h-3 ml-1" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="w-40">
-                    {filterOptions.map((option) => (
-                      <DropdownMenuItem
-                        key={option}
-                        onClick={() => setSelectedFilter(option)}
-                        className="text-xs"
-                      >
-                        {option}
-                      </DropdownMenuItem>
-                    ))}
-                    <DropdownMenuSeparator />
-                    <Dialog open={isCreateGroupOpen} onOpenChange={setIsCreateGroupOpen}>
-                      <DialogTrigger asChild>
-                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                          <Plus className="w-3 h-3 mr-2" />
-                          创建分组
-                        </DropdownMenuItem>
-                      </DialogTrigger>
-                    </Dialog>
-                    <Dialog open={isManageGroupOpen} onOpenChange={setIsManageGroupOpen}>
-                      <DialogTrigger asChild>
-                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                          <Settings className="w-3 h-3 mr-2" />
-                          管理分组
-                        </DropdownMenuItem>
-                      </DialogTrigger>
-                    </Dialog>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-            </div>
-            <div className="flex items-center gap-1">
-              <Button
-                variant={sidebarViewMode === 'list' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setSidebarViewMode('list')}
-                className="h-6 w-6 p-0"
-              >
-                <List className="w-3 h-3" />
-              </Button>
-              <Button
-                variant={sidebarViewMode === 'grid' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setSidebarViewMode('grid')}
-                className="h-6 w-6 p-0"
-              >
-                <Grid3X3 className="w-3 h-3" />
-              </Button>
-            </div>
-          </div>
-        </div>
-        
-        <div className="flex-1 overflow-auto">
-          {sidebarViewMode === 'list' ? (
-            <div className="p-3">
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-border">
-                    <TableHead className="text-muted-foreground">{t('stock_detail.name_code')}</TableHead>
-                    <TableHead className="text-muted-foreground">{t('stock_detail.latest_price')}</TableHead>
-                    <TableHead className="text-muted-foreground">{t('stock_detail.change_percent')}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {hkHotStocks.slice(0, 20).map((s, idx) => (
-                    <TableRow
-                      key={`${s.code}-${idx}`}
-                      className="border-border hover:bg-muted/20 cursor-pointer"
-                      onClick={() => handleSidebarItemClick(s.code)}
-                    >
-                      <TableCell className="text-sm whitespace-nowrap">
-                        <div className="flex flex-col leading-tight">
-                          <span className="text-foreground">{s.name}</span>
-                          <span className="text-xs text-muted-foreground">{s.code}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-sm font-mono text-foreground">{s.price}</TableCell>
-                      <TableCell className={`text-sm font-mono ${s.percentage?.startsWith('+') ? 'text-green-500' : s.percentage?.startsWith('-') ? 'text-red-500' : 'text-muted-foreground'}`}>{s.percentage}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          ) : (
-            <div className="p-3 h-full flex flex-col">
-              {/* Period Selector */}
-              <div className="flex-shrink-0 mb-3 pb-3 border-b border-border">
-                <div className="flex gap-1 flex-wrap">
-                  {[
-                    { key: 'daily', label: '日' },
-                    { key: 'weekly', label: '周' },
-                    { key: 'monthly', label: '月' },
-                    { key: 'quarterly', label: '季' },
-                    { key: 'yearly', label: '年' }
-                  ].map((period) => (
-                    <Button
-                      key={period.key}
-                      variant={selectedPeriod === period.key ? 'default' : 'ghost'}
-                      size="sm"
-                      className="h-6 px-2 text-xs"
-                      onClick={() => setSelectedPeriod(period.key)}
-                    >
-                      {period.label}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Grid Layout */}
-              <div className="flex-1 overflow-auto">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                  {hkHotStocks.slice(0, 20).map((s, idx) => (
-                    <StockGridItem
-                      key={`${s.code}-${idx}`}
-                      stock={s}
-                      selectedPeriod={selectedPeriod}
-                      onClick={() => handleGridSidebarItemClick(s.code)}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </aside>
+      <AsideList
+        rankingTitle={rankingTitle}
+        isWatchlistRoute={isWatchlistRoute}
+        sidebarViewMode={sidebarViewMode}
+        onSidebarViewModeChange={setSidebarViewMode}
+        selectedPeriod={selectedPeriod}
+        onSelectedPeriodChange={setSelectedPeriod}
+        selectedFilter={selectedFilter}
+        onSelectedFilterChange={setSelectedFilter}
+        isCreateGroupOpen={isCreateGroupOpen}
+        setIsCreateGroupOpen={setIsCreateGroupOpen}
+        isManageGroupOpen={isManageGroupOpen}
+        setIsManageGroupOpen={setIsManageGroupOpen}
+        customGroups={customGroups}
+        onListItemClick={handleSidebarItemClick}
+        onGridItemClick={handleGridSidebarItemClick}
+      />
 
       {/* Main Content Area - Only show in list mode */}
       {sidebarViewMode === 'list' && (
