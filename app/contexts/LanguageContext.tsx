@@ -92,6 +92,8 @@ const translations: Record<Language, Record<string, string>> = {
     'common.previous_page': '前一页',
     'common.next_page': '后一页',
     'common.quick_trading': '快捷交易',
+    'common.cancel': '取消',
+    'common.confirm': '确认',
     
     // 应用标题
     'app.title': '天风国际PC客户端',
@@ -192,6 +194,16 @@ const translations: Record<Language, Record<string, string>> = {
     'orders.sell': '卖出',
     'orders.pending': '待成交',
     'orders.filled': '已成交',
+    'orders.cancelled': '已撤单',
+    'orders.partial': '部分成交',
+    'orders.action_cancel': '撤单',
+    'orders.cancel_confirm_title': '委托撤单确认',
+    'orders.cancel_name': '名称',
+    'orders.cancel_code': '代码',
+    'orders.cancel_direction': '委托方向',
+    'orders.cancel_quantity': '委托数量',
+    'orders.cancel_price': '委托价格',
+    'orders.cancel_submit': '确认撤单',
     
     // 成交相关
     'transactions.execution_time': '成交时间',
@@ -507,6 +519,8 @@ const translations: Record<Language, Record<string, string>> = {
     'common.previous_page': 'Previous',
     'common.next_page': 'Next',
     'common.quick_trading': 'Quick Trade',
+    'common.cancel': 'Cancel',
+    'common.confirm': 'Confirm',
     
     // 应用标题
     'app.title': 'TF International PC Client',
@@ -607,6 +621,16 @@ const translations: Record<Language, Record<string, string>> = {
     'orders.sell': 'Sell',
     'orders.pending': 'Pending',
     'orders.filled': 'Filled',
+    'orders.cancelled': 'Cancelled',
+    'orders.partial': 'Partial Fill',
+    'orders.action_cancel': 'Cancel Order',
+    'orders.cancel_confirm_title': 'Cancel Confirmation',
+    'orders.cancel_name': 'Name',
+    'orders.cancel_code': 'Code',
+    'orders.cancel_direction': 'Direction',
+    'orders.cancel_quantity': 'Quantity',
+    'orders.cancel_price': 'Price',
+    'orders.cancel_submit': 'Confirm Cancel',
     
     // 成交相关
     'transactions.execution_time': 'Execution Time',
