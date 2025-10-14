@@ -188,15 +188,15 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                   <span className="text-xs text-muted-foreground">金额</span>
                   <span className="text-xs text-foreground">{accountData.balance}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between cursor-pointer hover:bg-accent/40 rounded px-2" onClick={() => setQuantity(accountData.cashAvailable)}>
                   <span className="text-xs text-muted-foreground">现金可买</span>
                   <span className="text-xs text-[#16BA71]">{accountData.cashAvailable}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-xs text-muted-foreground">持仓可卖</span>
+                <div className="flex justify-between cursor-pointer hover:bg-accent/40 rounded px-2" onClick={() => setQuantity(accountData.positionSellable)}>
+                  <span className="text-xs text-muted-foreground">最大可卖</span>
                   <span className="text-xs text-[#F44345]">{accountData.positionSellable}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between cursor-pointer hover:bg-accent/40 rounded px-2" onClick={() => setQuantity(accountData.maxBuyable)}>
                   <span className="text-xs text-muted-foreground">最大可买</span>
                   <span className="text-xs text-foreground">{accountData.maxBuyable}</span>
                 </div>
@@ -289,7 +289,7 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                           <div className="text-right">持仓占比</div>
                         </div>
                         {holdings.map((holding, index) => (
-                          <div key={index} className="grid grid-cols-12 gap-2 text-xs whitespace-nowrap">
+                          <div key={index} className="grid grid-cols-12 gap-2 text-xs whitespace-nowrap cursor-pointer hover:bg-accent/40 rounded" onClick={() => setStockCode(holding.code)}>
                             <div className="text-[#3B78F1]">交易</div>
                             <div className="text-foreground">{holding.code}</div>
                             <div className="text-foreground">{holding.name}</div>

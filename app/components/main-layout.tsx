@@ -18,6 +18,7 @@ import { useState } from 'react'
 import DiscoveryPage from '../pages/DiscoveryPage'
 import HeatmapPage from '../pages/HeatmapPage'
 import TradePage from '../pages/TradePage'
+import DocPage from '../pages/DocPage'
 import { LanguageProvider, useLanguage } from '../contexts/LanguageContext'
 import { TradingLockProvider, useTradingLock } from '../contexts/TradingLockContext'
 
@@ -153,6 +154,7 @@ function MainLayoutContent() {
                 <Route path="/discovery" element={<DiscoveryPage />} />
                 <Route path="/trade" element={<TradePage />} />
                 <Route path="/heatmap" element={<HeatmapPage />} />
+                <Route path="/doc" element={<DocPage />} />
                 <Route path="*" element={<PlaceholderPage title={t('page.not_found')} />} />
               </Routes>
             </div>

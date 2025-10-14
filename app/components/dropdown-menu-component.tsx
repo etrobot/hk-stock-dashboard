@@ -6,7 +6,7 @@ import { cn } from '../lib/utils'
 import { ChevronRight, FileText, TrendingUp, CreditCard, Settings, LogOut, HelpCircle } from 'lucide-react'
 import { SettingsDetailPage } from './settings-detail-page'
 import { LoginDialog } from './login-dialog'
-import { HelpCenterPopup } from './help-center-popup'
+
 import { useLanguage } from '../contexts/LanguageContext'
 import { OrderHistoryDialog } from './order-history-dialog'
 
@@ -31,7 +31,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
   const [showSettingsDetail, setShowSettingsDetail] = useState(false)
   const [showLoginDialog, setShowLoginDialog] = useState(false)
   const [showMyQuotesDetail, setShowMyQuotesDetail] = useState(false)
-  const [showHelpCenter, setShowHelpCenter] = useState(false)
+
   const [showOrderHistory, setShowOrderHistory] = useState(false)
   const { t } = useLanguage()
 
@@ -40,7 +40,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
     setShowSettingsDetail(false)
     setShowLoginDialog(false)
     setShowMyQuotesDetail(false)
-    setShowHelpCenter(false)
+
     onClose()
   }, [onClose])
 
@@ -57,7 +57,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       // Don't close if any dialog is open
-      if (showLoginDialog || showSettingsDetail || showMyQuotesDetail || showHelpCenter) {
+      if (showLoginDialog || showSettingsDetail || showMyQuotesDetail) {
         return
       }
       
@@ -72,7 +72,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
         document.removeEventListener('mousedown', handleClickOutside)
       }
     }
-  }, [isOpen, handleClose, showLoginDialog, showSettingsDetail, showMyQuotesDetail, showHelpCenter])
+  }, [isOpen, handleClose, showLoginDialog, showSettingsDetail, showMyQuotesDetail])
 
   const handleMenuItemClick = (item: MenuItem) => {
     if (item.labelKey === 'dropdown.business') {
@@ -85,7 +85,8 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
       handleClose()
       navigate('/discovery')
     } else if (item.labelKey === 'dropdown.help_center') {
-      setShowHelpCenter(true)
+      handleClose()
+      navigate('/doc')
     } else if (item.labelKey === 'dropdown.settings') {
       setShowSettingsDetail(true)
     } else if (item.labelKey === 'dropdown.my_quotes') {
@@ -109,9 +110,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
     handleClose()
   }
 
-  const handleHelpCenterClose = () => {
-    setShowHelpCenter(false)
-  }
+
 
   const handleOrderHistoryClose = () => {
     setShowOrderHistory(false)
@@ -135,12 +134,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
         className={className}
       />
 
-      {/* Help Center Popup */}
-      <HelpCenterPopup 
-        isOpen={showHelpCenter}
-        onClose={handleHelpCenterClose}
-        className={className}
-      />
+
 
       <OrderHistoryDialog 
         isOpen={showOrderHistory}
@@ -238,7 +232,7 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
       )}
       
       {/* Main Dropdown Menu - Only show when settings, my quotes, and help center are not open */}
-      {!showSettingsDetail && !showMyQuotesDetail && !showHelpCenter && (
+      {!showSettingsDetail && !showMyQuotesDetail && (
         <div 
           ref={dropdownRef}
           className={cn(

@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "tsc && vite build",
-    "dev": "vite --port 3456 --host",
+    "build": "node ./scripts/generate-docs.mjs && tsc && vite build",
+    "dev": "node ./scripts/generate-docs.mjs && vite --port 3456 --host",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview --port 3456"
   },
