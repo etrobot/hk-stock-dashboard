@@ -242,22 +242,6 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                 />
               </div>
 
-              <div className="flex gap-8 text-xs">
-                <div>
-                  <span className="text-foreground">市值(HKD)</span>
-                  <ChevronDown className="w-3 h-3 inline ml-1 text-muted-foreground" />
-                  <span className="ml-2 text-foreground">250.60</span>
-                </div>
-                <div>
-                  <span className="text-foreground">今日盈亏</span>
-                  <span className="ml-2 text-[#16BA71]">+4.85</span>
-                </div>
-                <div>
-                  <span className="text-foreground">持仓收益</span>
-                  <span className="ml-2 text-[#16BA71]">+54.70</span>
-                </div>
-              </div>
-
               <div className="space-y-2">
                 <Tabs defaultValue="holdings" className="w-full">
                   <TabsList className="bg-transparent p-0 border-b border-border rounded-none h-auto">

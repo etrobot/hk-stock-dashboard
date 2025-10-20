@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { ChevronRight, ChevronDown } from 'lucide-react'
 import { cn } from '../lib/utils'
-import { AboutUsPage } from './about-us-page'
+import { useTheme } from './theme-provider'
 
 interface SettingsDetailPageProps {
   isOpen: boolean
@@ -18,24 +18,49 @@ export function SettingsDetailPage({ isOpen, onClose, className }: SettingsDetai
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const [showAboutUs, setShowAboutUs] = useState(false)
 
+  const { resolvedTheme } = useTheme()
+  const themeParam = resolvedTheme === 'dark' ? 'dark' : 'white'
+  const iframeUrl = `http://testdv.tfisec.cn/activity/appVersionDesc?theme=${themeParam}`
+
   const languages = ['简体中文', '繁体中文', 'English']
 
   if (!isOpen) return null
 
   return (
     <>
-      {/* About Us Page */}
-      <AboutUsPage 
-        isOpen={showAboutUs} 
-        onClose={() => setShowAboutUs(false)}
-        className={className}
-      />
+      {/* About Us Iframe Overlay */}
+      {showAboutUs && (
+        <div 
+          className={cn(
+            'absolute left-8 top-0 w-[250px] h-[436px] bg-[#222632] rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.6)] z-50',
+            className
+          )}
+        >
+          {/* Header */}
+          <div className="relative h-[40px] bg-[#222632] rounded-t-lg border-b border-[rgba(75,82,105,0.2)]">
+            <button
+              onClick={() => setShowAboutUs(false)}
+              className="absolute left-[20px] top-[15px] w-[9px] h-[9px] transform rotate-180"
+            >
+              <ChevronRight className="w-full h-full text-[#DBDBE0]" />
+            </button>
+            <div className="absolute left-1/2 top-[12px] transform -translate-x-1/2 text-[#DBDBE0] text-[12px] font-medium">
+              关于我们
+            </div>
+          </div>
+
+          {/* Iframe content */}
+          <div className="w-full h-[calc(100%-40px)]">
+            <iframe src={iframeUrl} className="w-full h-full" frameBorder={0} />
+          </div>
+        </div>
+      )}
       
       {/* Settings Detail Page */}
       <div 
         className={cn(
-          "absolute left-8 top-0 w-[250px] h-[436px] bg-[#222632] rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.6)] z-50",
-          showAboutUs && "hidden", // Hide settings when about us is open
+          'absolute left-8 top-0 w-[250px] h-[436px] bg-[#222632] rounded-lg shadow-[0px_4px_30px_0px_rgba(0,0,0,0.6)] z-50',
+          showAboutUs && 'hidden', // Hide settings when about us is open
           className
         )}
       >
@@ -63,8 +88,8 @@ export function SettingsDetailPage({ isOpen, onClose, className }: SettingsDetai
             >
               <span className="text-white text-[10px] font-normal">{selectedLanguage}</span>
               <ChevronDown className={cn(
-                "w-[9px] h-[6px] text-[#8A8B96] transition-transform",
-                showLanguageDropdown && "rotate-180"
+                'w-[9px] h-[6px] text-[#8A8B96] transition-transform',
+                showLanguageDropdown && 'rotate-180'
               )} />
             </button>
             
@@ -79,8 +104,8 @@ export function SettingsDetailPage({ isOpen, onClose, className }: SettingsDetai
                       setShowLanguageDropdown(false)
                     }}
                     className={cn(
-                      "w-full px-2.5 py-1.5 text-left text-[10px] font-normal hover:bg-[#2A2F3A] transition-colors",
-                      selectedLanguage === language ? "text-white bg-[#2A2F3A]" : "text-[#8A8B96]"
+                      'w-full px-2.5 py-1.5 text-left text-[10px] font-normal hover:bg-[#2A2F3A] transition-colors',
+                      selectedLanguage === language ? 'text-white bg-[#2A2F3A]' : 'text-[#8A8B96]'
                     )}
                   >
                     {language}
@@ -98,10 +123,10 @@ export function SettingsDetailPage({ isOpen, onClose, className }: SettingsDetai
             {/* Red Up Green Down */}
             <div 
               className={cn(
-                "w-[100px] h-[42px] rounded-sm border-[1px] relative overflow-hidden cursor-pointer flex items-center justify-center",
+                'w-[100px] h-[42px] rounded-sm border-[1px] relative overflow-hidden cursor-pointer flex items-center justify-center',
                 selectedColorScheme === '红涨绿跌' 
-                  ? "border-white bg-white" 
-                  : "border-[#1D212A] bg-[#1D212A]"
+                  ? 'border-white bg-white' 
+                  : 'border-[#1D212A] bg-[#1D212A]'
               )}
               onClick={() => setSelectedColorScheme('红涨绿跌')}
             >
@@ -124,10 +149,10 @@ export function SettingsDetailPage({ isOpen, onClose, className }: SettingsDetai
             {/* Green Up Red Down */}
             <div 
               className={cn(
-                "w-[100px] h-[42px] rounded-sm border-[1px] relative overflow-hidden cursor-pointer flex items-center justify-center",
+                'w-[100px] h-[42px] rounded-sm border-[1px] relative overflow-hidden cursor-pointer flex items-center justify-center',
                 selectedColorScheme === '绿涨红跌' 
-                  ? "border-white bg-white" 
-                  : "border-[#1D212A] bg-[#1D212A]"
+                  ? 'border-white bg-white' 
+                  : 'border-[#1D212A] bg-[#1D212A]'
               )}
               onClick={() => setSelectedColorScheme('绿涨红跌')}
             >
@@ -155,10 +180,10 @@ export function SettingsDetailPage({ isOpen, onClose, className }: SettingsDetai
           <div className="w-[100px] h-[72px] space-y-1">
             <div 
               className={cn(
-                "w-full h-[51px] rounded-sm border-[1px] relative overflow-hidden cursor-pointer",
+                'w-full h-[51px] rounded-sm border-[1px] relative overflow-hidden cursor-pointer',
                 selectedTheme === '深色' 
-                  ? "border-[#DBDBE0] bg-[#DBDBE0]" 
-                  : "border-[#11131B] bg-[#11131B]"
+                  ? 'border-[#DBDBE0] bg-[#DBDBE0]' 
+                  : 'border-[#11131B] bg-[#11131B]'
               )}
               onClick={() => setSelectedTheme('深色')}
             >
@@ -174,10 +199,10 @@ export function SettingsDetailPage({ isOpen, onClose, className }: SettingsDetai
           <div className="w-[100px] h-[72px] space-y-1">
             <div 
               className={cn(
-                "w-full h-[51px] rounded-sm border-[1px] relative overflow-hidden cursor-pointer",
+                'w-full h-[51px] rounded-sm border-[1px] relative overflow-hidden cursor-pointer',
                 selectedTheme === '浅色' 
-                  ? "border-[#DBDBE0] bg-[#DBDBE0]" 
-                  : "border-[#DBDBE0] bg-[#DBDBE0]"
+                  ? 'border-[#DBDBE0] bg-[#DBDBE0]' 
+                  : 'border-[#DBDBE0] bg-[#DBDBE0]'
               )}
               onClick={() => setSelectedTheme('浅色')}
             >
