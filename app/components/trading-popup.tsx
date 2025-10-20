@@ -181,6 +181,29 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                   </div>
                   <Button variant="ghost" size="icon" className="h-6 w-6 bg-input hover:bg-accent" onClick={() => adjustQuantity(1)}>+</Button>
                 </div>
+                <div className="mt-2">
+                  <div className="grid grid-cols-5 gap-2 text-xs whitespace-nowrap">
+                    <div className="text-muted-foreground">设置</div>
+                    <div className="text-right text-muted-foreground">全仓</div>
+                    <div className="text-right text-muted-foreground">1/2</div>
+                    <div className="text-right text-muted-foreground">1/4</div>
+                    <div className="text-right text-muted-foreground">1/8</div>
+                  </div>
+                  <div className="grid grid-cols-5 gap-2 text-xs mt-1">
+                    <div className="text-foreground">最大可买</div>
+                    <div className="text-right text-foreground">0</div>
+                    <div className="text-right text-foreground">0</div>
+                    <div className="text-right text-foreground">0</div>
+                    <div className="text-right text-foreground">0</div>
+                  </div>
+                  <div className="grid grid-cols-5 gap-2 text-xs mt-1">
+                    <div className="text-foreground">持仓可卖</div>
+                    <div className="text-right text-foreground">0</div>
+                    <div className="text-right text-foreground">0</div>
+                    <div className="text-right text-foreground">0</div>
+                    <div className="text-right text-foreground">0</div>
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-3 pt-4">
@@ -198,6 +221,14 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                 </div>
                 <div className="flex justify-between cursor-pointer hover:bg-accent/40 rounded px-2" onClick={() => setQuantity(accountData.maxBuyable)}>
                   <span className="text-xs text-muted-foreground">最大可买</span>
+                  <span className="text-xs text-foreground">{accountData.maxBuyable}</span>
+                </div>
+                <div className="flex justify-between cursor-pointer hover:bg-accent/40 rounded px-2" onClick={() => setQuantity(accountData.maxBuyable)}>
+                  <span className="text-xs text-muted-foreground">可用资金</span>
+                  <span className="text-xs text-foreground">{accountData.maxBuyable}</span>
+                </div>
+                <div className="flex justify-between cursor-pointer hover:bg-accent/40 rounded px-2" onClick={() => setQuantity(accountData.maxBuyable)}>
+                  <span className="text-xs text-muted-foreground">可用单位</span>
                   <span className="text-xs text-foreground">{accountData.maxBuyable}</span>
                 </div>
               </div>
@@ -294,6 +325,31 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                   <TabsContent value="orders" className="mt-2">
                     <div className="overflow-x-auto">
                       <OrderTable orders={todayOrders} className="text-xs" />
+                    </div>
+                    <div className="mt-3 overflow-x-auto">
+                      <div className="w-max">
+                        <div className="grid grid-cols-5 gap-2 text-xs text-muted-foreground pb-1 whitespace-nowrap min-w-max">
+                          <div>代码名称</div>
+                          <div>方向</div>
+                          <div className="text-right">成交数量</div>
+                          <div className="text-right">成交价格</div>
+                          <div className="text-right">成交金额</div>
+                        </div>
+                        {todayTransactions.map((tx, idx) => {
+                          const qty = parseFloat(tx.executionQuantity)
+                          const amt = parseFloat(tx.executionAmount)
+                          const price = isNaN(qty) || qty === 0 ? '-' : (amt / qty).toFixed(3)
+                          return (
+                            <div key={idx} className="grid grid-cols-5 gap-2 text-xs whitespace-nowrap rounded">
+                              <div className="text-foreground">{`${stockCode} ${tx.name}`}</div>
+                              <div className={tx.direction === 'buy' ? 'text-[#16BA71]' : 'text-[#F44345]'}>{tx.direction === 'buy' ? '买入' : '卖出'}</div>
+                              <div className="text-right text-foreground">{tx.executionQuantity}</div>
+                              <div className="text-right text-foreground">{price}</div>
+                              <div className="text-right text-foreground">{tx.executionAmount}</div>
+                            </div>
+                          )
+                        })}
+                      </div>
                     </div>
                   </TabsContent>
                   <TabsContent value="history" className="mt-2">
