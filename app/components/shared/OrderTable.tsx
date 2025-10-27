@@ -20,9 +20,30 @@ interface OrderTableProps {
   orders: Order[]
   className?: string
   showOperation?: boolean
+  timeFormat?: 'HH:mm:ss'
+  onModify?: (order: Order) => void
 }
 
-export function OrderTable({ orders, className, showOperation = true }: OrderTableProps) {
+function formatTimeString(input: string, timeFormat?: 'HH:mm:ss') {
+  if (!timeFormat) return input;
+  // Expecting formats like 'YYYY-MM-DD HH:mm' or 'YYYY-MM-DD HH:mm:ss' or just 'HH:mm'/'HH:mm:ss'
+  const parts = input.trim().split(/\s+/);
+  let time = parts.length > 1 ? parts[1] : parts[0];
+  // Normalize to HH:mm:ss
+  const segs = time.split(':');
+  if (segs.length === 1) {
+    // e.g., '09' -> '09:00:00'
+    time = `${segs[0].padStart(2, '0')}:00:00`;
+  } else if (segs.length === 2) {
+    // e.g., '09:05' -> '09:05:00'
+    time = `${segs[0].padStart(2, '0')}:${segs[1].padStart(2, '0')}:00`;
+  } else if (segs.length >= 3) {
+    time = `${segs[0].padStart(2, '0')}:${segs[1].padStart(2, '0')}:${segs[2].padStart(2, '0')}`;
+  }
+  return time;
+}
+
+export function OrderTable({ orders, className, showOperation = true, timeFormat, onModify }: OrderTableProps) {
   const { t } = useLanguage()
   const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -67,7 +88,7 @@ export function OrderTable({ orders, className, showOperation = true }: OrderTab
             <TableRow key={index}>
               <TableCell>{order.code ?? '-'}</TableCell>
               <TableCell>{order.name}</TableCell>
-              <TableCell>{order.orderTime}</TableCell>
+              <TableCell>{formatTimeString(order.orderTime, timeFormat)}</TableCell>
               <TableCell>{order.orderPrice}</TableCell>
               <TableCell>{order.avgPrice}</TableCell>
               <TableCell>{order.orderQuantity}</TableCell>
@@ -77,9 +98,14 @@ export function OrderTable({ orders, className, showOperation = true }: OrderTab
               {showOperation && (
                 <TableCell>
                   {order.status === 'pending' && (
-                    <Button variant="outline" className="h-6 text-xs" onClick={() => setConfirmOpen(true)}>
-                      {t('orders.action_cancel')}
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button variant="link" className="p-0 h-auto text-blue-600 hover:text-blue-800 text-xs" onClick={() => setConfirmOpen(true)}>
+                        {t('orders.action_cancel')}
+                      </Button>
+                      <Button variant="link" className="p-0 h-auto text-blue-600 hover:text-blue-800 text-xs" onClick={() => onModify?.(order)}>
+                        {t('orders.action_modify') || '改单'}
+                      </Button>
+                    </div>
                   )}
                 </TableCell>
               )}

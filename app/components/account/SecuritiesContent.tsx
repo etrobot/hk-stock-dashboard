@@ -9,6 +9,9 @@ import {
   TableRow,
 } from '../ui/table';
 import { Button } from '../ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as DateCalendar } from '../ui/calendar';
 import {
   Download,
   Upload,
@@ -29,6 +32,14 @@ import { TransactionTable } from '../shared/TransactionTable';
 export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
   const { t } = useLanguage();
   const [isTradingPopupOpen, setIsTradingPopupOpen] = useState(false);
+  // Date filters
+  const [histOrdersFrom, setHistOrdersFrom] = useState<Date | undefined>();
+  const [histOrdersTo, setHistOrdersTo] = useState<Date | undefined>();
+  const [histTxFrom, setHistTxFrom] = useState<Date | undefined>();
+  const [histTxTo, setHistTxTo] = useState<Date | undefined>();
+  const [fundFlowFrom, setFundFlowFrom] = useState<Date | undefined>();
+  const [fundFlowTo, setFundFlowTo] = useState<Date | undefined>();
+
   const [isIframeOpen, setIsIframeOpen] = useState(false);
   const [iframeUrl, setIframeUrl] = useState('');
   const [iframeTitle, setIframeTitle] = useState('');
@@ -100,8 +111,10 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
 
   const todayTransactions = [
     {
+      code: '00005',
       name: '汇丰控股',
       executionTime: '2023-10-01 09:05',
+      executionPrice: '108.00',
       executionQuantity: '1',
       direction: 'buy' as const,
       executionAmount: '108.00'
@@ -118,6 +131,18 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
       filledQuantity: '1',
       direction: 'buy' as const,
       status: 'filled' as const
+    }
+  ];
+
+  const historicalTransactions = [
+    {
+      code: '02318',
+      name: '中国平安',
+      executionTime: '2023-09-29 10:15',
+      executionPrice: '71.60',
+      executionQuantity: '2',
+      direction: 'sell' as const,
+      executionAmount: '143.20'
     }
   ];
 
@@ -238,11 +263,12 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
       <Card>
         <CardContent className="p-4">
           <Tabs defaultValue="holdings" className="w-full">
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger value="holdings">{t('tabs.holdings')}</TabsTrigger>
               <TabsTrigger value="today-orders">{t('tabs.today_orders')}</TabsTrigger>
               <TabsTrigger value="today-transactions">{t('tabs.today_transactions')}</TabsTrigger>
               <TabsTrigger value="historical-orders">{t('tabs.historical_orders')}</TabsTrigger>
+              <TabsTrigger value="historical-transactions">{t('tabs.historical_transactions')}</TabsTrigger>
               <TabsTrigger value="fund-flow">{t('tabs.fund_flow')}</TabsTrigger>
             </TabsList>
 
@@ -316,21 +342,101 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
 
             {/* Today's Orders Tab */}
             <TabsContent value="today-orders" className="mt-4 border-none p-0">
-              <OrderTable orders={todayOrders} />
+              <OrderTable orders={todayOrders} timeFormat="HH:mm:ss" onModify={() => setIsTradingPopupOpen(true)} />
             </TabsContent>
 
             {/* Today's Transactions Tab */}
             <TabsContent value="today-transactions" className="mt-4 border-none p-0">
-              <TransactionTable transactions={todayTransactions} />
+              <TransactionTable transactions={todayTransactions} timeColumn="time" />
             </TabsContent>
 
             {/* Historical Orders Tab */}
             <TabsContent value="historical-orders" className="mt-4 border-none p-0">
+              <div className="flex items-center gap-2 mb-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="h-8 px-2 text-xs">
+                      <CalendarIcon className="mr-1 h-3 w-3" />
+                      {histOrdersFrom ? `${histOrdersFrom.getFullYear()}-${String(histOrdersFrom.getMonth()+1).padStart(2,'0')}-${String(histOrdersFrom.getDate()).padStart(2,'0')}` : t('filters.start_date')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <DateCalendar mode="single" selected={histOrdersFrom} onSelect={setHistOrdersFrom} />
+                  </PopoverContent>
+                </Popover>
+                <span className="text-xs">-</span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="h-8 px-2 text-xs">
+                      <CalendarIcon className="mr-1 h-3 w-3" />
+                      {histOrdersTo ? `${histOrdersTo.getFullYear()}-${String(histOrdersTo.getMonth()+1).padStart(2,'0')}-${String(histOrdersTo.getDate()).padStart(2,'0')}` : t('filters.end_date')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <DateCalendar mode="single" selected={histOrdersTo} onSelect={setHistOrdersTo} />
+                  </PopoverContent>
+                </Popover>
+              </div>
               <OrderTable orders={historicalOrders} />
+            </TabsContent>
+
+            {/* Historical Transactions Tab */}
+            <TabsContent value="historical-transactions" className="mt-4 border-none p-0">
+              <div className="flex items-center gap-2 mb-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="h-8 px-2 text-xs">
+                      <CalendarIcon className="mr-1 h-3 w-3" />
+                      {histTxFrom ? `${histTxFrom.getFullYear()}-${String(histTxFrom.getMonth()+1).padStart(2,'0')}-${String(histTxFrom.getDate()).padStart(2,'0')}` : t('filters.start_date')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <DateCalendar mode="single" selected={histTxFrom} onSelect={setHistTxFrom} />
+                  </PopoverContent>
+                </Popover>
+                <span className="text-xs">-</span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="h-8 px-2 text-xs">
+                      <CalendarIcon className="mr-1 h-3 w-3" />
+                      {histTxTo ? `${histTxTo.getFullYear()}-${String(histTxTo.getMonth()+1).padStart(2,'0')}-${String(histTxTo.getDate()).padStart(2,'0')}` : t('filters.end_date')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <DateCalendar mode="single" selected={histTxTo} onSelect={setHistTxTo} />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <TransactionTable transactions={historicalTransactions} timeColumn="datetime" />
             </TabsContent>
 
             {/* Fund Flow Tab */}
             <TabsContent value="fund-flow" className="mt-4 border-none p-0">
+              <div className="flex items-center gap-2 mb-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="h-8 px-2 text-xs">
+                      <CalendarIcon className="mr-1 h-3 w-3" />
+                      {fundFlowFrom ? `${fundFlowFrom.getFullYear()}-${String(fundFlowFrom.getMonth()+1).padStart(2,'0')}-${String(fundFlowFrom.getDate()).padStart(2,'0')}` : t('filters.start_date')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <DateCalendar mode="single" selected={fundFlowFrom} onSelect={setFundFlowFrom} />
+                  </PopoverContent>
+                </Popover>
+                <span className="text-xs">-</span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="h-8 px-2 text-xs">
+                      <CalendarIcon className="mr-1 h-3 w-3" />
+                      {fundFlowTo ? `${fundFlowTo.getFullYear()}-${String(fundFlowTo.getMonth()+1).padStart(2,'0')}-${String(fundFlowTo.getDate()).padStart(2,'0')}` : t('filters.end_date')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <DateCalendar mode="single" selected={fundFlowTo} onSelect={setFundFlowTo} />
+                  </PopoverContent>
+                </Popover>
+              </div>
               <Table>
                 <TableHeader>
                   <TableRow>

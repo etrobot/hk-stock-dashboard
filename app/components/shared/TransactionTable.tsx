@@ -4,7 +4,8 @@ import { useLanguage } from '../../contexts/LanguageContext';
 interface Transaction {
   code?: string;
   name: string;
-  executionTime: string;
+  executionTime?: string;
+  executionPrice?: string;
   executionQuantity: string;
   direction: 'buy' | 'sell';
   executionAmount: string;
@@ -13,9 +14,10 @@ interface Transaction {
 interface TransactionTableProps {
   transactions: Transaction[];
   className?: string;
+  timeColumn?: 'none' | 'time' | 'datetime';
 }
 
-export function TransactionTable({ transactions, className }: TransactionTableProps) {
+export function TransactionTable({ transactions, className, timeColumn = 'none' }: TransactionTableProps) {
   const { t } = useLanguage();
 
   const getDirectionText = (direction: 'buy' | 'sell') => {
@@ -28,23 +30,44 @@ export function TransactionTable({ transactions, className }: TransactionTablePr
         <TableRow>
           <TableHead>{t('orders.code') || '代码'}</TableHead>
           <TableHead>{t('orders.name')}</TableHead>
-          <TableHead>{t('transactions.execution_time')}</TableHead>
-          <TableHead>{t('transactions.execution_quantity')}</TableHead>
+          {timeColumn !== 'none' && (
+            <TableHead>
+              {timeColumn === 'datetime' ? (t('transactions.execution_datetime') || '日期时间') : (t('transactions.execution_time') || '时间')}
+            </TableHead>
+          )}
           <TableHead>{t('orders.direction')}</TableHead>
+          <TableHead>{t('transactions.execution_price') || '成交价'}</TableHead>
+          <TableHead>{t('transactions.execution_quantity')}</TableHead>
           <TableHead>{t('transactions.execution_amount')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {transactions.map((transaction, index) => (
-          <TableRow key={index}>
-            <TableCell>{transaction.code ?? '-'}</TableCell>
-            <TableCell>{transaction.name}</TableCell>
-            <TableCell>{transaction.executionTime}</TableCell>
-            <TableCell>{transaction.executionQuantity}</TableCell>
-            <TableCell>{getDirectionText(transaction.direction)}</TableCell>
-            <TableCell>{transaction.executionAmount}</TableCell>
-          </TableRow>
-        ))}
+        {transactions.map((transaction, index) => {
+          const renderTime = () => {
+            if (!transaction.executionTime) return '-';
+            if (timeColumn === 'datetime') return transaction.executionTime;
+            // time only: extract HH:mm[:ss]
+            const parts = transaction.executionTime.split(/\s+/);
+            const time = parts.length > 1 ? parts[1] : parts[0];
+            const segs = time.split(':');
+            if (segs.length === 1) return `${segs[0].padStart(2,'0')}:00:00`;
+            if (segs.length === 2) return `${segs[0].padStart(2,'0')}:${segs[1].padStart(2,'0')}:00`;
+            return `${segs[0].padStart(2,'0')}:${segs[1].padStart(2,'0')}:${segs[2].padStart(2,'0')}`;
+          };
+          return (
+            <TableRow key={index}>
+              <TableCell>{transaction.code ?? '-'}</TableCell>
+              <TableCell>{transaction.name}</TableCell>
+              {timeColumn !== 'none' && (
+                <TableCell>{renderTime()}</TableCell>
+              )}
+              <TableCell>{getDirectionText(transaction.direction)}</TableCell>
+              <TableCell>{transaction.executionPrice ?? '-'}</TableCell>
+              <TableCell>{transaction.executionQuantity}</TableCell>
+              <TableCell>{transaction.executionAmount}</TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );

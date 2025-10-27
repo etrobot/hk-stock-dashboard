@@ -179,14 +179,17 @@ const translations: Record<Language, Record<string, string>> = {
     'tabs.today_orders': '当日订单',
     'tabs.today_transactions': '当日成交',
     'tabs.historical_orders': '历史订单',
+    'tabs.historical_transactions': '历史成交',
     'tabs.fund_flow': '资金流水',
+    'filters.start_date': '起始日期',
+    'filters.end_date': '结束日期',
     
     // 订单相关
     'orders.code': '代码',
     'orders.name': '名称',
     'orders.order_time': '委托时间',
     'orders.order_price': '委托价格',
-    'orders.avg_price': '委托均价',
+    'orders.avg_price': '成交均价',
     'orders.order_quantity': '委托数量',
     'orders.filled_quantity': '成交数量',
     'orders.direction': '交易方向',
@@ -198,6 +201,7 @@ const translations: Record<Language, Record<string, string>> = {
     'orders.cancelled': '已撤单',
     'orders.partial': '部分成交',
     'orders.action_cancel': '撤单',
+    'orders.action_modify': '改单',
     'orders.cancel_confirm_title': '委托撤单确认',
     'orders.cancel_name': '名称',
     'orders.cancel_code': '代码',
@@ -210,6 +214,8 @@ const translations: Record<Language, Record<string, string>> = {
     'transactions.execution_time': '成交时间',
     'transactions.execution_quantity': '成交数量',
     'transactions.execution_amount': '成交金额',
+    'transactions.execution_datetime': '日期时间',
+    'transactions.execution_price': '成交价',
     
     // 资金流水
     'fund_flow.trade_date': '交易日期',
@@ -607,7 +613,10 @@ const translations: Record<Language, Record<string, string>> = {
     'tabs.today_orders': 'Today Orders',
     'tabs.today_transactions': 'Today Transactions',
     'tabs.historical_orders': 'Historical Orders',
+    'tabs.historical_transactions': 'Historical Transactions',
     'tabs.fund_flow': 'Fund Flow',
+    'filters.start_date': 'Start Date',
+    'filters.end_date': 'End Date',
     
     // 订单相关
     'orders.code': 'Code',
@@ -626,6 +635,7 @@ const translations: Record<Language, Record<string, string>> = {
     'orders.cancelled': 'Cancelled',
     'orders.partial': 'Partial Fill',
     'orders.action_cancel': 'Cancel Order',
+    'orders.action_modify': 'Modify Order',
     'orders.cancel_confirm_title': 'Cancel Confirmation',
     'orders.cancel_name': 'Name',
     'orders.cancel_code': 'Code',
@@ -638,6 +648,8 @@ const translations: Record<Language, Record<string, string>> = {
     'transactions.execution_time': 'Execution Time',
     'transactions.execution_quantity': 'Execution Qty',
     'transactions.execution_amount': 'Execution Amount',
+    'transactions.execution_datetime': 'Date Time',
+    'transactions.execution_price': 'Execution Price',
     
     // 资金流水
     'fund_flow.trade_date': 'Trade Date',
