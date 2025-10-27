@@ -16,34 +16,35 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
   const { resolvedTheme } = useTheme()
   const { t } = useLanguage()
   
+  const stockLabel = `${indexDetail.name} (${indexDetail.code})`
   const newsItems = [
     {
-      title: "苹果(AAPL.US)句报计划明年上半年推出廉价版iPhone、iPad平板及Mac电脑升级",
+      title: `${stockLabel} 计划明年上半年推出新品及系列升级`,
       source: "首页 AASTOCKS",
       time: "2小时前",
     },
     {
-      title: "苹果(AAPL.US)句报计划明年上半年推出廉价版iPhone、iPad平板及Mac电脑升级",
+      title: `${stockLabel} 获机构关注，分析师上调目标价`,
       source: "DoNews",
       time: "45分钟前",
     },
     {
-      title: "苹果(AAPL.US)句报计划明年上半年推出廉价版iPhone、iPad平板及Mac电脑升级",
+      title: `${stockLabel} 发布季度业绩，营收同比变化引关注`,
       source: "DoNews",
       time: "45分钟前",
     },
     {
-      title: "苹果(AAPL.US)句报计划明年上半年推出廉价版iPhone、iPad平板及Mac电脑升级",
+      title: `${stockLabel} 供应链动态：核心零部件厂商加码投入`,
       source: "DoNews",
       time: "45分钟前",
     },
     {
-      title: "苹果(AAPL.US)句报计划明年上半年推出廉价版iPhone、iPad平板及Mac电脑升级",
+      title: `${stockLabel} 新产品传闻再起，市场预期升温`,
       source: "DoNews",
       time: "45分钟前",
     },
     {
-      title: "苹果(AAPL.US)句报计划明年上半年推出廉价版iPhone、iPad平板及Mac电脑升级",
+      title: `${stockLabel} 海外市场拓展进展，关注后续落地`,
       source: "DoNews",
       time: "45分钟前",
     },

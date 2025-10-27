@@ -25,6 +25,7 @@ export function AsideList({
   customGroups,
   onListItemClick,
   onGridItemClick,
+  hideViewToggle = false,
 }: {
   rankingTitle: string
   isWatchlistRoute: boolean
@@ -41,6 +42,7 @@ export function AsideList({
   customGroups: string[]
   onListItemClick: (code: string) => void
   onGridItemClick: (code: string) => void
+  hideViewToggle?: boolean
 }) {
   const { t } = useLanguage()
 
@@ -97,7 +99,8 @@ export function AsideList({
               </DropdownMenu>
             )}
           </div>
-          <div className="flex items-center gap-1">
+          {!hideViewToggle && (
+            <div className="flex items-center gap-1">
             <Button
               variant={sidebarViewMode === 'list' ? 'default' : 'ghost'}
               size="sm"
@@ -115,6 +118,7 @@ export function AsideList({
               <Grid3X3 className="w-3 h-3" />
             </Button>
           </div>
+          )}
         </div>
       </div>
 

@@ -182,6 +182,7 @@ const translations: Record<Language, Record<string, string>> = {
     'tabs.fund_flow': '资金流水',
     
     // 订单相关
+    'orders.code': '代码',
     'orders.name': '名称',
     'orders.order_time': '委托时间',
     'orders.order_price': '委托价格',
@@ -609,6 +610,7 @@ const translations: Record<Language, Record<string, string>> = {
     'tabs.fund_flow': 'Fund Flow',
     
     // 订单相关
+    'orders.code': 'Code',
     'orders.name': 'Name',
     'orders.order_time': 'Order Time',
     'orders.order_price': 'Order Price',

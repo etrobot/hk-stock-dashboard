@@ -5,6 +5,7 @@ import { Button } from '../ui/button'
 import { Dialog, DialogContent } from '../ui/dialog'
 
 interface Order {
+  code?: string
   name: string
   orderTime: string
   orderPrice: string
@@ -18,9 +19,10 @@ interface Order {
 interface OrderTableProps {
   orders: Order[]
   className?: string
+  showOperation?: boolean
 }
 
-export function OrderTable({ orders, className }: OrderTableProps) {
+export function OrderTable({ orders, className, showOperation = true }: OrderTableProps) {
   const { t } = useLanguage()
   const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -48,6 +50,7 @@ export function OrderTable({ orders, className }: OrderTableProps) {
       <Table className={className}>
         <TableHeader>
           <TableRow>
+            <TableHead>{t('orders.code') || '代码'}</TableHead>
             <TableHead>{t('orders.name')}</TableHead>
             <TableHead>{t('orders.order_time')}</TableHead>
             <TableHead>{t('orders.order_price')}</TableHead>
@@ -56,12 +59,13 @@ export function OrderTable({ orders, className }: OrderTableProps) {
             <TableHead>{t('orders.filled_quantity')}</TableHead>
             <TableHead>{t('orders.direction')}</TableHead>
             <TableHead>{t('orders.status')}</TableHead>
-            <TableHead>{t('holdings.operation')}</TableHead>
+            {showOperation && <TableHead>{t('holdings.operation')}</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
           {orders.map((order, index) => (
             <TableRow key={index}>
+              <TableCell>{order.code ?? '-'}</TableCell>
               <TableCell>{order.name}</TableCell>
               <TableCell>{order.orderTime}</TableCell>
               <TableCell>{order.orderPrice}</TableCell>
@@ -70,13 +74,15 @@ export function OrderTable({ orders, className }: OrderTableProps) {
               <TableCell>{order.filledQuantity}</TableCell>
               <TableCell>{getDirectionText(order.direction)}</TableCell>
               <TableCell>{getStatusText(order.status)}</TableCell>
-              <TableCell>
-                {order.status === 'pending' && (
-                  <Button variant="outline" className="h-6 text-xs" onClick={() => setConfirmOpen(true)}>
-                    {t('orders.action_cancel')}
-                  </Button>
-                )}
-              </TableCell>
+              {showOperation && (
+                <TableCell>
+                  {order.status === 'pending' && (
+                    <Button variant="outline" className="h-6 text-xs" onClick={() => setConfirmOpen(true)}>
+                      {t('orders.action_cancel')}
+                    </Button>
+                  )}
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

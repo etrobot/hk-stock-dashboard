@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { useLanguage } from '../../contexts/LanguageContext';
 
 interface Transaction {
+  code?: string;
   name: string;
   executionTime: string;
   executionQuantity: string;
@@ -25,6 +26,7 @@ export function TransactionTable({ transactions, className }: TransactionTablePr
     <Table className={className}>
       <TableHeader>
         <TableRow>
+          <TableHead>{t('orders.code') || '代码'}</TableHead>
           <TableHead>{t('orders.name')}</TableHead>
           <TableHead>{t('transactions.execution_time')}</TableHead>
           <TableHead>{t('transactions.execution_quantity')}</TableHead>
@@ -35,6 +37,7 @@ export function TransactionTable({ transactions, className }: TransactionTablePr
       <TableBody>
         {transactions.map((transaction, index) => (
           <TableRow key={index}>
+            <TableCell>{transaction.code ?? '-'}</TableCell>
             <TableCell>{transaction.name}</TableCell>
             <TableCell>{transaction.executionTime}</TableCell>
             <TableCell>{transaction.executionQuantity}</TableCell>

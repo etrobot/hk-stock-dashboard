@@ -71,6 +71,7 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
 
   const todayOrders = [
     {
+      code: stockCode,
       name: '汇丰控股',
       orderTime: '2023-10-01 09:00',
       orderPrice: '98.45',
@@ -84,6 +85,7 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
 
   const todayTransactions = [
     {
+      code: stockCode,
       name: '汇丰控股',
       executionTime: '2023-10-01 09:05',
       executionQuantity: '1',
@@ -354,6 +356,9 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
                   </TabsContent>
                   <TabsContent value="history" className="mt-2">
                     <div className="overflow-x-auto">
+                      <OrderTable orders={todayOrders} className="text-xs" showOperation={false} />
+                    </div>
+                    <div className="mt-3 overflow-x-auto">
                       <TransactionTable transactions={todayTransactions} className="text-xs" />
                     </div>
                   </TabsContent>
