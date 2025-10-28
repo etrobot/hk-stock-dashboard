@@ -16,7 +16,7 @@ import { type StockData, mockStockData } from '../data/mockStockData'
 import { hkHotStocks } from '../data/mock-data'
 import { type IndexDetail } from '../types/market'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table'
-import AssetCashCards from '../components/account/AssetCashCards'
+import UnifiedAssetCashCards from '../components/account/UnifiedAssetCashCards'
 import { useLanguage } from '../contexts/LanguageContext'
 
 // Transform StockData to IndexDetail format
@@ -244,36 +244,7 @@ export default function TradePage() {
           </div>
         </div>
                     {/* First row: Three tables side by side (reused component) */}
-            <AssetCashCards
-              assets={{
-                title: t('securities.assets'),
-                rows: [
-                  { label: t('securities.market_value'), value: '268.65' },
-                  { label: t('securities.withdrawable_cash'), value: '312.63' },
-                  { label: t('securities.in_transit_assets'), value: '2.51' },
-                  { label: t('securities.frozen_funds'), value: '0.69' },
-                ],
-                footerText: `${t('securities.risk_level')} | ${t('securities.safe')}`,
-              }}
-              cashDetails={{
-                title: t('securities.cash_details'),
-                headers: [t('securities.currency_type'), t('securities.amount')],
-                rows: [
-                  { label: `${t('securities.total_cash')} · HKD`, value: '-183.31' },
-                  { label: 'HKD', value: '-183.31' },
-                  { label: 'USD', value: '0.00' },
-                ],
-              }}
-              withdrawableCash={{
-                title: t('securities.withdrawable_cash'),
-                headers: [t('securities.currency_type'), t('securities.amount')],
-                rows: [
-                  { label: 'HKD', value: '0.00' },
-                  { label: 'USD', value: '0.00' },
-                  { label: 'CNH', value: '0.00' },
-                ],
-              }}
-            />
+            <UnifiedAssetCashCards />
 
 
       <div className="p-3">

@@ -92,7 +92,7 @@ const AccountPage = () => {
                 </div>
               </div>
               <div className="text-lg font-bold text-card-foreground mb-1">
-                --
+                268.65
               </div>
             </CardContent>
           </Card>

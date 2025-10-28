@@ -1,5 +1,5 @@
 import { Card, CardContent } from '../ui/card';
-import AssetCashCards from './AssetCashCards';
+import UnifiedAssetCashCards from './UnifiedAssetCashCards';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import {
   Table,
@@ -152,38 +152,7 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
       <h2 className="text-sm font-medium text-foreground">{t('account.securities_position')}</h2>
 
       {/* Reusable Asset/Cash Cards */}
-      <AssetCashCards
-        isMasked={isMasked}
-        assets={{
-          title: t('securities.assets'),
-          headers: [t('securities.item'), t('securities.amount')],
-          rows: [
-            { label: t('securities.market_value'), value: '268.65' },
-            { label: t('securities.available_funds'), value: '312.63' },
-            { label: t('securities.in_transit_assets'), value: '2.51' },
-            { label: t('securities.frozen_funds'), value: '0.69' },
-          ],
-          footerText: `${t('securities.risk_level')} | ${t('securities.safe')}`,
-        }}
-        cashDetails={{
-          title: t('securities.cash_details'),
-          headers: [t('securities.currency_type'), t('securities.amount')],
-          rows: [
-            { label: `${t('securities.total_cash')} · HKD`, value: '-183.31' },
-            { label: 'HKD', value: '-183.31' },
-            { label: 'USD', value: '0.00' },
-          ],
-        }}
-        withdrawableCash={{
-          title: t('securities.withdrawable_cash'),
-          headers: [t('securities.currency_type'), t('securities.amount')],
-          rows: [
-            { label: 'HKD', value: '0.00' },
-            { label: 'USD', value: '0.00' },
-            { label: 'CNH', value: '0.00', mask: false },
-          ],
-        }}
-      />
+      <UnifiedAssetCashCards isMasked={isMasked} />
 
       {/* Second row: Function icons */}
       <div className="flex gap-2">
