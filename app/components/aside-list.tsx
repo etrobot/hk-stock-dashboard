@@ -45,14 +45,20 @@ export function AsideList({
   hideViewToggle?: boolean
 }) {
   const { t } = useLanguage()
-
+  
   const filterOptions = [
     '全部',
     '港股',
     '美股',
-    '加密货币',
     ...customGroups,
   ]
+
+  const renderFilterLabel = (value: string) => {
+    if (value === '全部') return t('market.all')
+    if (value === '港股') return t('market.hk')
+    if (value === '美股') return t('market.us')
+    return value
+  }
 
   return (
     <aside className={`${sidebarViewMode === 'grid' ? 'flex-1' : 'w-[260px]'} border-r border-border flex-shrink-0 flex flex-col`}>
@@ -64,7 +70,7 @@ export function AsideList({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="h-7 justify-between text-xs">
-                    {selectedFilter}
+                    {renderFilterLabel(selectedFilter)}
                     <ChevronDown className="w-3 h-3 ml-1" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -75,7 +81,7 @@ export function AsideList({
                       onClick={() => onSelectedFilterChange(option)}
                       className="text-xs"
                     >
-                      {option}
+                      {renderFilterLabel(option)}
                     </DropdownMenuItem>
                   ))}
                   <DropdownMenuSeparator />
@@ -83,7 +89,7 @@ export function AsideList({
                     <DialogTrigger asChild>
                       <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                         <Plus className="w-3 h-3 mr-2" />
-                        创建分组
+                        {t('aside.create_group')}
                       </DropdownMenuItem>
                     </DialogTrigger>
                   </Dialog>
@@ -91,7 +97,7 @@ export function AsideList({
                     <DialogTrigger asChild>
                       <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                         <Settings className="w-3 h-3 mr-2" />
-                        管理分组
+                        {t('aside.manage_group')}
                       </DropdownMenuItem>
                     </DialogTrigger>
                   </Dialog>
@@ -158,11 +164,11 @@ export function AsideList({
             <div className="flex-shrink-0 mb-3 pb-3 border-b border-border">
               <div className="flex gap-1 flex-wrap">
                 {[
-                  { key: 'daily', label: '日' },
-                  { key: 'weekly', label: '周' },
-                  { key: 'monthly', label: '月' },
-                  { key: 'quarterly', label: '季' },
-                  { key: 'yearly', label: '年' },
+                  { key: 'daily', label: t('period.daily') },
+                  { key: 'weekly', label: t('period.weekly') },
+                  { key: 'monthly', label: t('period.monthly') },
+                  { key: 'quarterly', label: t('period.quarterly') },
+                  { key: 'yearly', label: t('period.yearly') },
                 ].map((period) => (
                   <Button
                     key={period.key}

@@ -29,85 +29,7 @@ export function MarketContent({ indexCode }: MarketContentProps) {
           selectedPeriod="daily"
         />
       </div>
-      
-      {/* 资金流向趋势 */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-base font-semibold text-foreground">{t('capital_flow.title')}</h3>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <span>{t('capital_flow.unit')}</span>
-            <button className="text-muted-foreground hover:text-foreground">{t('capital_flow.history')}</button>
-          </div>
-        </div>
-        
-        {/* 时间段选择 */}
-        <div className="flex items-center gap-1 mb-3">
-          <div className="bg-muted rounded-full px-4 py-1">
-            <button className="bg-background rounded-full px-3 py-1 text-xs text-foreground shadow-sm">{t('capital_flow.5d')}</button>
-          </div>
-          <button className="px-3 py-1 text-xs text-muted-foreground">{t('capital_flow.20d')}</button>
-          <button className="px-3 py-1 text-xs text-muted-foreground">{t('capital_flow.60d')}</button>
-        </div>
-        
-        <div className="text-xs text-muted-foreground mb-3">{t('capital_flow.net_inflow')}</div>
-        
-        {/* 资金成交统计 */}
-        <div className="h-48 bg-muted/50 mb-3 flex items-center justify-center p-4">
-          <CapitalFlowChart
-            totalInflow={18163.34}
-            totalOutflow={23749.76}
-            netOutflow={1.72}
-            data={[
-              { 
-                category: '特大', 
-                inflow: 6053.98, 
-                outflow: 2636.57, 
-                inflowPercentage: 4.11, 
-                outflowPercentage: 1.79 
-              },
-              { 
-                category: '大单', 
-                inflow: 13044.97, 
-                outflow: 15528.90, 
-                inflowPercentage: 8.85, 
-                outflowPercentage: 10.54 
-              },
-              { 
-                category: '中单', 
-                inflow: 16597.67, 
-                outflow: 17585.03, 
-                inflowPercentage: 11.26, 
-                outflowPercentage: 11.93 
-              },
-              { 
-                category: '小单', 
-                inflow: 28577.26, 
-                outflow: 47366.29, 
-                inflowPercentage: 19.39, 
-                outflowPercentage: 32.14 
-              }
-            ]}
-          />
-        </div>
-        
-        {/* 图例 */}
-        <div className="flex items-center justify-center gap-6 text-xs">
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-red-500"></div>
-            <span className="text-muted-foreground">{t('capital_flow.net_inflow_legend')}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-green-500"></div>
-            <span className="text-muted-foreground">{t('capital_flow.net_outflow_legend')}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-3 h-0.5 bg-blue-500"></div>
-            <span className="text-muted-foreground">{t('capital_flow.close_price_legend')}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 买卖盘十档 */}
+            {/* 买卖盘十档 */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-base font-semibold text-foreground">{t('order_book.title')}</h3>
@@ -214,6 +136,84 @@ export function MarketContent({ indexCode }: MarketContentProps) {
           </div>
         </div>
       </div>
+      {/* 资金流向趋势 */}
+      <div className="mb-4">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-base font-semibold text-foreground">{t('capital_flow.title')}</h3>
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            <span>{t('capital_flow.unit')}</span>
+            <button className="text-muted-foreground hover:text-foreground">{t('capital_flow.history')}</button>
+          </div>
+        </div>
+        
+        {/* 时间段选择 */}
+        <div className="flex items-center gap-1 mb-3">
+          <div className="bg-muted rounded-full px-4 py-1">
+            <button className="bg-background rounded-full px-3 py-1 text-xs text-foreground shadow-sm">{t('capital_flow.5d')}</button>
+          </div>
+          <button className="px-3 py-1 text-xs text-muted-foreground">{t('capital_flow.20d')}</button>
+          <button className="px-3 py-1 text-xs text-muted-foreground">{t('capital_flow.60d')}</button>
+        </div>
+        
+        <div className="text-xs text-muted-foreground mb-3">{t('capital_flow.net_inflow')}</div>
+        
+        {/* 资金成交统计 */}
+        <div className="h-48 bg-muted/50 mb-3 flex items-center justify-center p-4">
+          <CapitalFlowChart
+            totalInflow={18163.34}
+            totalOutflow={23749.76}
+            netOutflow={1.72}
+            data={[
+              { 
+                category: '特大', 
+                inflow: 6053.98, 
+                outflow: 2636.57, 
+                inflowPercentage: 4.11, 
+                outflowPercentage: 1.79 
+              },
+              { 
+                category: '大单', 
+                inflow: 13044.97, 
+                outflow: 15528.90, 
+                inflowPercentage: 8.85, 
+                outflowPercentage: 10.54 
+              },
+              { 
+                category: '中单', 
+                inflow: 16597.67, 
+                outflow: 17585.03, 
+                inflowPercentage: 11.26, 
+                outflowPercentage: 11.93 
+              },
+              { 
+                category: '小单', 
+                inflow: 28577.26, 
+                outflow: 47366.29, 
+                inflowPercentage: 19.39, 
+                outflowPercentage: 32.14 
+              }
+            ]}
+          />
+        </div>
+        
+        {/* 图例 */}
+        <div className="flex items-center justify-center gap-6 text-xs">
+          <div className="flex items-center gap-1">
+            <div className="w-2 h-2 bg-red-500"></div>
+            <span className="text-muted-foreground">{t('capital_flow.net_inflow_legend')}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-2 h-2 bg-green-500"></div>
+            <span className="text-muted-foreground">{t('capital_flow.net_outflow_legend')}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-3 h-0.5 bg-blue-500"></div>
+            <span className="text-muted-foreground">{t('capital_flow.close_price_legend')}</span>
+          </div>
+        </div>
+      </div>
+
+
     </div>
   )
 }

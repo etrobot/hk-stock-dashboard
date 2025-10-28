@@ -1,14 +1,12 @@
 import { useState } from 'react'
-import { Info, Lock, Plus, GripVertical } from 'lucide-react'
+import { Lock, Plus, GripVertical } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs'
-import { OrderTable } from '../components/shared/OrderTable'
-import { TransactionTable } from '../components/shared/TransactionTable'
 import { useTradingLock } from '../contexts/TradingLockContext'
-import { useLanguage } from '../contexts/LanguageContext'
-import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip'
+import { TradingForm } from '../components/shared/TradingForm'
+import { TradingTabs } from '../components/shared/TradingTabs'
 import { AsideList } from '../components/aside-list'
 import { IndexInfoPanel } from '../components/index-info-panel'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog'
@@ -17,8 +15,9 @@ import { toast } from 'sonner'
 import { type StockData, mockStockData } from '../data/mockStockData'
 import { hkHotStocks } from '../data/mock-data'
 import { type IndexDetail } from '../types/market'
-import { Card, CardContent } from '../components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table'
+import AssetCashCards from '../components/account/AssetCashCards'
+import { useLanguage } from '../contexts/LanguageContext'
 
 // Transform StockData to IndexDetail format
 function transformStockToIndex(stockData: StockData): IndexDetail {
@@ -204,7 +203,7 @@ export default function TradePage() {
     <div className="h-full bg-background text-foreground relative flex">
       {/* Left AsideList Column */}
       <AsideList
-        rankingTitle="自选"
+        rankingTitle={t('nav.watchlist')}
         isWatchlistRoute={true}
         sidebarViewMode={sidebarViewMode}
         onSidebarViewModeChange={setSidebarViewMode}
@@ -244,96 +243,37 @@ export default function TradePage() {
             </div>
           </div>
         </div>
-                    {/* First row: Three tables side by side (copied from SecuritiesContent) */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Assets Table */}
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="text-card-foreground font-medium mb-2">资产</h3>
-                  <Table className="text-xs">
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>持仓市值</TableCell>
-                        <TableCell>268.65</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>现金可取</TableCell>
-                        <TableCell>312.63</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>资金在途</TableCell>
-                        <TableCell>2.51</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>冻结资金</TableCell>
-                        <TableCell>0.69</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                  <div className="text-center text-sm text-gray-300 mt-2">
-                    风险等级 | 安全
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Cash Details Table */}
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="text-card-foreground font-medium mb-2">现金详情</h3>
-                  <Table className="text-xs">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>币种类型</TableHead>
-                        <TableHead>金额</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>总现金 · HKD</TableCell>
-                        <TableCell>-183.31</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>HKD</TableCell>
-                        <TableCell>-183.31</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>USD</TableCell>
-                        <TableCell>0.00</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-
-              {/* Withdrawable Cash Table */}
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="text-card-foreground font-medium mb-2">可取现金</h3>
-                  <Table className="text-xs">
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>币种类型</TableHead>
-                        <TableHead>金额</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>HKD</TableCell>
-                        <TableCell>0.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>USD</TableCell>
-                        <TableCell>0.00</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell>CNH</TableCell>
-                        <TableCell>0.00</TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
-            </div>
+                    {/* First row: Three tables side by side (reused component) */}
+            <AssetCashCards
+              assets={{
+                title: t('securities.assets'),
+                rows: [
+                  { label: t('securities.market_value'), value: '268.65' },
+                  { label: t('securities.withdrawable_cash'), value: '312.63' },
+                  { label: t('securities.in_transit_assets'), value: '2.51' },
+                  { label: t('securities.frozen_funds'), value: '0.69' },
+                ],
+                footerText: `${t('securities.risk_level')} | ${t('securities.safe')}`,
+              }}
+              cashDetails={{
+                title: t('securities.cash_details'),
+                headers: [t('securities.currency_type'), t('securities.amount')],
+                rows: [
+                  { label: `${t('securities.total_cash')} · HKD`, value: '-183.31' },
+                  { label: 'HKD', value: '-183.31' },
+                  { label: 'USD', value: '0.00' },
+                ],
+              }}
+              withdrawableCash={{
+                title: t('securities.withdrawable_cash'),
+                headers: [t('securities.currency_type'), t('securities.amount')],
+                rows: [
+                  { label: 'HKD', value: '0.00' },
+                  { label: 'USD', value: '0.00' },
+                  { label: 'CNH', value: '0.00' },
+                ],
+              }}
+            />
 
 
       <div className="p-3">
@@ -345,245 +285,37 @@ export default function TradePage() {
           <TabsContent value="trade" className="mt-3 min-w-0">
             <div className="flex gap-6 min-w-0">
               <div className="space-y-4 w-[320px] flex-shrink-0">
-                <div className="space-y-2">
-                  <label className="text-xs text-foreground">代码</label>
-                  <div className="relative">
-                    <Input 
-                      value={stockCode}
-                      onChange={(e) => setStockCode(e.target.value)}
-                      className="text-xs h-6 px-3 bg-input"
-                    />
-                  </div>
-                  <div className="text-xs text-muted-foreground">{hkHotStocks.find(s => s.code === stockCode)?.name || stockData.name}</div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center gap-1">
-                    <label className="text-xs text-muted-foreground">{t('orders.order_type')}</label>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Info className="w-3 h-3 text-muted-foreground cursor-help" />
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-xs p-3">
-                        <div className="space-y-2 text-xs">
-                          <div>
-                            <div className="font-semibold text-foreground">{t('order_type.at_auction')}</div>
-                            <div className="text-muted-foreground">{t('order_type_desc.at_auction')}</div>
-                          </div>
-                          <div>
-                            <div className="font-semibold text-foreground">{t('order_type.at_auction_limit')}</div>
-                            <div className="text-muted-foreground">{t('order_type_desc.at_auction_limit')}</div>
-                          </div>
-                          <div>
-                            <div className="font-semibold text-foreground">{t('order_type.limit')}</div>
-                            <div className="text-muted-foreground">{t('order_type_desc.limit')}</div>
-                          </div>
-                          <div>
-                            <div className="font-semibold text-foreground">{t('order_type.enhanced_limit')}</div>
-                            <div className="text-muted-foreground">{t('order_type_desc.enhanced_limit')}</div>
-                          </div>
-                          <div>
-                            <div className="font-semibold text-foreground">{t('order_type.special_limit')}</div>
-                            <div className="text-muted-foreground">{t('order_type_desc.special_limit')}</div>
-                          </div>
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-                  <Select value={orderType} onValueChange={setOrderType}>
-                    <SelectTrigger className="bg-input text-xs h-6">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover border-border">
-                      <SelectItem value="order_type.enhanced_limit" className="text-xs">{t('order_type.enhanced_limit')}</SelectItem>
-                      <SelectItem value="order_type.at_auction" className="text-xs">{t('order_type.at_auction')}</SelectItem>
-                      <SelectItem value="order_type.at_auction_limit" className="text-xs">{t('order_type.at_auction_limit')}</SelectItem>
-                      <SelectItem value="order_type.limit" className="text-xs">{t('order_type.limit')}</SelectItem>
-                      <SelectItem value="order_type.special_limit" className="text-xs">{t('order_type.special_limit')}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs text-foreground">价格</label>
-                  <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" className="h-6 w-6 bg-input hover:bg-accent" onClick={() => adjustPrice(-0.010)}>-</Button>
-                    <div className="relative flex-1">
-                      <Input 
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        inputMode="decimal"
-                        className="text-xs h-6 px-3 bg-input"
-                      />
-                    </div>
-                    <Button variant="ghost" size="icon" className="h-6 w-6 bg-input hover:bg-accent" onClick={() => adjustPrice(0.010)}>+</Button>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs text-foreground">数量</label>
-                  <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" className="h-6 w-6 bg-input hover:bg-accent" onClick={() => adjustQuantity(-1)}>-</Button>
-                    <div className="relative flex-1">
-                      <Input 
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                        inputMode="numeric"
-                        className="text-xs h-6 px-3 bg-input"
-                      />
-                    </div>
-                    <Button variant="ghost" size="icon" className="h-6 w-6 bg-input hover:bg-accent" onClick={() => adjustQuantity(1)}>+</Button>
-                  </div>
-                </div>
-
-                <div className="space-y-3 pt-4">
-                  <div className="flex justify-between">
-                    <span className="text-xs text-muted-foreground">金额</span>
-                    <span className="text-xs text-foreground">{accountData.balance}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-xs text-muted-foreground">现金可买</span>
-                    <span className="text-xs text-[#16BA71]">{accountData.cashAvailable}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-xs text-muted-foreground">持仓可卖</span>
-                    <span className="text-xs text-[#F44345]">{accountData.positionSellable}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-xs text-muted-foreground">最大可买</span>
-                    <span className="text-xs text-foreground">{accountData.maxBuyable}</span>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 pt-4">
-                  <Button className="flex-1 text-xs h-6 rounded-xl bg-[#F44345] hover:bg-[#d63b3d] text-white">
-                    买入
-                  </Button>
-                  <Button className="flex-1 text-xs h-6 rounded-xl bg-[#16BA71] hover:bg-[#10975c] text-white">
-                    卖出
-                  </Button>
-                </div>
+                <TradingForm
+                  stockCode={stockCode}
+                  setStockCode={setStockCode}
+                  orderType={orderType}
+                  setOrderType={setOrderType}
+                  price={price}
+                  setPrice={setPrice}
+                  quantity={quantity}
+                  setQuantity={setQuantity}
+                  adjustPrice={adjustPrice}
+                  adjustQuantity={adjustQuantity}
+                  accountData={accountData}
+                  nameBelowCode={hkHotStocks.find(s => s.code === stockCode)?.name || stockData.name}
+                />
               </div>
 
-              <div className="flex-1 min-w-0 space-y-4">
-                <div className="flex gap-2">
-                  <Select value={market} onValueChange={setMarket}>
-                    <SelectTrigger className="bg-input text-xs h-5 px-2">
-                      <SelectValue placeholder="全部市场" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover border-border">
-                      <SelectItem value="全部" className="text-xs">全部</SelectItem>
-                      <SelectItem value="港股" className="text-xs">港股</SelectItem>
-                      <SelectItem value="美股" className="text-xs">美股</SelectItem>
-                      <SelectItem value="沪深" className="text-xs">沪深</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value={currency} onValueChange={setCurrency}>
-                    <SelectTrigger className="bg-input text-xs h-5 px-2">
-                      <SelectValue placeholder="全部币种" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-popover border-border">
-                      <SelectItem value="USD" className="text-xs">USD</SelectItem>
-                      <SelectItem value="HKD" className="text-xs">HKD</SelectItem>
-                      <SelectItem value="CNY" className="text-xs">CNY</SelectItem>
-                      <SelectItem value="USDT" className="text-xs">USDT</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input 
-                    placeholder="输入代码/名称"
-                    className="text-xs h-5 px-3 flex-1 bg-input"
-                  />
-                </div>
-
-                <div className="space-y-2 min-w-0">
-                  <Tabs defaultValue="holdings" className="w-full">
-                    <TabsList className="bg-transparent p-0 border-b border-border rounded-none h-auto">
-                      <TabsTrigger value="holdings" className="rounded-none border-0 h-auto px-3 py-2 text-xs text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
-                        持仓
-                      </TabsTrigger>
-                      <TabsTrigger value="orders" className="rounded-none border-0 h-auto px-3 py-2 text-xs text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
-                        订单(0)
-                      </TabsTrigger>
-                      <TabsTrigger value="history" className="rounded-none border-0 h-auto px-3 py-2 text-xs text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
-                        历史
-                      </TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="holdings" className="mt-2">
-                      <div className="overflow-x-auto">
-                        <div className="w-max">
-                          <div className="grid grid-cols-12 gap-2 text-xs text-muted-foreground pb-1 whitespace-nowrap min-w-max">
-                            <div>操作</div>
-                            <div>代码</div>
-                            <div>名称</div>
-                            <div className="text-right">持有数量</div>
-                            <div className="text-right">可用数量</div>
-                            <div className="text-right">现价</div>
-                            <div className="text-right">平均成本价</div>
-                            <div className="text-right">市值</div>
-                            <div className="text-right">未实现盈亏比例</div>
-                            <div className="text-right">总盈亏金额</div>
-                            <div className="text-right">今日盈亏</div>
-                            <div className="text-right">持仓占比</div>
-                          </div>
-                          {holdings.map((holding, index) => (
-                            <div key={index} className="grid grid-cols-12 gap-2 text-xs whitespace-nowrap">
-                              <div className="text-[#3B78F1]">交易</div>
-                              <div className="text-foreground">{holding.code}</div>
-                              <div className="text-foreground">{holding.name}</div>
-                              <div className="text-right text-foreground">{holding.holdingQty}</div>
-                              <div className="text-right text-foreground">{holding.availableQty}</div>
-                              <div className="text-right text-foreground">{holding.currentPrice}</div>
-                              <div className="text-right text-foreground">{holding.avgCost}</div>
-                              <div className="text-right text-foreground">{holding.marketValue}</div>
-                              <div className="text-right text-[#16BA71]">{holding.unrealizedPnlRatio}</div>
-                              <div className="text-right text-[#16BA71]">{holding.totalPnl}</div>
-                              <div className="text-right text-[#16BA71]">{holding.todayPnl}</div>
-                              <div className="text-right text-foreground">{holding.positionRatio}</div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </TabsContent>
-                    <TabsContent value="orders" className="mt-2">
-                      <div className="overflow-x-auto">
-                        <OrderTable orders={todayOrders} className="text-xs" />
-                      </div>
-                      <div className="mt-3 overflow-x-auto">
-                        <div className="w-max">
-                          <div className="grid grid-cols-5 gap-2 text-xs text-muted-foreground pb-1 whitespace-nowrap min-w-max">
-                            <div>代码名称</div>
-                            <div>方向</div>
-                            <div className="text-right">成交数量</div>
-                            <div className="text-right">成交价格</div>
-                            <div className="text-right">成交金额</div>
-                          </div>
-                          {todayTransactions.map((tx, idx) => {
-                            const qty = parseFloat(tx.executionQuantity)
-                            const amt = parseFloat(tx.executionAmount)
-                            const price = isNaN(qty) || qty === 0 ? '-' : (amt / qty).toFixed(3)
-                            return (
-                              <div key={idx} className="grid grid-cols-5 gap-2 text-xs whitespace-nowrap rounded">
-                                <div className="text-foreground">{`${stockCode} ${tx.name}`}</div>
-                                <div className={tx.direction === 'buy' ? 'text-[#16BA71]' : 'text-[#F44345]'}>{tx.direction === 'buy' ? '买入' : '卖出'}</div>
-                                <div className="text-right text-foreground">{tx.executionQuantity}</div>
-                                <div className="text-right text-foreground">{price}</div>
-                                <div className="text-right text-foreground">{tx.executionAmount}</div>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    </TabsContent>
-                    <TabsContent value="history" className="mt-2">
-                      <div className="overflow-x-auto">
-                        <OrderTable orders={todayOrders} className="text-xs" showOperation={false} />
-                      </div>
-                      <div className="mt-3 overflow-x-auto">
-                        <TransactionTable transactions={todayTransactions} className="text-xs" />
-                      </div>
-                    </TabsContent>
-                  </Tabs>
-                </div>
+              <div className="flex-1 min-w-0">
+                <TradingTabs
+                  stockCode={stockCode}
+                  holdings={holdings}
+                  todayOrders={todayOrders}
+                  todayTransactions={todayTransactions}
+                  market={market}
+                  setMarket={setMarket}
+                  currency={currency}
+                  setCurrency={setCurrency}
+                  onHoldingSelect={(code, availableQty) => {
+                    setStockCode(code)
+                    setQuantity(availableQty)
+                  }}
+                />
               </div>
             </div>
           </TabsContent>
@@ -605,27 +337,27 @@ export default function TradePage() {
      {/* Manage Groups Dialog */}
      <Dialog open={isManageGroupOpen} onOpenChange={setIsManageGroupOpen}>
        <DialogContent className="sm:max-w-4xl max-h-[80vh]">
-         <DialogHeader>
-           <DialogTitle>管理分组</DialogTitle>
-         </DialogHeader>
+          <DialogHeader>
+            <DialogTitle>{t('groups.manage')}</DialogTitle>
+          </DialogHeader>
          <div className="flex h-[500px]">
            {/* Left side - Group names */}
            <div className="w-1/3 border-r pr-4">
              <div className="flex items-center justify-between mb-3">
-               <h3 className="font-medium">分组列表</h3>
-               <Button
-                 variant="outline"
-                 size="sm"
-                 onClick={() => {
-                   setIsManageGroupOpen(false)
-                   setIsCreateGroupOpen(true)
-                 }}
-                 className="h-7 px-2 text-xs"
-               >
-                 <Plus className="w-3 h-3 mr-1" />
-                 创建分组
-               </Button>
-             </div>
+              <h3 className="font-medium">{t('groups.list')}</h3>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setIsManageGroupOpen(false)
+                  setIsCreateGroupOpen(true)
+                }}
+                className="h-7 px-2 text-xs"
+              >
+                <Plus className="w-3 h-3 mr-1" />
+                {t('groups.create')}
+              </Button>
+            </div>
              <div className="space-y-2">
                {customGroups.map((group) => (
                  <div 
@@ -655,30 +387,30 @@ export default function TradePage() {
            {/* Right side - Stock list */}
            <div className="flex-1 pl-4">
              <div className="flex items-center justify-between mb-3">
-               <h3 className="font-medium">股票列表 - {selectedGroup}</h3>
-               <Button
-                 variant="outline"
-                 size="sm"
-                 onClick={() => toast.info("功能开发中...")}
-                 className="h-7 px-2 text-xs"
-               >
-                 <Plus className="w-3 h-3 mr-1" />
-                 添加
-               </Button>
-             </div>
-             <div className="border rounded">
-               <Table>
-                 <TableHeader>
-                   <TableRow>
-                     <TableHead className="w-20">代码</TableHead>
-                     <TableHead>名称</TableHead>
-                     <TableHead>市场</TableHead>
-                     <TableHead className="w-16">操作</TableHead>
-                   </TableRow>
-                 </TableHeader>
-                 <TableBody>
-                   {(groupStocks[selectedGroup] || []).map((stock, index) => (
-                     <TableRow 
+              <h3 className="font-medium">{`${t('groups.stock_list')} - ${selectedGroup}`}</h3>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => toast.info(t('page.developing'))}
+                className="h-7 px-2 text-xs"
+              >
+                <Plus className="w-3 h-3 mr-1" />
+                {t('common.add')}
+              </Button>
+            </div>
+            <div className="border rounded">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-20">{t('table.code')}</TableHead>
+                    <TableHead>{t('table.name')}</TableHead>
+                    <TableHead>{t('common.market')}</TableHead>
+                    <TableHead className="w-16">{t('common.action')}</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {(groupStocks[selectedGroup] || []).map((stock, index) => (
+                    <TableRow 
                        key={stock.code}
                        draggable
                        onDragStart={(e) => handleDragStart(e, index)}
@@ -693,60 +425,60 @@ export default function TradePage() {
                          </div>
                        </TableCell>
                        <TableCell className="text-sm">{stock.name}</TableCell>
-                       <TableCell className="text-sm">港股</TableCell>
-                       <TableCell>
-                         <Button
-                           variant="ghost"
-                           size="sm"
-                           onClick={() => handleRemoveStockFromGroup(stock.code)}
-                           className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
-                         >
-                           ×
-                         </Button>
-                       </TableCell>
-                     </TableRow>
-                   ))}
-                 </TableBody>
-               </Table>
-             </div>
-           </div>
-         </div>
-         <div className="flex justify-end">
-           <Button onClick={() => setIsManageGroupOpen(false)}>
-             关闭
-           </Button>
-         </div>
-       </DialogContent>
-     </Dialog>
+                       <TableCell className="text-sm">{t('market.hk')}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRemoveStockFromGroup(stock.code)}
+                          className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
+                        >
+                          ×
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <Button onClick={() => setIsManageGroupOpen(false)}>
+            {t('common.close')}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
 
      {/* Create Group Dialog */}
      <Dialog open={isCreateGroupOpen} onOpenChange={setIsCreateGroupOpen}>
        <DialogContent className="sm:max-w-md">
          <DialogHeader>
-           <DialogTitle>创建分组</DialogTitle>
-         </DialogHeader>
-         <div className="space-y-4">
-           <div>
-             <Label htmlFor="groupName">分组名称</Label>
-             <Input
-               id="groupName"
-               value={newGroupName}
-               onChange={(e) => setNewGroupName(e.target.value)}
-               placeholder="输入分组名称"
-               className="mt-1"
-             />
-           </div>
-           <div className="flex justify-end gap-2">
-             <Button variant="outline" onClick={() => setIsCreateGroupOpen(false)}>
-               取消
-             </Button>
-             <Button onClick={handleCreateGroup} disabled={!newGroupName.trim()}>
-               创建
-             </Button>
-           </div>
-         </div>
-       </DialogContent>
-     </Dialog>
+          <DialogTitle>{t('groups.create')}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="groupName">{t('groups.name')}</Label>
+            <Input
+              id="groupName"
+              value={newGroupName}
+              onChange={(e) => setNewGroupName(e.target.value)}
+              placeholder={t('groups.input_name_placeholder')}
+              className="mt-1"
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setIsCreateGroupOpen(false)}>
+              {t('common.cancel')}
+            </Button>
+            <Button onClick={handleCreateGroup} disabled={!newGroupName.trim()}>
+              {t('common.create')}
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
    </div>
  )
 }

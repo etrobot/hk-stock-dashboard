@@ -1,18 +1,16 @@
 'use client'
 
 import { useState } from 'react'
-import { Info, Lock } from 'lucide-react'
+import { Lock } from 'lucide-react'
 import { Button } from './ui/button'
-import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Dialog, DialogContent, DialogHeader } from './ui/dialog'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs'
-import { OrderTable } from './shared/OrderTable'
-import { TransactionTable } from './shared/TransactionTable'
 import { useTradingLock } from '../contexts/TradingLockContext'
 import { ConditionalOrdersPanel } from './ConditionalOrdersPanel'
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
 import { useLanguage } from '../contexts/LanguageContext'
+import { TradingForm } from './shared/TradingForm'
+import { TradingTabs } from './shared/TradingTabs'
 
 interface TradingPopupProps {
   open: boolean
@@ -121,283 +119,39 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
 <Tabs defaultValue="trade">
   <TabsList className="bg-transparent p-0 border-b border-border rounded-none h-auto">
     <TabsTrigger value="trade" className="rounded-none border-0 h-auto px-3 py-2 text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
-      交易
+      {t('tab.trade')}
     </TabsTrigger>
   </TabsList>
   <TabsContent value="trade" className="mt-3">
 
           <div className="grid grid-cols-3 gap-6">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-xs text-foreground">代码</label>
-                <div className="relative">
-                  <Input 
-                    value={stockCode}
-                    onChange={(e) => setStockCode(e.target.value)}
-                    className="text-xs h-6 px-3 bg-input"
-                  />
-                </div>
-                <div className="text-xs text-muted-foreground">汇丰控股</div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-1">
-                  <label className="text-xs text-muted-foreground">{t('orders.order_type')}</label>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="w-3 h-3 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent className="max-w-xs p-3">
-                      <div className="space-y-2 text-xs">
-                        <div>
-                          <div className="font-semibold text-foreground">{t('order_type.at_auction')}</div>
-                          <div className="text-muted-foreground">{t('order_type_desc.at_auction')}</div>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-foreground">{t('order_type.at_auction_limit')}</div>
-                          <div className="text-muted-foreground">{t('order_type_desc.at_auction_limit')}</div>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-foreground">{t('order_type.limit')}</div>
-                          <div className="text-muted-foreground">{t('order_type_desc.limit')}</div>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-foreground">{t('order_type.enhanced_limit')}</div>
-                          <div className="text-muted-foreground">{t('order_type_desc.enhanced_limit')}</div>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-foreground">{t('order_type.special_limit')}</div>
-                          <div className="text-muted-foreground">{t('order_type_desc.special_limit')}</div>
-                        </div>
-                      </div>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-                <Select value={orderType} onValueChange={setOrderType}>
-                  <SelectTrigger className="bg-input text-xs h-6">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover border-border">
-                    <SelectItem value="order_type.enhanced_limit" className="text-xs">{t('order_type.enhanced_limit')}</SelectItem>
-                    <SelectItem value="order_type.at_auction" className="text-xs">{t('order_type.at_auction')}</SelectItem>
-                    <SelectItem value="order_type.at_auction_limit" className="text-xs">{t('order_type.at_auction_limit')}</SelectItem>
-                    <SelectItem value="order_type.limit" className="text-xs">{t('order_type.limit')}</SelectItem>
-                    <SelectItem value="order_type.special_limit" className="text-xs">{t('order_type.special_limit')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs text-foreground">价格</label>
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="icon" className="h-6 w-6 bg-input hover:bg-accent" onClick={() => adjustPrice(-0.010)}>-</Button>
-                  <div className="relative flex-1">
-                    <Input 
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                      inputMode="decimal"
-                      className="text-xs h-6 px-3 bg-input"
-                    />
-                  </div>
-                  <Button variant="ghost" size="icon" className="h-6 w-6 bg-input hover:bg-accent" onClick={() => adjustPrice(0.010)}>+</Button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs text-foreground">数量</label>
-                <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="icon" className="h-6 w-6 bg-input hover:bg-accent" onClick={() => adjustQuantity(-1)}>-</Button>
-                  <div className="relative flex-1">
-                    <Input 
-                      value={quantity}
-                      onChange={(e) => setQuantity(e.target.value)}
-                      inputMode="numeric"
-                      className="text-xs h-6 px-3 bg-input"
-                    />
-                  </div>
-                  <Button variant="ghost" size="icon" className="h-6 w-6 bg-input hover:bg-accent" onClick={() => adjustQuantity(1)}>+</Button>
-                </div>
-                <div className="mt-2">
-                  <div className="grid grid-cols-5 gap-2 text-xs whitespace-nowrap">
-                    <div className="text-muted-foreground">设置</div>
-                    <div className="text-right text-muted-foreground">全仓</div>
-                    <div className="text-right text-muted-foreground">1/2</div>
-                    <div className="text-right text-muted-foreground">1/4</div>
-                    <div className="text-right text-muted-foreground">1/8</div>
-                  </div>
-                  <div className="grid grid-cols-5 gap-2 text-xs mt-1">
-                    <div className="text-foreground">最大可买</div>
-                    <div className="text-right text-foreground">0</div>
-                    <div className="text-right text-foreground">0</div>
-                    <div className="text-right text-foreground">0</div>
-                    <div className="text-right text-foreground">0</div>
-                  </div>
-                  <div className="grid grid-cols-5 gap-2 text-xs mt-1">
-                    <div className="text-foreground">持仓可卖</div>
-                    <div className="text-right text-foreground">0</div>
-                    <div className="text-right text-foreground">0</div>
-                    <div className="text-right text-foreground">0</div>
-                    <div className="text-right text-foreground">0</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-3 pt-4">
-                <div className="flex justify-between">
-                  <span className="text-xs text-muted-foreground">金额</span>
-                  <span className="text-xs text-foreground">{accountData.balance}</span>
-                </div>
-                <div className="flex justify-between cursor-pointer hover:bg-accent/40 rounded px-2" onClick={() => setQuantity(accountData.cashAvailable)}>
-                  <span className="text-xs text-muted-foreground">现金可买</span>
-                  <span className="text-xs text-[#16BA71]">{accountData.cashAvailable}</span>
-                </div>
-                <div className="flex justify-between cursor-pointer hover:bg-accent/40 rounded px-2" onClick={() => setQuantity(accountData.positionSellable)}>
-                  <span className="text-xs text-muted-foreground">最大可卖</span>
-                  <span className="text-xs text-[#F44345]">{accountData.positionSellable}</span>
-                </div>
-                <div className="flex justify-between cursor-pointer hover:bg-accent/40 rounded px-2" onClick={() => setQuantity(accountData.maxBuyable)}>
-                  <span className="text-xs text-muted-foreground">最大可买</span>
-                  <span className="text-xs text-foreground">{accountData.maxBuyable}</span>
-                </div>
-                <div className="flex justify-between cursor-pointer hover:bg-accent/40 rounded px-2" onClick={() => setQuantity(accountData.maxBuyable)}>
-                  <span className="text-xs text-muted-foreground">可用资金</span>
-                  <span className="text-xs text-foreground">{accountData.maxBuyable}</span>
-                </div>
-                <div className="flex justify-between cursor-pointer hover:bg-accent/40 rounded px-2" onClick={() => setQuantity(accountData.maxBuyable)}>
-                  <span className="text-xs text-muted-foreground">可用单位</span>
-                  <span className="text-xs text-foreground">{accountData.maxBuyable}</span>
-                </div>
-              </div>
-
-              <div className="flex gap-2 pt-4">
-                <Button className="flex-1 text-xs h-6 rounded-xl bg-[#F44345] hover:bg-[#d63b3d] text-white" onClick={() => { setConfirmDirection('buy'); setConfirmOpen(true) }}>
-                  买入
-                </Button>
-                <Button className="flex-1 text-xs h-6 rounded-xl bg-[#16BA71] hover:bg-[#10975c] text-white" onClick={() => { setConfirmDirection('sell'); setConfirmOpen(true) }}>
-                  卖出
-                </Button>
-              </div>
-            </div>
-
-            <div className="col-span-2 space-y-4">
-              <div className="flex gap-2">
-                <Select value={market} onValueChange={setMarket}>
-                  <SelectTrigger className="bg-input text-xs h-5 px-2">
-                    <SelectValue placeholder="全部市场" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover border-border">
-                    <SelectItem value="全部" className="text-xs">全部</SelectItem>
-                    <SelectItem value="港股" className="text-xs">港股</SelectItem>
-                    <SelectItem value="美股" className="text-xs">美股</SelectItem>
-                    <SelectItem value="沪深" className="text-xs">沪深</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={currency} onValueChange={setCurrency}>
-                  <SelectTrigger className="bg-input text-xs h-5 px-2">
-                    <SelectValue placeholder="全部币种" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-popover border-border">
-                    <SelectItem value="USD" className="text-xs">USD</SelectItem>
-                    <SelectItem value="HKD" className="text-xs">HKD</SelectItem>
-                    <SelectItem value="CNY" className="text-xs">CNY</SelectItem>
-                    <SelectItem value="USDT" className="text-xs">USDT</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Input 
-                  placeholder="输入代码/名称"
-                  className="text-xs h-5 px-3 flex-1 bg-input"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Tabs defaultValue="holdings" className="w-full">
-                  <TabsList className="bg-transparent p-0 border-b border-border rounded-none h-auto">
-                    <TabsTrigger value="holdings" className="rounded-none border-0 h-auto px-3 py-2 text-xs text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
-                      持仓
-                    </TabsTrigger>
-                    <TabsTrigger value="orders" className="rounded-none border-0 h-auto px-3 py-2 text-xs text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
-                      订单(0)
-                    </TabsTrigger>
-                    <TabsTrigger value="history" className="rounded-none border-0 h-auto px-3 py-2 text-xs text-muted-foreground data-[state=active]:border-b-2 data-[state=active]:border-[#FF5C00] data-[state=active]:text-foreground">
-                      历史
-                    </TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="holdings" className="mt-2">
-                    <div className="overflow-x-auto">
-                      <div className="w-max">
-                        <div className="grid grid-cols-12 gap-2 text-xs text-muted-foreground pb-1 whitespace-nowrap min-w-max">
-                          <div>操作</div>
-                          <div>代码</div>
-                          <div>名称</div>
-                          <div className="text-right">持有数量</div>
-                          <div className="text-right">可用数量</div>
-                          <div className="text-right">现价</div>
-                          <div className="text-right">平均成本价</div>
-                          <div className="text-right">市值</div>
-                          <div className="text-right">未实现盈亏比例</div>
-                          <div className="text-right">总盈亏金额</div>
-                          <div className="text-right">今日盈亏</div>
-                          <div className="text-right">持仓占比</div>
-                        </div>
-                        {holdings.map((holding, index) => (
-                          <div key={index} className="grid grid-cols-12 gap-2 text-xs whitespace-nowrap cursor-pointer hover:bg-accent/40 rounded" onClick={() => setStockCode(holding.code)}>
-                            <div className="text-[#3B78F1]">交易</div>
-                            <div className="text-foreground">{holding.code}</div>
-                            <div className="text-foreground">{holding.name}</div>
-                            <div className="text-right text-foreground">{holding.holdingQty}</div>
-                            <div className="text-right text-foreground">{holding.availableQty}</div>
-                            <div className="text-right text-foreground">{holding.currentPrice}</div>
-                            <div className="text-right text-foreground">{holding.avgCost}</div>
-                            <div className="text-right text-foreground">{holding.marketValue}</div>
-                            <div className="text-right text-[#16BA71]">{holding.unrealizedPnlRatio}</div>
-                            <div className="text-right text-[#16BA71]">{holding.totalPnl}</div>
-                            <div className="text-right text-[#16BA71]">{holding.todayPnl}</div>
-                            <div className="text-right text-foreground">{holding.positionRatio}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="orders" className="mt-2">
-                    <div className="overflow-x-auto">
-                      <OrderTable orders={todayOrders} className="text-xs" />
-                    </div>
-                    <div className="mt-3 overflow-x-auto">
-                      <div className="w-max">
-                        <div className="grid grid-cols-5 gap-2 text-xs text-muted-foreground pb-1 whitespace-nowrap min-w-max">
-                          <div>代码名称</div>
-                          <div>方向</div>
-                          <div className="text-right">成交数量</div>
-                          <div className="text-right">成交价格</div>
-                          <div className="text-right">成交金额</div>
-                        </div>
-                        {todayTransactions.map((tx, idx) => {
-                          const qty = parseFloat(tx.executionQuantity)
-                          const amt = parseFloat(tx.executionAmount)
-                          const price = isNaN(qty) || qty === 0 ? '-' : (amt / qty).toFixed(3)
-                          return (
-                            <div key={idx} className="grid grid-cols-5 gap-2 text-xs whitespace-nowrap rounded">
-                              <div className="text-foreground">{`${stockCode} ${tx.name}`}</div>
-                              <div className={tx.direction === 'buy' ? 'text-[#16BA71]' : 'text-[#F44345]'}>{tx.direction === 'buy' ? '买入' : '卖出'}</div>
-                              <div className="text-right text-foreground">{tx.executionQuantity}</div>
-                              <div className="text-right text-foreground">{price}</div>
-                              <div className="text-right text-foreground">{tx.executionAmount}</div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="history" className="mt-2">
-                    <div className="overflow-x-auto">
-                      <OrderTable orders={todayOrders} className="text-xs" showOperation={false} />
-                    </div>
-                    <div className="mt-3 overflow-x-auto">
-                      <TransactionTable transactions={todayTransactions} className="text-xs" />
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </div>
+            <TradingForm
+              stockCode={stockCode}
+              setStockCode={setStockCode}
+              orderType={orderType}
+              setOrderType={setOrderType}
+              price={price}
+              setPrice={setPrice}
+              quantity={quantity}
+              setQuantity={setQuantity}
+              adjustPrice={adjustPrice}
+              adjustQuantity={adjustQuantity}
+              accountData={accountData}
+              onBuy={() => { setConfirmDirection('buy'); setConfirmOpen(true) }}
+              onSell={() => { setConfirmDirection('sell'); setConfirmOpen(true) }}
+              nameBelowCode={'汇丰控股'}
+            />
+            <div className="col-span-2">
+              <TradingTabs
+                stockCode={stockCode}
+                holdings={holdings}
+                todayOrders={todayOrders}
+                todayTransactions={todayTransactions}
+                market={market}
+                setMarket={setMarket}
+                currency={currency}
+                setCurrency={setCurrency}
+              />
             </div>
           </div>
         </TabsContent>
@@ -421,37 +175,37 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
           <DialogContent className="sm:max-w-md p-4">
             <div className="space-y-3 text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-foreground">账户类型</span>
+                <span className="text-foreground">{t('confirm.account_type')}</span>
                 <span className="text-foreground">{selectedAccount}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-foreground">方向</span>
-                <span className="text-foreground">{confirmDirection === 'buy' ? '买入' : '卖出'}</span>
+                <span className="text-foreground">{t('confirm.direction')}</span>
+                <span className="text-foreground">{confirmDirection === 'buy' ? t('orders.buy') : t('orders.sell')}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-foreground">代码</span>
+                <span className="text-foreground">{t('confirm.code')}</span>
                 <span className="text-foreground">腾讯控股(00700.HK)</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-foreground">订单类型</span>
+                <span className="text-foreground">{t('confirm.order_type')}</span>
                 <span className="text-foreground">{t(orderType)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-foreground">价格</span>
+                <span className="text-foreground">{t('confirm.price')}</span>
                 <span className="text-foreground">828383港元</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-foreground">数量</span>
+                <span className="text-foreground">{t('confirm.quantity')}</span>
                 <span className="text-foreground">1000股</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-foreground">金额</span>
+                <span className="text-foreground">{t('confirm.amount')}</span>
                 <span className="text-foreground">4,323.88港元</span>
               </div>
               <div className="flex gap-2 pt-2">
-                <Button variant="outline" className="flex-1 h-7" onClick={() => setConfirmOpen(false)}>取消</Button>
+                <Button variant="outline" className="flex-1 h-7" onClick={() => setConfirmOpen(false)}>{t('common.cancel')}</Button>
                 <Button className="flex-1 h-7 bg-[#FF5C00] hover:bg-[#e54f00] text-white" onClick={() => setConfirmOpen(false)}>
-                  {confirmDirection === 'buy' ? '确认买入' : '确认卖出'}
+                  {confirmDirection === 'buy' ? t('confirm.confirm_buy') : t('confirm.confirm_sell')}
                 </Button>
               </div>
             </div>

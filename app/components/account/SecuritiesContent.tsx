@@ -1,4 +1,5 @@
 import { Card, CardContent } from '../ui/card';
+import AssetCashCards from './AssetCashCards';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import {
   Table,
@@ -150,102 +151,39 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
     <div className="space-y-4">
       <h2 className="text-sm font-medium text-foreground">{t('account.securities_position')}</h2>
 
-      {/* First row: Three tables side by side */}
-      <div className="grid grid-cols-3 gap-4">
-        {/* Assets Table */}
-        <Card>
-          <CardContent className="p-4">
-            <h3 className="text-card-foreground font-medium mb-2">{t('securities.assets')}</h3>
-            <Table className="text-xs">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t('securities.item')}</TableHead>
-                  <TableHead>{t('securities.amount')}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>{t('securities.market_value')}</TableCell>
-                  <TableCell>{isMasked ? '****' : '268.65'}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>{t('securities.available_funds')}</TableCell>
-                  <TableCell>{isMasked ? '****' : '312.63'}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>{t('securities.in_transit_assets')}</TableCell>
-                  <TableCell>{isMasked ? '****' : '2.51'}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>{t('securities.frozen_funds')}</TableCell>
-                  <TableCell>{isMasked ? '****' : '0.69'}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-            <div className="text-center text-sm text-gray-300 mt-2">
-              {t('securities.risk_level')} | {t('securities.safe')}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Cash Details Table */}
-        <Card>
-          <CardContent className="p-4">
-            <h3 className="text-card-foreground font-medium mb-2">{t('securities.cash_details')}</h3>
-            <Table className="text-xs">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t('securities.currency_type')}</TableHead>
-                  <TableHead>{t('securities.amount')}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>{t('securities.total_cash')} · HKD</TableCell>
-                  <TableCell>{isMasked ? '****' : '-183.31'}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>HKD</TableCell>
-                  <TableCell>{isMasked ? '****' : '-183.31'}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>USD</TableCell>
-                  <TableCell>{isMasked ? '****' : '0.00'}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-
-        {/* Withdrawable Cash Table */}
-        <Card>
-          <CardContent className="p-4">
-            <h3 className="text-card-foreground font-medium mb-2">{t('securities.withdrawable_cash')}</h3>
-            <Table className="text-xs">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{t('securities.currency_type')}</TableHead>
-                  <TableHead>{t('securities.amount')}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>HKD</TableCell>
-                  <TableCell>{isMasked ? '****' : '0.00'}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>USD</TableCell>
-                  <TableCell>{isMasked ? '****' : '0.00'}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>CNH</TableCell>
-                  <TableCell>0.00</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Reusable Asset/Cash Cards */}
+      <AssetCashCards
+        isMasked={isMasked}
+        assets={{
+          title: t('securities.assets'),
+          headers: [t('securities.item'), t('securities.amount')],
+          rows: [
+            { label: t('securities.market_value'), value: '268.65' },
+            { label: t('securities.available_funds'), value: '312.63' },
+            { label: t('securities.in_transit_assets'), value: '2.51' },
+            { label: t('securities.frozen_funds'), value: '0.69' },
+          ],
+          footerText: `${t('securities.risk_level')} | ${t('securities.safe')}`,
+        }}
+        cashDetails={{
+          title: t('securities.cash_details'),
+          headers: [t('securities.currency_type'), t('securities.amount')],
+          rows: [
+            { label: `${t('securities.total_cash')} · HKD`, value: '-183.31' },
+            { label: 'HKD', value: '-183.31' },
+            { label: 'USD', value: '0.00' },
+          ],
+        }}
+        withdrawableCash={{
+          title: t('securities.withdrawable_cash'),
+          headers: [t('securities.currency_type'), t('securities.amount')],
+          rows: [
+            { label: 'HKD', value: '0.00' },
+            { label: 'USD', value: '0.00' },
+            { label: 'CNH', value: '0.00', mask: false },
+          ],
+        }}
+      />
 
       {/* Second row: Function icons */}
       <div className="flex gap-2">

@@ -64,6 +64,7 @@ const translations: Record<Language, Record<string, string>> = {
     'market.crypto': '加密货币',
     'market.cn': '沪深',
     'market.funds': '基金',
+    'market.all': '全部',
     
     // 主页标签
     'tab.home': '首页',
@@ -94,6 +95,24 @@ const translations: Record<Language, Record<string, string>> = {
     'common.quick_trading': '快捷交易',
     'common.cancel': '取消',
     'common.confirm': '确认',
+    // 交易通用
+    'tab.trade': '交易',
+    'trade.code': '代码',
+    'trade.price': '价格',
+    'trade.quantity': '数量',
+    'trade.amount': '金额',
+    'trade.cash_buyable': '现金可买',
+    'trade.max_sellable': '最大可卖',
+    'trade.max_buyable': '最大可买',
+    'trade.available_funds': '可用资金',
+    'trade.available_units': '买卖单位',
+    'trade.settings': '设置',
+    'trade.full_position': '全仓',
+    'trade.fraction.half': '1/2',
+    'trade.fraction.quarter': '1/4',
+    'trade.fraction.eighth': '1/8',
+    'trade.buy': '买入',
+    'trade.sell': '卖出',
     
     // 应用标题
     'app.title': '天风国际PC客户端',
@@ -112,6 +131,22 @@ const translations: Record<Language, Record<string, string>> = {
     'language.chinese': '中文',
     'language.english': 'English',
     'language.switch': '语言切换',
+    // Aside 分组
+    'aside.create_group': '创建分组',
+    'aside.manage_group': '管理分组',
+    // 分组管理与对话
+    'groups.manage': '管理分组',
+    'groups.list': '分组列表',
+    'groups.create': '创建分组',
+    'groups.name': '分组名称',
+    'groups.input_name_placeholder': '输入分组名称',
+    'groups.stock_list': '股票列表',
+    // 通用表头/操作
+    'common.market': '市场',
+    'common.action': '操作',
+    'common.add': '添加',
+    'common.close': '关闭',
+    'common.create': '创建',
     
     // 账户页面
     'account.total_assets': '总资产',
@@ -133,6 +168,11 @@ const translations: Record<Language, Record<string, string>> = {
     'period.recent_1m': '近1月',
     'period.ytd': '年初至今',
     'period.custom': '自定义',
+    'period.daily': '日',
+    'period.weekly': '周',
+    'period.monthly': '月',
+    'period.quarterly': '季',
+    'period.yearly': '年',
     
     // 证券持仓相关
     'securities.assets': '资产',
@@ -194,6 +234,7 @@ const translations: Record<Language, Record<string, string>> = {
     'orders.filled_quantity': '成交数量',
     'orders.direction': '交易方向',
     'orders.status': '委托状态',
+    'orders.code_name': '代码名称',
     'orders.buy': '买入',
     'orders.sell': '卖出',
     'orders.pending': '待成交',
@@ -214,8 +255,8 @@ const translations: Record<Language, Record<string, string>> = {
     'orders.order_type': '订单类型',
     'order_type.at_auction': '竞价盘',
     'order_type.at_auction_limit': '竞价限价盘',
-    'order_type.limit': '限价盘',
-    'order_type.enhanced_limit': '增强限价盘（美股仅有此项）',
+    'order_type.limit': '限价盘（美股仅有此项）',
+    'order_type.enhanced_limit': '增强限价盘',
     'order_type.special_limit': '特别限价盘',
     'order_type_desc.at_auction': '无指定价格；于竞价时段按最终的参考平衡价格(IEP)成交；具有更高优先级。',
     'order_type_desc.at_auction_limit': '指定价格；若价格等于或优于IEP则按IEP成交；未成交部分可结转至持续交易时段。',
@@ -466,6 +507,8 @@ const translations: Record<Language, Record<string, string>> = {
 
     // 标签
     'tabs.fund_holdings': '基金持仓',
+    'tabs.history': '历史',
+    'tabs.orders': '订单',
 
     // 操作
     'actions.fund_purchase': '基金申购',
@@ -511,11 +554,14 @@ const translations: Record<Language, Record<string, string>> = {
     'market.crypto': 'Crypto',
     'market.cn': 'A Shares',
     'market.funds': 'Funds',
+    'market.all': 'All',
     
     // 主页标签
     'tab.home': 'Home',
     'tab.concept_sectors': 'Concept Sectors',
     'tab.new_stock_center': 'New Stock Center',
+    'tabs.history': 'History',
+    'tabs.orders': 'Orders',
     
     // 表格相关
     'table.gainers': 'Top Gainers',
@@ -541,6 +587,24 @@ const translations: Record<Language, Record<string, string>> = {
     'common.quick_trading': 'Quick Trade',
     'common.cancel': 'Cancel',
     'common.confirm': 'Confirm',
+    // Trading Common
+    'tab.trade': 'Trade',
+    'trade.code': 'Code',
+    'trade.price': 'Price',
+    'trade.quantity': 'Quantity',
+    'trade.amount': 'Amount',
+    'trade.cash_buyable': 'Cash Buyable',
+    'trade.max_sellable': 'Max Sellable',
+    'trade.max_buyable': 'Max Buyable',
+    'trade.available_funds': 'Available Funds',
+    'trade.available_units': 'Available Units',
+    'trade.settings': 'Settings',
+    'trade.full_position': 'Full',
+    'trade.fraction.half': '1/2',
+    'trade.fraction.quarter': '1/4',
+    'trade.fraction.eighth': '1/8',
+    'trade.buy': 'Buy',
+    'trade.sell': 'Sell',
     
     // 应用标题
     'app.title': 'TF International PC Client',
@@ -559,6 +623,22 @@ const translations: Record<Language, Record<string, string>> = {
     'language.chinese': '中文',
     'language.english': 'English',
     'language.switch': 'Language',
+    // Aside groups
+    'aside.create_group': 'Create Group',
+    'aside.manage_group': 'Manage Groups',
+    // Group management & dialogs
+    'groups.manage': 'Manage Groups',
+    'groups.list': 'Group List',
+    'groups.create': 'Create Group',
+    'groups.name': 'Group Name',
+    'groups.input_name_placeholder': 'Enter group name',
+    'groups.stock_list': 'Stock List',
+    // Common table headers/actions
+    'common.market': 'Market',
+    'common.action': 'Action',
+    'common.add': 'Add',
+    'common.close': 'Close',
+    'common.create': 'Create',
     
     // 账户页面
     'account.total_assets': 'Total Assets',
@@ -571,20 +651,6 @@ const translations: Record<Language, Record<string, string>> = {
     'account.cumulative_return': 'Cumulative Return',
     'account.return_rate': 'Return Rate',
     'account.simple_weighted': 'Simple Weighted',
-    'account.return_trend': 'Return Trend',
-    'account.total_asset_trend': 'Total Asset Trend',
-    'account.earnings_calendar': 'Earnings Calendar',
-    
-    // 时间周期
-    'period.recent_1w': 'Past 1 Week',
-    'period.recent_1m': 'Past 1 Month',
-    'period.ytd': 'Year to Date',
-    'period.custom': 'Custom',
-    
-    // 证券持仓相关
-    'securities.assets': 'Assets',
-    'securities.item': 'Item',
-    'securities.amount': 'Amount',
     'securities.market_value': 'Securities Market Value',
     'securities.available_funds': 'Available Funds',
     'securities.in_transit_assets': 'In-Transit Assets',
@@ -641,6 +707,7 @@ const translations: Record<Language, Record<string, string>> = {
     'orders.filled_quantity': 'Filled Qty',
     'orders.direction': 'Direction',
     'orders.status': 'Status',
+    'orders.code_name': 'Code & Name',
     'orders.buy': 'Buy',
     'orders.sell': 'Sell',
     'orders.pending': 'Pending',
