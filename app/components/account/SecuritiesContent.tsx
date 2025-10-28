@@ -211,8 +211,8 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
                     </TableCell>
                     <TableCell>00005</TableCell>
                     <TableCell>汇丰控股</TableCell>
-                    <TableCell>2</TableCell>
-                    <TableCell>2</TableCell>
+                    <TableCell>{isMasked ? '****' : '2'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '2'}</TableCell>
                     <TableCell>{isMasked ? '****' : '108.000'}</TableCell>
                     <TableCell>{isMasked ? '****' : '62.15'}</TableCell>
                     <TableCell>{isMasked ? '****' : '216.00'}</TableCell>

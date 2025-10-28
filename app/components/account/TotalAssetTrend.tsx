@@ -115,8 +115,8 @@ export const TotalAssetTrend = ({
 
             {/* X-axis labels */}
             <div className="absolute bottom-2 left-0 right-8 flex justify-between text-xs text-muted-foreground" style={{ fontFamily: 'D', fontSize: '8px' }}>
-              <span>{isMasked ? '****' : '2025/01/01'}</span>
-              <span>{isMasked ? '****' : '2025/07/11'}</span>
+              <span>{'2025/01/01'}</span>
+              <span>{'2025/07/11'}</span>
             </div>
           </div>
         </CardContent>

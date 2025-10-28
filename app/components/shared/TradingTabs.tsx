@@ -106,7 +106,6 @@ export function TradingTabs({
           </SelectContent>
         </Select>
         <Input 
-          placeholder={t('filters.search_placeholder')}
           className="text-xs h-5 px-3 flex-1 bg-input"
         />
       </div>
@@ -193,7 +192,6 @@ export function TradingTabs({
           <TabsContent value="history" className="mt-2">
             {/* 日期筛选（起止） */}
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs text-muted-foreground">{t('filters.date_range') || '日期范围'}</span>
               <Input type="date" className="h-6 text-xs w-[140px]" value={startDate} onChange={(e) => setStartDate(e.target.value)} placeholder="开始日期" />
               <span className="text-xs text-muted-foreground">-</span>
               <Input type="date" className="h-6 text-xs w-[140px]" value={endDate} onChange={(e) => setEndDate(e.target.value)} placeholder="结束日期" />
