@@ -7,6 +7,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs'
 import { OrderTable } from '../components/shared/OrderTable'
 import { TransactionTable } from '../components/shared/TransactionTable'
 import { useTradingLock } from '../contexts/TradingLockContext'
+import { useLanguage } from '../contexts/LanguageContext'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip'
 import { AsideList } from '../components/aside-list'
 import { IndexInfoPanel } from '../components/index-info-panel'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog'
@@ -39,9 +41,10 @@ function transformStockToIndex(stockData: StockData): IndexDetail {
 }
 
 export default function TradePage() {
+  const { t } = useLanguage()
   const [selectedAccount, setSelectedAccount] = useState('孖展账户12345678')
   const [stockCode, setStockCode] = useState('00005')
-  const [orderType, setOrderType] = useState('限价单')
+  const [orderType, setOrderType] = useState('order_type.limit')
   const [price, setPrice] = useState('2')
   const [quantity, setQuantity] = useState('2')
   const [market, setMarket] = useState('全部')
@@ -356,16 +359,47 @@ export default function TradePage() {
 
                 <div className="space-y-2">
                   <div className="flex items-center gap-1">
-                    <label className="text-xs text-muted-foreground">订单类型</label>
-                    <Info className="w-3 h-3 text-muted-foreground" />
+                    <label className="text-xs text-muted-foreground">{t('orders.order_type')}</label>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="w-3 h-3 text-muted-foreground cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs p-3">
+                        <div className="space-y-2 text-xs">
+                          <div>
+                            <div className="font-semibold text-foreground">{t('order_type.at_auction')}</div>
+                            <div className="text-muted-foreground">{t('order_type_desc.at_auction')}</div>
+                          </div>
+                          <div>
+                            <div className="font-semibold text-foreground">{t('order_type.at_auction_limit')}</div>
+                            <div className="text-muted-foreground">{t('order_type_desc.at_auction_limit')}</div>
+                          </div>
+                          <div>
+                            <div className="font-semibold text-foreground">{t('order_type.limit')}</div>
+                            <div className="text-muted-foreground">{t('order_type_desc.limit')}</div>
+                          </div>
+                          <div>
+                            <div className="font-semibold text-foreground">{t('order_type.enhanced_limit')}</div>
+                            <div className="text-muted-foreground">{t('order_type_desc.enhanced_limit')}</div>
+                          </div>
+                          <div>
+                            <div className="font-semibold text-foreground">{t('order_type.special_limit')}</div>
+                            <div className="text-muted-foreground">{t('order_type_desc.special_limit')}</div>
+                          </div>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                   <Select value={orderType} onValueChange={setOrderType}>
                     <SelectTrigger className="bg-input text-xs h-6">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-popover border-border">
-                      <SelectItem value="限价单" className="text-xs">限价单</SelectItem>
-                      <SelectItem value="市价单" className="text-xs">市价单</SelectItem>
+                      <SelectItem value="order_type.enhanced_limit" className="text-xs">{t('order_type.enhanced_limit')}</SelectItem>
+                      <SelectItem value="order_type.at_auction" className="text-xs">{t('order_type.at_auction')}</SelectItem>
+                      <SelectItem value="order_type.at_auction_limit" className="text-xs">{t('order_type.at_auction_limit')}</SelectItem>
+                      <SelectItem value="order_type.limit" className="text-xs">{t('order_type.limit')}</SelectItem>
+                      <SelectItem value="order_type.special_limit" className="text-xs">{t('order_type.special_limit')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

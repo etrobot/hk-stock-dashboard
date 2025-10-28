@@ -209,6 +209,19 @@ const translations: Record<Language, Record<string, string>> = {
     'orders.cancel_quantity': '委托数量',
     'orders.cancel_price': '委托价格',
     'orders.cancel_submit': '确认撤单',
+
+    // 订单类型与描述
+    'orders.order_type': '订单类型',
+    'order_type.at_auction': '竞价盘',
+    'order_type.at_auction_limit': '竞价限价盘',
+    'order_type.limit': '限价盘',
+    'order_type.enhanced_limit': '增强限价盘（美股仅有此项）',
+    'order_type.special_limit': '特别限价盘',
+    'order_type_desc.at_auction': '无指定价格；于竞价时段按最终的参考平衡价格(IEP)成交；具有更高优先级。',
+    'order_type_desc.at_auction_limit': '指定价格；若价格等于或优于IEP则按IEP成交；未成交部分可结转至持续交易时段。',
+    'order_type_desc.limit': '指定价格；仅在该价格成交；未成交部分保留在订单簿。',
+    'order_type_desc.enhanced_limit': '指定价格；可向上/下最多跨10个价位撮合；未成交部分即时撤销。',
+    'order_type_desc.special_limit': '指定价格；可向上/下最多跨10个价位撮合；未成交部分转为限价盘。',
     
     // 成交相关
     'transactions.execution_time': '成交时间',
@@ -643,6 +656,19 @@ const translations: Record<Language, Record<string, string>> = {
     'orders.cancel_quantity': 'Quantity',
     'orders.cancel_price': 'Price',
     'orders.cancel_submit': 'Confirm Cancel',
+
+    // Order types and descriptions
+    'orders.order_type': 'Order Type',
+    'order_type.at_auction': 'At-auction Order',
+    'order_type.at_auction_limit': 'At-auction Limit Order',
+    'order_type.limit': 'Limit Order',
+    'order_type.enhanced_limit': 'Enhanced Limit Order',
+    'order_type.special_limit': 'Special Limit Order',
+    'order_type_desc.at_auction': 'No specified price; matched at final Indicative Equilibrium Price (IEP) during auction sessions; higher priority.',
+    'order_type_desc.at_auction_limit': 'Specified price; matched at IEP if price is equal to or better than IEP; unmatched orders may carry over to Continuous Trading Session.',
+    'order_type_desc.limit': 'Specified price; matched only at that price; unmatched portion remains in the order book.',
+    'order_type_desc.enhanced_limit': 'Specified price; can match up to 10 price levels; unmatched portion is immediately cancelled.',
+    'order_type_desc.special_limit': 'Specified price; can match up to 10 price levels; unmatched portion becomes a Limit Order.',
     
     // 成交相关
     'transactions.execution_time': 'Execution Time',
