@@ -32,7 +32,7 @@ export function TransactionTable({ transactions, className, timeColumn = 'none' 
           <TableHead>{t('orders.name')}</TableHead>
           {timeColumn !== 'none' && (
             <TableHead>
-              {timeColumn === 'datetime' ? (t('transactions.execution_datetime') || '日期时间') : (t('transactions.execution_time') || '时间')}
+              {timeColumn === 'datetime' ? (t('transactions.execution_datetime') || '成交时间') : (t('transactions.execution_time') || '时间')}
             </TableHead>
           )}
           <TableHead>{t('orders.direction')}</TableHead>

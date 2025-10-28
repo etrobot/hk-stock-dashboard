@@ -263,12 +263,22 @@ const translations: Record<Language, Record<string, string>> = {
     'order_type_desc.limit': '指定价格；仅在该价格成交；未成交部分保留在订单簿。',
     'order_type_desc.enhanced_limit': '指定价格；可向上/下最多跨10个价位撮合；未成交部分即时撤销。',
     'order_type_desc.special_limit': '指定价格；可向上/下最多跨10个价位撮合；未成交部分转为限价盘。',
+    'confirm.confirm_buy': '确认买入',
+    'confirm.confirm_sell': '确认卖出',
+
+    'confirm.account_type': '账户类型',
+    'confirm.direction': '交易方向',
+    'confirm.code': '代码',
+    'confirm.order_type': '订单类型',
+    'confirm.price': '价格',
+    'confirm.quantity': '数量',
+    'confirm.amount': '金额',
     
     // 成交相关
     'transactions.execution_time': '成交时间',
     'transactions.execution_quantity': '成交数量',
     'transactions.execution_amount': '成交金额',
-    'transactions.execution_datetime': '日期时间',
+    'transactions.execution_datetime': '成交时间',
     'transactions.execution_price': '成交价',
     
     // 资金流水
@@ -723,6 +733,17 @@ const translations: Record<Language, Record<string, string>> = {
     'orders.cancel_quantity': 'Quantity',
     'orders.cancel_price': 'Price',
     'orders.cancel_submit': 'Confirm Cancel',
+    'confirm.confirm_buy': 'Confirm Buy',
+    'confirm.confirm_sell': 'Confirm Sell',
+
+
+    'confirm.account_type': 'Account Type',
+    'confirm.direction': 'Direction',
+    'confirm.code': 'Code',
+    'confirm.order_type': 'Order Type',
+    'confirm.price': 'Price',
+    'confirm.quantity': 'Quantity',
+    'confirm.amount': 'Amount',
 
     // Order types and descriptions
     'orders.order_type': 'Order Type',

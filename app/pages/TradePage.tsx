@@ -43,7 +43,7 @@ export default function TradePage() {
   const { t } = useLanguage()
   const [selectedAccount, setSelectedAccount] = useState('孖展账户12345678')
   const [stockCode, setStockCode] = useState('00005')
-  const [orderType, setOrderType] = useState('order_type.limit')
+  const [orderType, setOrderType] = useState('order_type.enhanced_limit')
   const [price, setPrice] = useState('2')
   const [quantity, setQuantity] = useState('2')
   const [market, setMarket] = useState('全部')
@@ -311,9 +311,10 @@ export default function TradePage() {
                   setMarket={setMarket}
                   currency={currency}
                   setCurrency={setCurrency}
-                  onHoldingSelect={(code, availableQty) => {
+                  onHoldingSelect={(code, availableQty, currentPrice) => {
                     setStockCode(code)
                     setQuantity(availableQty)
+                    setPrice(currentPrice)
                   }}
                 />
               </div>
