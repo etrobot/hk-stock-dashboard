@@ -76,31 +76,3 @@ export const usDividendStocks = [
 ];
 
 export const usIndexDetail = { name: '道琼斯详情', components: [] /* mock */ };
-
-export const cryptoIndices = [
-  { name: '比特币', value: 60000, change: 500, changePercent: 0.8 },
-  { name: '以太坊', value: 3000, change: -20, changePercent: -0.7 },
-  // Add more
-];
-
-export const cryptoGainers = [
-  { symbol: 'BTC', name: 'Bitcoin', price: 60000, change: 500, changePercent: 0.8 },
-  // Add more
-];
-
-export const cryptoLosers = [
-  { symbol: 'ETH', name: 'Ethereum', price: 3000, change: -20, changePercent: -0.7 },
-  // Add more
-];
-
-export const cryptoHotStocks = [
-  { symbol: 'SOL', name: 'Solana', price: 150, volume: 100000000, turnover: 15000000000 },
-  // Add more
-];
-
-export const cryptoDeFiStocks = [
-  { symbol: 'UNI', name: 'Uniswap', defiYield: '5%', apy: 15 },
-  // Add more
-];
-
-export const cryptoIndexDetail = { name: '加密货币详情', components: [] /* mock */ };

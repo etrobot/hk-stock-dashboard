@@ -9,11 +9,10 @@ import { Button } from "./components/ui/button"
 import { useNavigate } from 'react-router-dom'
 import CNStockPage from "./pages/CNStockPage"
 import USStockPage from "./pages/USStockPage"
-import CryptoPage from "./pages/CryptoPage"
 import FundsPage from "./pages/FundsPage"
 import { DetailedStockTablePage } from "./pages/DetailedStockTablePage"
 import { NewStockCenter } from "./components/new-stock-center"
-import { hkIndices, hkGainers, hkLosers, hkHotStocks, hkDividendStocks, hkIndexDetail, cnIndexDetail, usIndexDetail, cryptoIndexDetail, hkSectors, cnSectors } from './data/mock-data'
+import { hkIndices, hkGainers, hkLosers, hkHotStocks, hkDividendStocks, hkIndexDetail, cnIndexDetail, usIndexDetail, hkSectors, cnSectors } from './data/mock-data'
 import { MarketIndex, IndexDetail } from './types/market'
 import { useLanguage } from "./contexts/LanguageContext"
 
@@ -106,8 +105,6 @@ function App() {
         return <CNStockPage onStockClick={handleStockClick} />
       case 'us':
         return <USStockPage onStockClick={handleStockClick} />
-      case 'crypto':
-        return <CryptoPage onStockClick={handleStockClick} />
       case 'funds':
         return <FundsPage />
       case 'hk':
@@ -214,7 +211,6 @@ function App() {
             selectedIndexDetail || (
               currentPage === 'cn' ? cnIndexDetail :
               currentPage === 'us' ? usIndexDetail :
-              currentPage === 'crypto' ? cryptoIndexDetail :
               hkIndexDetail
             )
           } />

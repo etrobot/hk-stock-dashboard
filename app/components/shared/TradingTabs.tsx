@@ -102,7 +102,6 @@ export function TradingTabs({
             <SelectItem value="USD" className="text-xs">USD</SelectItem>
             <SelectItem value="HKD" className="text-xs">HKD</SelectItem>
             <SelectItem value="CNY" className="text-xs">CNY</SelectItem>
-            <SelectItem value="USDT" className="text-xs">USDT</SelectItem>
           </SelectContent>
         </Select>
         <Input 

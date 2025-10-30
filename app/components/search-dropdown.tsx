@@ -9,8 +9,7 @@ import {
   hkGainers, hkLosers, hkHotStocks, hkDividendStocks,
   cnGainers, cnLosers, cnHotStocks, cnDividendStocks,
   usGainers, usLosers, usHotStocks, usDividendStocks,
-  cryptoGainers, cryptoLosers, cryptoHotStocks, cryptoDeFiStocks,
-  hkIndices, cnIndices, usIndices, cryptoIndices
+  hkIndices, cnIndices, usIndices
 } from '../data/mock-data'
 
 interface SearchableItem {
@@ -117,35 +116,6 @@ export function SearchDropdown() {
         name: index.name,
         type: 'index',
         market: 'us',
-        price: index.value,
-        change: index.change,
-        percentage: index.percentage,
-        isPositive: index.isPositive
-      })
-    })
-
-    // 加密货币数据
-    const cryptoStocks = [...cryptoGainers, ...cryptoLosers, ...cryptoHotStocks, ...cryptoDeFiStocks]
-    cryptoStocks.forEach(stock => {
-      items.push({
-        code: stock.code,
-        name: stock.name,
-        type: 'stock',
-        market: 'crypto',
-        price: stock.price,
-        change: stock.change,
-        percentage: stock.percentage,
-        isPositive: stock.isPositive
-      })
-    })
-
-    // 加密货币指数
-    cryptoIndices.forEach(index => {
-      items.push({
-        code: index.name,
-        name: index.name,
-        type: 'index',
-        market: 'crypto',
         price: index.value,
         change: index.change,
         percentage: index.percentage,

@@ -255,7 +255,7 @@ const translations: Record<Language, Record<string, string>> = {
     'orders.order_type': '订单类型',
     'order_type.at_auction': '竞价盘',
     'order_type.at_auction_limit': '竞价限价盘',
-    'order_type.limit': '限价盘（美股仅有此项）',
+    'order_type.limit': '限价盘（美股、沪深仅有此项）',
     'order_type.enhanced_limit': '增强限价盘',
     'order_type.special_limit': '特别限价盘',
     'order_type_desc.at_auction': '无指定价格；于竞价时段按最终的参考平衡价格(IEP)成交；具有更高优先级。',
