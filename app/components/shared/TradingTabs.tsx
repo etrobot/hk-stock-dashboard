@@ -1,12 +1,13 @@
 "use client"
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Input } from '../ui/input'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/tabs'
 import { OrderTable } from './OrderTable'
 import { TransactionTable } from './TransactionTable'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useMemo, useState } from 'react'
+import { MktFilter } from '../mkt-filter';
+
 
 interface Holding {
   code: string
@@ -49,10 +50,10 @@ interface TradingTabsProps {
   holdings: Holding[]
   todayOrders: OrderItem[]
   todayTransactions: TransactionItem[]
-  market: string
-  setMarket: (v: string) => void
-  currency: string
-  setCurrency: (v: string) => void
+  setMarket?: (v: string) => void
+  market?: string
+  currency?: string
+  setCurrency?: (v: string) => void
 }
 
 export function TradingTabs({
@@ -60,10 +61,7 @@ export function TradingTabs({
   holdings,
   todayOrders,
   todayTransactions,
-  market,
-  setMarket,
-  currency,
-  setCurrency,
+  setMarket = () => {},
   onHoldingSelect,
 }: TradingTabsProps) {
   const { t } = useLanguage()
@@ -83,27 +81,7 @@ export function TradingTabs({
   return (
     <div className="space-y-4">
       <div className="flex gap-2">
-        <Select value={market} onValueChange={setMarket}>
-          <SelectTrigger className="bg-input text-xs h-5 px-2">
-            <SelectValue placeholder={t('filters.all_markets')} />
-          </SelectTrigger>
-          <SelectContent className="bg-popover border-border">
-            <SelectItem value="全部" className="text-xs">{t('market.all')}</SelectItem>
-            <SelectItem value="港股" className="text-xs">{t('market.hk')}</SelectItem>
-            <SelectItem value="美股" className="text-xs">{t('market.us')}</SelectItem>
-            <SelectItem value="沪深" className="text-xs">{t('market.cn')}</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select value={currency} onValueChange={setCurrency}>
-          <SelectTrigger className="bg-input text-xs h-5 px-2">
-            <SelectValue placeholder={t('filters.all_currencies')} />
-          </SelectTrigger>
-          <SelectContent className="bg-popover border-border">
-            <SelectItem value="USD" className="text-xs">USD</SelectItem>
-            <SelectItem value="HKD" className="text-xs">HKD</SelectItem>
-            <SelectItem value="CNY" className="text-xs">CNY</SelectItem>
-          </SelectContent>
-        </Select>
+        <MktFilter onMarketChange={setMarket} />
         <Input 
           className="text-xs h-5 px-3 flex-1 bg-input"
         />
@@ -135,8 +113,6 @@ export function TradingTabs({
                   <div className="text-right">{t('holdings.market_value')}</div>
                   <div className="text-right">{t('holdings.profit_loss_ratio')}</div>
                   <div className="text-right">{t('holdings.profit_loss_amount')}</div>
-                  <div className="text-right">{t('holdings.today_profit_loss')}</div>
-                  <div className="text-right">{t('holdings.position_ratio')}</div>
                 </div>
                 {holdings.map((holding, index) => (
                   <div key={index} className="grid grid-cols-12 gap-2 text-xs whitespace-nowrap cursor-pointer hover:bg-accent/40 rounded" onClick={() => onHoldingSelect?.(holding.code, holding.availableQty, holding.currentPrice)}>

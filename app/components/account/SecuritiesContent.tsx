@@ -29,6 +29,7 @@ import { useLanguage } from '../../contexts/LanguageContext';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { OrderTable } from '../shared/OrderTable';
 import { TransactionTable } from '../shared/TransactionTable';
+import { MktFilter } from '../mkt-filter';
 
 export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
   const { t } = useLanguage();
@@ -181,6 +182,7 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
 
             {/* Holdings Tab */}
             <TabsContent value="holdings" className="mt-4 border-none p-0">
+              <MktFilter />
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -194,8 +196,6 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
                     <TableHead>{t('holdings.market_value')}</TableHead>
                     <TableHead>{t('holdings.profit_loss_ratio')}</TableHead>
                     <TableHead>{t('holdings.profit_loss_amount')}</TableHead>
-                    <TableHead>{t('holdings.today_profit_loss')}</TableHead>
-                    <TableHead>{t('holdings.position_ratio')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -254,12 +254,14 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
 
             {/* Today's Transactions Tab */}
             <TabsContent value="today-transactions" className="mt-4 border-none p-0">
+              <MktFilter />
               <TransactionTable transactions={todayTransactions} timeColumn="time" />
             </TabsContent>
 
             {/* Historical Orders Tab */}
             <TabsContent value="historical-orders" className="mt-4 border-none p-0">
               <div className="flex items-center gap-2 mb-2">
+                <MktFilter />
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className="h-8 px-2 text-xs">
@@ -290,6 +292,7 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
             {/* Historical Transactions Tab */}
             <TabsContent value="historical-transactions" className="mt-4 border-none p-0">
               <div className="flex items-center gap-2 mb-2">
+                <MktFilter />
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className="h-8 px-2 text-xs">
@@ -320,6 +323,7 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
             {/* Fund Flow Tab */}
             <TabsContent value="fund-flow" className="mt-4 border-none p-0">
               <div className="flex items-center gap-2 mb-2">
+                <MktFilter />
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className="h-8 px-2 text-xs">
