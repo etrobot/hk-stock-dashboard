@@ -319,15 +319,6 @@ export default function HeatmapPage() {
           </Button>
           <h1 className="text-sm font-medium text-foreground">热力图</h1>
         </div>
-        
-        <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="sm" className="h-6 px-2 text-[10px] text-foreground bg-primary/20">
-            行业
-          </Button>
-          <Button variant="ghost" size="sm" className="h-6 px-2 text-[10px] text-muted-foreground">
-            个股
-          </Button>
-        </div>
       </div>
 
       {/* Main Content - Heatmap with Right Panel */}

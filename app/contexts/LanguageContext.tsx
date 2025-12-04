@@ -74,8 +74,8 @@ const translations: Record<Language, Record<string, string>> = {
     // 表格相关
     'table.gainers': '领涨榜',
     'table.losers': '领跌榜',
-    'table.hot_stocks': '热度榜',
-    'table.dividend_stocks': '高息股',
+    'table.hot_stocks': '成交额榜',
+    'table.dividend_stocks': '年初至今涨幅榜',
     'table.show_more': '更多',
     'table.code': '代码',
     'table.name': '名称',
@@ -83,6 +83,8 @@ const translations: Record<Language, Record<string, string>> = {
     'table.latest_price': '最新价',
     'table.change_amount': '涨跌额',
     'table.dividend_yield_ttm': '股息率TTM',
+    'table.ytd': '年初至今涨跌幅',
+    'table.amount': '成交额',
     
     // 通用
     'common.home': '首页',
@@ -585,6 +587,8 @@ const translations: Record<Language, Record<string, string>> = {
     'table.latest_price': 'Price',
     'table.change_amount': 'Change',
     'table.dividend_yield_ttm': 'Dividend Yield TTM',
+    'table.ytd': 'YTD',
+    'table.amount': 'Amount',
     
     // 通用
     'common.home': 'Home',

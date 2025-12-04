@@ -271,14 +271,6 @@ export function SectorHeatmap({ currentMarket = 'hk' }: SectorHeatmapProps) {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-3">
             <h3 className="text-[10px] leading-5 font-medium text-foreground">{t('heatmap.title_main')}</h3>
-            <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="sm" className="h-6 px-2 text-[10px] text-foreground bg-primary/20">
-                {t('heatmap.industry_btn')}
-              </Button>
-              <Button variant="ghost" size="sm" className="h-6 px-2 text-[10px] text-muted-foreground">
-                {t('heatmap.individual_stocks_btn')}
-              </Button>
-            </div>
           </div>
           <Button 
             variant="ghost" 

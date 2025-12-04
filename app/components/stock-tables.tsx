@@ -12,7 +12,7 @@ interface StockTablesProps {
   onShowMore?: (tableType: string) => void
 }
 
-function StockTable({ title, data, showTTM = false, onStockClick, onShowMore }: { title: string; data: any[]; showTTM?: boolean; onStockClick?: (stock: any, tableTitle?: string) => void; onShowMore?: (tableType: string) => void }) {
+function StockTable({ title, data, showTTM = false, showAM = false, onStockClick, onShowMore }: { title: string; data: any[]; showTTM?: boolean; showAM?: boolean; onStockClick?: (stock: any, tableTitle?: string) => void; onShowMore?: (tableType: string) => void }) {
   const { t } = useLanguage()
   const rows = data.slice(0, 10)
 
@@ -35,7 +35,7 @@ function StockTable({ title, data, showTTM = false, onStockClick, onShowMore }: 
           <div className="px-1">{t('table.name')}</div>
           <div className="px-1">{t('table.change_percent')}</div>
           <div className="px-1">{t('table.latest_price')}</div>
-          <div className="px-1">{showTTM ? t('table.dividend_yield_ttm') : t('table.change_amount')}</div>
+          <div className="px-1">{showTTM ? t('table.ytd') : (showAM ? t('table.amount') : t('table.change_amount'))}</div>
         </div>
         <div className="max-h-[280px] overflow-hidden">
           {rows.map((stock, i) => (
@@ -73,7 +73,7 @@ export function StockTables({ gainers, losers, hotStocks, dividendStocks, divide
 
       <div className="flex gap-3">
         <div className="flex-1">
-          <StockTable title={t('table.hot_stocks')} data={hotStocks.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onShowMore={onShowMore} />
+          <StockTable title={t('table.hot_stocks')} data={hotStocks.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onShowMore={onShowMore} showAM={true} />
         </div>
         {dividendStocks && (
           <div className="flex-1">
