@@ -1,6 +1,7 @@
 import { Button } from "./ui/button"
 import { Stock, DividendStock } from "../types/market"
 import { useLanguage } from "../contexts/LanguageContext"
+import { useRef } from "react"
 
 interface StockTablesProps {
   gainers: Stock[]
@@ -9,12 +10,36 @@ interface StockTablesProps {
   dividendStocks?: DividendStock[]
   dividendTitle?: string
   onStockClick?: (stock: any, tableTitle?: string) => void
+  onStockSelect?: (stock: any, tableTitle?: string) => void
   onShowMore?: (tableType: string) => void
 }
 
-function StockTable({ title, data, showTTM = false, showAM = false, onStockClick, onShowMore }: { title: string; data: any[]; showTTM?: boolean; showAM?: boolean; onStockClick?: (stock: any, tableTitle?: string) => void; onShowMore?: (tableType: string) => void }) {
+function StockTable({ title, data, showTTM = false, showAM = false, onStockClick, onStockSelect, onShowMore }: { title: string; data: any[]; showTTM?: boolean; showAM?: boolean; onStockClick?: (stock: any, tableTitle?: string) => void; onStockSelect?: (stock: any, tableTitle?: string) => void; onShowMore?: (tableType: string) => void }) {
   const { t } = useLanguage()
   const rows = data.slice(0, 10)
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleSingleClick = (stock: any, title: string) => {
+    // Clear any existing timeout
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+    }
+    
+    // Set a new timeout for single click
+    clickTimeoutRef.current = setTimeout(() => {
+      onStockSelect?.(stock, title)
+      clickTimeoutRef.current = null;
+    }, 250)
+  }
+
+  const handleDoubleClick = (stock: any, title: string) => {
+    // Clear single click timeout to prevent it from firing
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+      clickTimeoutRef.current = null;
+    }
+    onStockClick?.(stock, title)
+  }
 
   return (
     <div className="p-3 border border-border rounded-md bg-card/30">
@@ -42,7 +67,8 @@ function StockTable({ title, data, showTTM = false, showAM = false, onStockClick
             <div
               key={i}
               className="grid grid-cols-5 items-center text-[10px] text-foreground border-b border-border hover:bg-muted/50 cursor-pointer"
-              onClick={() => onStockClick?.(stock, title)}
+              onClick={() => handleSingleClick(stock, title)}
+              onDoubleClick={() => handleDoubleClick(stock, title)}
             >
               <div className="px-1 py-1 font-mono">{stock.code}</div>
               <div className="px-1 py-1 truncate">{stock.name}</div>
@@ -57,27 +83,27 @@ function StockTable({ title, data, showTTM = false, showAM = false, onStockClick
   )
 }
 
-export function StockTables({ gainers, losers, hotStocks, dividendStocks, dividendTitle = "高股息", onStockClick, onShowMore }: StockTablesProps) {
+export function StockTables({ gainers, losers, hotStocks, dividendStocks, dividendTitle = "高股息", onStockClick, onStockSelect, onShowMore }: StockTablesProps) {
   const { t } = useLanguage()
 
   return (
     <div className="space-y-3">
       <div className="flex gap-3">
         <div className="flex-1">
-          <StockTable title={t('table.gainers')} data={gainers.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onShowMore={onShowMore} />
+          <StockTable title={t('table.gainers')} data={gainers.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onStockSelect={onStockSelect} onShowMore={onShowMore} />
         </div>
         <div className="flex-1">
-          <StockTable title={t('table.losers')} data={losers.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onShowMore={onShowMore} />
+          <StockTable title={t('table.losers')} data={losers.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onStockSelect={onStockSelect} onShowMore={onShowMore} />
         </div>
       </div>
 
       <div className="flex gap-3">
         <div className="flex-1">
-          <StockTable title={t('table.hot_stocks')} data={hotStocks.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onShowMore={onShowMore} showAM={true} />
+          <StockTable title={t('table.hot_stocks')} data={hotStocks.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onStockSelect={onStockSelect} onShowMore={onShowMore} showAM={true} />
         </div>
         {dividendStocks && (
           <div className="flex-1">
-            <StockTable title={dividendTitle} data={dividendStocks.map((stock, i) => ({ ...stock, rank: i + 1, ttm: stock.dividend }))} showTTM={true} onStockClick={onStockClick} onShowMore={onShowMore} />
+            <StockTable title={dividendTitle} data={dividendStocks.map((stock, i) => ({ ...stock, rank: i + 1, ttm: stock.dividend }))} showTTM={true} onStockClick={onStockClick} onStockSelect={onStockSelect} onShowMore={onShowMore} />
           </div>
         )}
       </div>

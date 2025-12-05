@@ -68,7 +68,7 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
           <span className="bg-orange-600 px-1 rounded text-xs">文</span>
         </div>
         
-        <div className="space-y-4">
+        <div className="space-y-4 relative">
           <div className="flex items-center gap-2">
             <span className={`text-xl font-bold ${indexDetail.isPositive ? 'text-chart-1' : 'text-chart-2'}`}>
               {indexDetail.value}
@@ -77,6 +77,13 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
             <span className={`text-xs ${indexDetail.isPositive ? 'text-chart-1' : 'text-chart-2'}`}>
               {indexDetail.change} {indexDetail.percentage}
             </span>
+          </div>
+
+          {/* Data mask overlay */}
+          <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center z-10">
+            <div className="text-center text-white">
+              <p className="text-sm font-medium">按实际api数据开发</p>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 text-sm">

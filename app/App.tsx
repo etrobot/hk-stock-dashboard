@@ -37,6 +37,36 @@ function App() {
     }
   }
 
+  const convertStockToIndexDetail = (stock: any): IndexDetail => {
+    // Generate mock data for missing fields
+    const baseValue = parseFloat(stock.price?.replace(/[,HK$]/g, '') || '100');
+    const changeValue = parseFloat(stock.change?.replace(/[+,-]/g, '') || '0');
+
+    return {
+      code: stock.code || stock.symbol || '000000',
+      name: stock.name || '未知股票',
+      value: stock.price || '0.00',
+      change: stock.change || '+0.00',
+      percentage: stock.percentage || '+0.00%',
+      isPositive: stock.percentage?.startsWith('+') ?? true,
+      high: (baseValue + changeValue * 1.2).toFixed(2),
+      low: (baseValue - changeValue * 1.5).toFixed(2),
+      open: (baseValue - changeValue * 0.3).toFixed(2),
+      close: (baseValue - changeValue).toFixed(2),
+      volume: `${Math.floor(Math.random() * 900 + 100)}万`,
+      avgPrice: (baseValue + changeValue * 0.2).toFixed(2),
+      market: currentPage === 'hk' ? '港股' : currentPage === 'cn' ? 'A股' : 'US股',
+      status: `交易中 ${new Date().toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' })} ${new Date().toLocaleTimeString('zh-CN', { hour12: false })}`
+    };
+  };
+
+  const handleStockSelect = (stock: ClickableStock, tableTitle?: string) => {
+    // Single click - update the right sidebar with stock information
+    console.log('Stock selected (single click):', tableTitle, stock)
+    const stockDetail = convertStockToIndexDetail(stock);
+    setSelectedIndexDetail(stockDetail);
+  }
+
   const handleShowMore = (tableType: string) => {
     setShowDetailedTable(tableType);
   };
@@ -173,6 +203,7 @@ function App() {
                         dividendStocks={hkDividendStocks}
                         dividendTitle={t('table.dividend_stocks')}
                         onStockClick={handleStockClick}
+                        onStockSelect={handleStockSelect}
                         onShowMore={handleShowMore}
                       />
                     </div>
