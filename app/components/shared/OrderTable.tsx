@@ -22,6 +22,7 @@ interface OrderTableProps {
   showOperation?: boolean
   timeFormat?: 'HH:mm:ss'
   onModify?: (order: Order) => void
+  isMasked?: boolean
 }
 
 function formatTimeString(input: string, timeFormat?: 'HH:mm:ss') {
@@ -43,7 +44,7 @@ function formatTimeString(input: string, timeFormat?: 'HH:mm:ss') {
   return time;
 }
 
-export function OrderTable({ orders, className, showOperation = true, timeFormat, onModify }: OrderTableProps) {
+export function OrderTable({ orders, className, showOperation = true, timeFormat, onModify, isMasked }: OrderTableProps) {
   const { t } = useLanguage()
   const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -89,10 +90,10 @@ export function OrderTable({ orders, className, showOperation = true, timeFormat
               <TableCell>{order.code ?? '-'}</TableCell>
               <TableCell>{order.name}</TableCell>
               <TableCell>{formatTimeString(order.orderTime, timeFormat)}</TableCell>
-              <TableCell>{order.orderPrice}</TableCell>
-              <TableCell>{order.avgPrice}</TableCell>
-              <TableCell>{order.orderQuantity}</TableCell>
-              <TableCell>{order.filledQuantity}</TableCell>
+              <TableCell>{isMasked ? '****' : order.orderPrice}</TableCell>
+              <TableCell>{isMasked ? '****' : order.avgPrice}</TableCell>
+              <TableCell>{isMasked ? '****' : order.orderQuantity}</TableCell>
+              <TableCell>{isMasked ? '****' : order.filledQuantity}</TableCell>
               <TableCell>{getDirectionText(order.direction)}</TableCell>
               <TableCell>{getStatusText(order.status)}</TableCell>
               {showOperation && (

@@ -233,8 +233,8 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
                     </TableCell>
                     <TableCell>02318</TableCell>
                     <TableCell>中国平安</TableCell>
-                    <TableCell>1</TableCell>
-                    <TableCell>1</TableCell>
+                    <TableCell>{isMasked ? '****' : '1'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '1'}</TableCell>
                     <TableCell>{isMasked ? '****' : '52.450'}</TableCell>
                     <TableCell>{isMasked ? '****' : '71.60'}</TableCell>
                     <TableCell>{isMasked ? '****' : '52.45'}</TableCell>
@@ -249,13 +249,13 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
 
             {/* Today's Orders Tab */}
             <TabsContent value="today-orders" className="mt-4 border-none p-0">
-              <OrderTable orders={todayOrders} timeFormat="HH:mm:ss" onModify={() => setIsTradingPopupOpen(true)} />
+              <OrderTable orders={todayOrders} timeFormat="HH:mm:ss" onModify={() => setIsTradingPopupOpen(true)} isMasked={isMasked} />
             </TabsContent>
 
             {/* Today's Transactions Tab */}
             <TabsContent value="today-transactions" className="mt-4 border-none p-0">
               <MktFilter />
-              <TransactionTable transactions={todayTransactions} timeColumn="time" />
+              <TransactionTable transactions={todayTransactions} timeColumn="time" isMasked={isMasked} />
             </TabsContent>
 
             {/* Historical Orders Tab */}
@@ -286,7 +286,7 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
                   </PopoverContent>
                 </Popover>
               </div>
-              <OrderTable orders={historicalOrders} />
+              <OrderTable orders={historicalOrders} isMasked={isMasked} />
             </TabsContent>
 
             {/* Historical Transactions Tab */}
@@ -317,7 +317,7 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
                   </PopoverContent>
                 </Popover>
               </div>
-              <TransactionTable transactions={historicalTransactions} timeColumn="datetime" />
+              <TransactionTable transactions={historicalTransactions} timeColumn="datetime" isMasked={isMasked} />
             </TabsContent>
 
             {/* Fund Flow Tab */}
@@ -363,8 +363,8 @@ export const SecuritiesContent = ({ isMasked }: { isMasked?: boolean }) => {
                   <TableRow>
                     <TableCell>2023-10-01</TableCell>
                     <TableCell>{t('fund_flow.deposit')}</TableCell>
-                    <TableCell>+100.00</TableCell>
-                    <TableCell>312.63</TableCell>
+                    <TableCell>{isMasked ? '****' : '+100.00'}</TableCell>
+                    <TableCell>{isMasked ? '****' : '312.63'}</TableCell>
                     <TableCell>HKD</TableCell>
                     <TableCell></TableCell>
                   </TableRow>

@@ -15,9 +15,10 @@ interface TransactionTableProps {
   transactions: Transaction[];
   className?: string;
   timeColumn?: 'none' | 'time' | 'datetime';
+  isMasked?: boolean;
 }
 
-export function TransactionTable({ transactions, className, timeColumn = 'none' }: TransactionTableProps) {
+export function TransactionTable({ transactions, className, timeColumn = 'none', isMasked }: TransactionTableProps) {
   const { t } = useLanguage();
 
   const getDirectionText = (direction: 'buy' | 'sell') => {
@@ -62,9 +63,9 @@ export function TransactionTable({ transactions, className, timeColumn = 'none' 
                 <TableCell>{renderTime()}</TableCell>
               )}
               <TableCell>{getDirectionText(transaction.direction)}</TableCell>
-              <TableCell>{transaction.executionPrice ?? '-'}</TableCell>
-              <TableCell>{transaction.executionQuantity}</TableCell>
-              <TableCell>{transaction.executionAmount}</TableCell>
+              <TableCell>{isMasked ? '****' : (transaction.executionPrice ?? '-')}</TableCell>
+              <TableCell>{isMasked ? '****' : transaction.executionQuantity}</TableCell>
+              <TableCell>{isMasked ? '****' : transaction.executionAmount}</TableCell>
             </TableRow>
           );
         })}

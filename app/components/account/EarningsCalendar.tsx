@@ -12,6 +12,7 @@ interface EarningsData {
 interface EarningsCalendarProps {
   selectedMonth: string;
   onMonthChange: (month: string) => void;
+  isMasked?: boolean;
 }
 
 const mockEarningsData: EarningsData[] = [
@@ -86,7 +87,7 @@ const chartData = [
   { day: 30, value: 0 },
 ];
 
-export const EarningsCalendar = ({ selectedMonth }: EarningsCalendarProps) => {
+export const EarningsCalendar = ({ selectedMonth, isMasked }: EarningsCalendarProps) => {
   const getEarningsForDate = (date: number) => {
     return mockEarningsData.find(item => item.date === date);
   };
@@ -115,10 +116,10 @@ export const EarningsCalendar = ({ selectedMonth }: EarningsCalendarProps) => {
         {hasEarnings && earnings?.isCurrentMonth && (
           <>
             <div className={`text-[9px] mt-1 ${earnings.earnings > 0 ? 'text-[#16BA71]' : earnings.earnings < 0 ? 'text-[#F44345]' : 'text-muted-foreground'}`}>
-              {earnings.earnings > 0 ? '+' : ''}{earnings.earnings.toFixed(2)}
+              {isMasked ? '****' : `${earnings.earnings > 0 ? '+' : ''}${earnings.earnings.toFixed(2)}`}
             </div>
             <div className={`text-[9px] ${earnings.returnRate > 0 ? 'text-[#16BA71]' : earnings.returnRate < 0 ? 'text-[#F44345]' : 'text-muted-foreground'}`}>
-              {earnings.returnRate > 0 ? '+' : ''}{earnings.returnRate.toFixed(2)}%
+              {isMasked ? '****' : `${earnings.returnRate > 0 ? '+' : ''}${earnings.returnRate.toFixed(2)}%`}
             </div>
           </>
         )}
@@ -189,14 +190,14 @@ export const EarningsCalendar = ({ selectedMonth }: EarningsCalendarProps) => {
                 <span>·</span>
                 <span>HKD</span>
               </div>
-              <div className="text-[11px] font-medium text-[#16BA71]">+1.20</div>
+              <div className={`text-[11px] font-medium text-[#16BA71]`}>{isMasked ? '****' : '+1.20'}</div>
             </div>
             
             <div className="text-right">
               <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
                 <span>收益率</span>
               </div>
-              <div className="text-[11px] font-medium text-[#16BA71]">+0.29%</div>
+              <div className={`text-[11px] font-medium text-[#16BA71]`}>{isMasked ? '****' : '+0.29%'}</div>
             </div>
           </div>
         </div>

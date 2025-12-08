@@ -138,6 +138,7 @@ export const AccountOverview = ({
         <EarningsCalendar 
           selectedMonth={selectedMonth}
           onMonthChange={setSelectedMonth}
+          isMasked={isMasked}
         />
       ) : (
         <TotalAssetTrend 
