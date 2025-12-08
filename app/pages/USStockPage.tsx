@@ -88,6 +88,10 @@ export default function USStockPage({ onStockClick }: USStockPageProps) {
                   losers={usLosers}
                   hotStocks={usHotStocks}
                   dividendStocks={usDividendStocks}
+                  gainersTitle="领涨榜"
+                  losersTitle="领跌榜"
+                  hotStocksTitle="成交额榜"
+                  dividendTitle="知名中概领涨榜"
                   onStockClick={onStockClick}
                   onShowMore={handleShowMore}
                 />

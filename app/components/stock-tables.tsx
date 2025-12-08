@@ -9,6 +9,9 @@ interface StockTablesProps {
   hotStocks: Stock[]
   dividendStocks?: DividendStock[]
   dividendTitle?: string
+  gainersTitle?: string
+  losersTitle?: string
+  hotStocksTitle?: string
   onStockClick?: (stock: any, tableTitle?: string) => void
   onStockSelect?: (stock: any, tableTitle?: string) => void
   onShowMore?: (tableType: string) => void
@@ -83,23 +86,23 @@ function StockTable({ title, data, showTTM = false, showAM = false, onStockClick
   )
 }
 
-export function StockTables({ gainers, losers, hotStocks, dividendStocks, dividendTitle = "高股息", onStockClick, onStockSelect, onShowMore }: StockTablesProps) {
+export function StockTables({ gainers, losers, hotStocks, dividendStocks, dividendTitle = "高股息", gainersTitle, losersTitle, hotStocksTitle, onStockClick, onStockSelect, onShowMore }: StockTablesProps) {
   const { t } = useLanguage()
 
   return (
     <div className="space-y-3">
       <div className="flex gap-3">
         <div className="flex-1">
-          <StockTable title={t('table.gainers')} data={gainers.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onStockSelect={onStockSelect} onShowMore={onShowMore} />
+          <StockTable title={gainersTitle || t('table.gainers')} data={gainers.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onStockSelect={onStockSelect} onShowMore={onShowMore} />
         </div>
         <div className="flex-1">
-          <StockTable title={t('table.losers')} data={losers.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onStockSelect={onStockSelect} onShowMore={onShowMore} />
+          <StockTable title={losersTitle || t('table.losers')} data={losers.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onStockSelect={onStockSelect} onShowMore={onShowMore} />
         </div>
       </div>
 
       <div className="flex gap-3">
         <div className="flex-1">
-          <StockTable title={t('table.hot_stocks')} data={hotStocks.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onStockSelect={onStockSelect} onShowMore={onShowMore} showAM={true} />
+          <StockTable title={hotStocksTitle || t('table.hot_stocks')} data={hotStocks.map((stock, i) => ({ ...stock, rank: i + 1 }))} onStockClick={onStockClick} onStockSelect={onStockSelect} onShowMore={onShowMore} showAM={true} />
         </div>
         {dividendStocks && (
           <div className="flex-1">

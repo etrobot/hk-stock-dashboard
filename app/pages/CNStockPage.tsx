@@ -41,6 +41,10 @@ export default function CNStockPage({ onStockClick }: CNStockPageProps) {
               losers={cnLosers}
               hotStocks={cnHotStocks}
               dividendStocks={cnDividendStocks}
+              gainersTitle="领涨榜"
+              losersTitle="上证领涨榜"
+              hotStocksTitle="成交额榜"
+              dividendTitle="深证领涨榜"
               onStockClick={onStockClick}
               onShowMore={handleShowMore}
             />
