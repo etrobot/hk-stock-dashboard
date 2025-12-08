@@ -1,6 +1,8 @@
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Card, CardContent } from '../ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-
+import { RefreshCwIcon } from 'lucide-react'
+import { useState } from 'react'
 export type AssetRow = {
   label: string
   value: string
@@ -40,12 +42,27 @@ const maybeMask = (value: string, shouldMaskRow: boolean | undefined, isMasked?:
 }
 
 export function AssetCashCards({ isMasked, className, assets, cashDetails, withdrawableCash }: AssetCashCardsProps) {
+  const [selectedCurrency, setSelectedCurrency] = useState('HKD')
   return (
     <div className={`grid grid-cols-1 md:grid-cols-3 gap-4 ${className ?? ''}`}>
       {/* Assets */}
       <Card>
         <CardContent className="p-4">
+                    <div className='flex gap-2 items-center'>
+
           <h3 className="text-card-foreground font-medium mb-2">{assets.title}</h3>
+          <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
+            <SelectTrigger className="bg-input text-foreground text-xs h-5 px-2 w-auto border-0">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-popover border-border">
+              <SelectItem value="HKD" className="text-xs">HKD</SelectItem>
+                      <SelectItem value="USD" className="text-xs">USD</SelectItem>
+                      <SelectItem value="CNY" className="text-xs">CNY</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <RefreshCwIcon/>
+</div>
           <Table className="text-xs">
             {assets.headers && (
               <TableHeader>

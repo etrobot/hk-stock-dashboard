@@ -27,6 +27,8 @@ export const AccountOverview = ({
 }: AccountOverviewProps) => {
   const { t } = useLanguage();
   const [selectedMonth, setSelectedMonth] = useState('2025/09');
+
+  const maskValue = (value: string) => (isMasked ? '****' : value);
   
   // Set default view to 'total-asset' if not already set
   useState(() => {
@@ -69,7 +71,7 @@ export const AccountOverview = ({
                     ></div>
                     <span className="text-xs">{item.category}</span>
                   </div>
-                  <span className="text-xs">{item.percentage}</span>
+                  <span className="text-xs">{maskValue(item.percentage)}</span>
                 </div>
               ))}
             </div>
@@ -104,7 +106,7 @@ export const AccountOverview = ({
                     ></div>
                     <span className="text-xs">{item.currency}</span>
                   </div>
-                  <span className="text-xs">{item.percentage}</span>
+                  <span className="text-xs">{maskValue(item.percentage)}</span>
                 </div>
               ))}
             </div>
