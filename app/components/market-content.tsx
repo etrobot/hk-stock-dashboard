@@ -12,7 +12,7 @@ export function MarketContent({ indexCode }: MarketContentProps) {
   
   // Find stock data based on indexCode, fallback to first stock if not found
   const selectedStock = indexCode 
-    ? mockDetailedStocks.find(stock => stock.code === indexCode) || mockDetailedStocks[0]
+    ? mockDetailedStocks.find(stock => stock.symbol === indexCode) || mockDetailedStocks[0]
     : mockDetailedStocks[0]
   
   return (
@@ -22,9 +22,9 @@ export function MarketContent({ indexCode }: MarketContentProps) {
         <StockGridItem 
           stock={{
             name: selectedStock.name,
-            code: selectedStock.code,
-            price: selectedStock.price,
-            percentage: selectedStock.percentage
+            code: selectedStock.symbol,
+            price: selectedStock.last,
+            percentage: selectedStock.changeRate
           }}
           selectedPeriod="daily"
         />

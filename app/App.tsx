@@ -88,7 +88,7 @@ function App() {
     const baseValue = parseFloat(index.value.replace(/,/g, ''));
     const changeValue = parseFloat(index.change.replace(/[+,-]/g, ''));
 
-    
+
     return {
       code: getIndexCode(index.name),
       name: index.name,
@@ -98,7 +98,7 @@ function App() {
       isPositive: index.isPositive,
       high: (baseValue + changeValue * 1.5).toLocaleString(),
       low: (baseValue - changeValue * 1.2).toLocaleString(),
-      open: (baseValue - changeValue * 0.5).toLocaleString(), 
+      open: (baseValue - changeValue * 0.5).toLocaleString(),
       close: (baseValue - changeValue).toLocaleString(),
       volume: `${Math.floor(Math.random() * 900 + 100)}亿`,
       avgPrice: (baseValue + changeValue * 0.3).toLocaleString(),
@@ -142,7 +142,7 @@ function App() {
       default:
         if (showDetailedTable) {
           return (
-            <DetailedStockTablePage 
+            <DetailedStockTablePage
               onBack={handleBackToMain}
             />
           );
@@ -150,22 +150,22 @@ function App() {
         return (
           <>
             <div className="flex items-center space-x-6 ml-6">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className={`${activeTab === t('tab.home') ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
                 onClick={() => handleTabChange(t('tab.home'))}
               >
                 {t('tab.home')}
               </Button>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className={`${activeTab === t('tab.concept_sectors') ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
                 onClick={() => handleTabChange(t('tab.concept_sectors'))}
               >
                 {t('tab.concept_sectors')}
               </Button>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className={`${activeTab === t('tab.new_stock_center') ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
                 onClick={() => handleTabChange(t('tab.new_stock_center'))}
               >
@@ -178,13 +178,13 @@ function App() {
               <div className="flex gap-4">
                 {activeTab === t('tab.concept_sectors') ? (
                   <>
-                    <ConceptSectors 
+                    <ConceptSectors
                       sectors={getCurrentSectors()}
                       selectedSector={selectedSector}
                       onSectorSelect={handleSectorSelect}
                     />
                     <div className="flex-1 min-w-0">
-                      <DetailedStockTablePage 
+                      <DetailedStockTablePage
                         onBack={() => setActiveTab(t('tab.home'))}
                       />
                     </div>

@@ -260,10 +260,10 @@ function MiniKLineChart({ data, period }: { data: KLinePoint[], period: string }
 }
 
 type StockSummary = {
-  code: string
-  name: string
-  price: string
-  percentage: string
+  code?: string
+  name?: string
+  price?: string
+  percentage?: string
   klineData?: Record<string, KLinePoint[]>
 }
 interface StockGridItemProps {
@@ -273,13 +273,13 @@ interface StockGridItemProps {
 }
 
 export function StockGridItem({ stock, selectedPeriod, onClick }: StockGridItemProps) {
-  const isPositive = stock.percentage.startsWith('+');
+  const isPositive = stock.percentage?.startsWith('+') ?? false;
   let klineData = stock.klineData?.[selectedPeriod] || [];
   
   // 如果没有数据，使用生成的数据
   if (!klineData || klineData.length === 0) {
-    const basePrice = parseFloat(stock.price.replace(/,/g, '')) || 100;
-    klineData = generateKLineData(stock.code, selectedPeriod, basePrice);
+    const basePrice = parseFloat(stock.price?.replace(/,/g, '') || '') || 100;
+    klineData = generateKLineData(stock.code || '', selectedPeriod, basePrice);
   }
   
   return (
@@ -288,13 +288,13 @@ export function StockGridItem({ stock, selectedPeriod, onClick }: StockGridItemP
         {/* Header */}
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="font-semibold text-foreground text-sm truncate">{stock.name}</h3>
-            <p className="text-xs text-muted-foreground font-mono">{stock.code}</p>
+            <h3 className="font-semibold text-foreground text-sm truncate">{stock.name || '--'}</h3>
+            <p className="text-xs text-muted-foreground font-mono">{stock.code || '--'}</p>
           </div>
           <div className="text-right">
-            <p className="font-mono text-sm font-semibold text-foreground">{stock.price}</p>
+            <p className="font-mono text-sm font-semibold text-foreground">{stock.price || '--'}</p>
             <p className={`text-xs font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-              {stock.percentage}
+              {stock.percentage || '--'}
             </p>
           </div>
         </div>

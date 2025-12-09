@@ -32,25 +32,27 @@ export interface SectorData {
 }
 
 export interface DetailedStock {
+  symbol: string;
   name: string;
-  code: string;
-  price: string;
-  percentage: string;
-  fiveMinPercentage: string;
-  sixtyDayPercentage: string;
-  ytdPercentage: string;
+  last: string;
   change: string;
-  listingDate: string;
-  firstDayGain: string;
-  cumulativeGain: string;
+  changeRate: string;
   volume: string;
-  turnover: string;
+  amount: string;
+  perTtm: string;
   turnoverRate: string;
-  pe: string;
   amplitude: string;
-  marketCap: string;
-  volumeRatio: string;
-  bidAskRatio: string;
+  volumeRate: string;
+  bidAskRate: string;
+  totalMarketValue: string;
+  yearChangeRate: string;
+  week52High: string;
+  week52Low: string;
+  min5Change: string;
+  min5ChangeRate: string;
+  min5Volume: string;
+  min5Amount: string;
+  min5Amplitude: string;
 }
 
 export interface IndexDetail {

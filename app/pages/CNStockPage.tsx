@@ -23,7 +23,7 @@ export default function CNStockPage({ onStockClick }: CNStockPageProps) {
 
   if (showDetailedTable) {
     return (
-      <DetailedStockTablePage 
+      <DetailedStockTablePage
         onBack={handleBackToMain}
       />
     );
@@ -42,9 +42,9 @@ export default function CNStockPage({ onStockClick }: CNStockPageProps) {
               hotStocks={cnHotStocks}
               dividendStocks={cnDividendStocks}
               gainersTitle="领涨榜"
-              losersTitle="上证领涨榜"
+              losersTitle="领跌榜"
               hotStocksTitle="成交额榜"
-              dividendTitle="深证领涨榜"
+              dividendTitle="年初至今涨幅榜"
               onStockClick={onStockClick}
               onShowMore={handleShowMore}
             />
