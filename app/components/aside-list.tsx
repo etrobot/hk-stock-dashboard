@@ -5,9 +5,15 @@ import { hkHotStocks } from '../data/mock-data'
 import { Button } from './ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from './ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
-import { List, Grid3X3, ChevronDown, Plus, Settings } from 'lucide-react'
+import { List, Grid3X3, ChevronDown, Plus, Settings, Zap, Star, Trash2 } from 'lucide-react'
 import { StockGridItem } from './stock-grid-item'
 import { Dialog, DialogTrigger } from './ui/dialog'
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from './ui/context-menu'
 
 export function AsideList({
   rankingTitle,
@@ -141,20 +147,43 @@ export function AsideList({
               </TableHeader>
               <TableBody>
                 {hkHotStocks.slice(0, 20).map((s, idx) => (
-                  <TableRow
-                    key={`${s.code}-${idx}`}
-                    className="border-border hover:bg-muted/20 cursor-pointer"
-                    onClick={() => onListItemClick(s.code)}
-                  >
-                    <TableCell className="text-sm whitespace-nowrap">
-                      <div className="flex flex-col leading-tight">
-                        <span className="text-foreground">{s.name}</span>
-                        <span className="text-xs text-muted-foreground">{s.code}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-sm font-mono text-foreground">{s.price}</TableCell>
-                    <TableCell className={`text-sm font-mono ${s.percentage?.startsWith('+') ? 'text-green-500' : s.percentage?.startsWith('-') ? 'text-red-500' : 'text-muted-foreground'}`}>{s.percentage}</TableCell>
-                  </TableRow>
+                  <ContextMenu key={`${s.code}-${idx}`}>
+                    <ContextMenuTrigger asChild>
+                      <TableRow
+                        className="border-border hover:bg-muted/20 cursor-pointer"
+                        onClick={() => onListItemClick(s.code)}
+                      >
+                        <TableCell className="text-sm whitespace-nowrap">
+                          <div className="flex flex-col leading-tight">
+                            <span className="text-foreground">{s.name}</span>
+                            <span className="text-xs text-muted-foreground">{s.code}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm font-mono text-foreground">{s.price}</TableCell>
+                        <TableCell className={`text-sm font-mono ${s.percentage?.startsWith('+') ? 'text-green-500' : s.percentage?.startsWith('-') ? 'text-red-500' : 'text-muted-foreground'}`}>{s.percentage}</TableCell>
+                      </TableRow>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent className="w-44">
+                      <ContextMenuItem onSelect={(event) => event.preventDefault()} className="text-xs">
+                        <Zap className="w-3.5 h-3.5" />
+                        快捷交易
+                      </ContextMenuItem>
+                      {!isWatchlistRoute && (
+                        <ContextMenuItem onSelect={(event) => event.preventDefault()} className="text-xs">
+                          <Star className="w-3.5 h-3.5" />
+                          加入自选
+                        </ContextMenuItem>
+                      )}
+                      <ContextMenuItem
+                        onSelect={(event) => event.preventDefault()}
+                        className="text-xs"
+                        variant="destructive"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        删除自选
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
                 ))}
               </TableBody>
             </Table>
@@ -185,12 +214,37 @@ export function AsideList({
             <div className="flex-1 overflow-auto">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                 {hkHotStocks.slice(0, 20).map((s, idx) => (
-                  <StockGridItem
-                    key={`${s.code}-${idx}`}
-                    stock={s}
-                    selectedPeriod={selectedPeriod}
-                    onClick={() => onGridItemClick(s.code)}
-                  />
+                  <ContextMenu key={`${s.code}-${idx}`}>
+                    <ContextMenuTrigger asChild>
+                      <div>
+                        <StockGridItem
+                          stock={s}
+                          selectedPeriod={selectedPeriod}
+                          onClick={() => onGridItemClick(s.code)}
+                        />
+                      </div>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent className="w-44">
+                      <ContextMenuItem onSelect={(event) => event.preventDefault()} className="text-xs">
+                        <Zap className="w-3.5 h-3.5" />
+                        快捷交易
+                      </ContextMenuItem>
+                      {!isWatchlistRoute && (
+                        <ContextMenuItem onSelect={(event) => event.preventDefault()} className="text-xs">
+                          <Star className="w-3.5 h-3.5" />
+                          加入自选
+                        </ContextMenuItem>
+                      )}
+                      <ContextMenuItem
+                        onSelect={(event) => event.preventDefault()}
+                        className="text-xs"
+                        variant="destructive"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        删除自选
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
                 ))}
               </div>
             </div>
