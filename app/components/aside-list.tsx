@@ -174,14 +174,14 @@ export function AsideList({
                           加入自选
                         </ContextMenuItem>
                       )}
-                      <ContextMenuItem
+                      {isWatchlistRoute && (<ContextMenuItem
                         onSelect={(event) => event.preventDefault()}
                         className="text-xs"
                         variant="destructive"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                         删除自选
-                      </ContextMenuItem>
+                      </ContextMenuItem>)}
                     </ContextMenuContent>
                   </ContextMenu>
                 ))}
