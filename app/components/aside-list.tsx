@@ -14,6 +14,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from './ui/context-menu'
+import { toast } from 'sonner'
 
 export function AsideList({
   rankingTitle,
@@ -64,6 +65,18 @@ export function AsideList({
     if (value === '港股') return t('market.hk')
     if (value === '美股') return t('market.us')
     return value
+  }
+
+  const showAddToast = (name: string) => {
+    toast.success(`${name} 已经添加`)
+  }
+
+  const showRemoveToast = (name: string) => {
+    toast.success(`${name} 已经删除`)
+  }
+
+  const handleManageGroups = () => {
+    setIsManageGroupOpen(true)
   }
 
   return (
@@ -169,19 +182,38 @@ export function AsideList({
                         快捷交易
                       </ContextMenuItem>
                       {!isWatchlistRoute && (
-                        <ContextMenuItem onSelect={(event) => event.preventDefault()} className="text-xs">
+                        <ContextMenuItem
+                          onSelect={(event) => {
+                            event.preventDefault()
+                            showAddToast(s.name)
+                          }}
+                          className="text-xs"
+                        >
                           <Star className="w-3.5 h-3.5" />
                           加入自选
                         </ContextMenuItem>
                       )}
-                      {isWatchlistRoute && (<ContextMenuItem
-                        onSelect={(event) => event.preventDefault()}
+                      <ContextMenuItem
+                        onSelect={(event) => {
+                          event.preventDefault()
+                          handleManageGroups()
+                        }}
+                        className="text-xs"
+                      >
+                        <Settings className="w-3.5 h-3.5" />
+                        分组管理
+                      </ContextMenuItem>
+                      <ContextMenuItem
+                        onSelect={(event) => {
+                          event.preventDefault()
+                          showRemoveToast(s.name)
+                        }}
                         className="text-xs"
                         variant="destructive"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                         删除自选
-                      </ContextMenuItem>)}
+                      </ContextMenuItem>
                     </ContextMenuContent>
                   </ContextMenu>
                 ))}
@@ -230,13 +262,22 @@ export function AsideList({
                         快捷交易
                       </ContextMenuItem>
                       {!isWatchlistRoute && (
-                        <ContextMenuItem onSelect={(event) => event.preventDefault()} className="text-xs">
+                        <ContextMenuItem
+                          onSelect={(event) => {
+                            event.preventDefault()
+                            showAddToast(s.name)
+                          }}
+                          className="text-xs"
+                        >
                           <Star className="w-3.5 h-3.5" />
                           加入自选
                         </ContextMenuItem>
                       )}
                       <ContextMenuItem
-                        onSelect={(event) => event.preventDefault()}
+                        onSelect={(event) => {
+                          event.preventDefault()
+                          showRemoveToast(s.name)
+                        }}
                         className="text-xs"
                         variant="destructive"
                       >
