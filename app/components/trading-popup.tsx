@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Lock } from 'lucide-react'
 import { Button } from './ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
@@ -15,12 +15,20 @@ import { TradingTabs } from './shared/TradingTabs'
 interface TradingPopupProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  initialStockCode?: string
+  initialStockName?: string
 }
 
-export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
+export function TradingPopup({
+  open,
+  onOpenChange,
+  initialStockCode,
+  initialStockName,
+}: TradingPopupProps) {
   const { t } = useLanguage()
   const [selectedAccount, setSelectedAccount] = useState('孖展账户12345678')
   const [stockCode, setStockCode] = useState('00005')
+  const [stockName, setStockName] = useState('汇丰控股')
   const [orderType, setOrderType] = useState('order_type.enhanced_limit')
   const [price, setPrice] = useState('2')
   const [quantity, setQuantity] = useState('2')
@@ -95,6 +103,17 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
     }
   ]
 
+  useEffect(() => {
+    if (open) {
+      if (initialStockCode) {
+        setStockCode(initialStockCode)
+      }
+      if (initialStockName) {
+        setStockName(initialStockName)
+      }
+    }
+  }, [open, initialStockCode, initialStockName])
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:!max-w-[84rem] max-h-[90vh] overflow-y-auto p-0 bg-background">
@@ -139,7 +158,7 @@ export function TradingPopup({ open, onOpenChange }: TradingPopupProps) {
               accountData={accountData}
               onBuy={() => { setConfirmDirection('buy'); setConfirmOpen(true) }}
               onSell={() => { setConfirmDirection('sell'); setConfirmOpen(true) }}
-              nameBelowCode={'汇丰控股'}
+              nameBelowCode={stockName}
             />
             <div className="col-span-2">
               <TradingTabs

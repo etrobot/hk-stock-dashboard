@@ -14,7 +14,8 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from './ui/context-menu'
-import { toast } from 'sonner'
+import { toast } from '@/hooks/use-toast'
+import { useTradingPopup } from '../contexts/TradingPopupContext'
 
 export function AsideList({
   rankingTitle,
@@ -52,6 +53,7 @@ export function AsideList({
   hideViewToggle?: boolean
 }) {
   const { t } = useLanguage()
+  const { openTradingPopup } = useTradingPopup()
   
   const filterOptions = [
     '全部',
@@ -68,15 +70,26 @@ export function AsideList({
   }
 
   const showAddToast = (name: string) => {
-    toast.success(`${name} 已经添加`)
+    toast({
+      title: `${name} 已经添加`,
+    })
   }
 
   const showRemoveToast = (name: string) => {
-    toast.success(`${name} 已经删除`)
+    toast({
+      title: `${name} 已经删除`,
+    })
   }
 
   const handleManageGroups = () => {
     setIsManageGroupOpen(true)
+  }
+
+  const handleQuickTrade = (code: string, name: string) => {
+    openTradingPopup({
+      stockCode: code,
+      stockName: name,
+    })
   }
 
   return (
@@ -177,7 +190,13 @@ export function AsideList({
                       </TableRow>
                     </ContextMenuTrigger>
                     <ContextMenuContent className="w-44">
-                      <ContextMenuItem onSelect={(event) => event.preventDefault()} className="text-xs">
+                      <ContextMenuItem
+                        onSelect={(event) => {
+                          event.preventDefault()
+                          handleQuickTrade(s.code, s.name)
+                        }}
+                        className="text-xs"
+                      >
                         <Zap className="w-3.5 h-3.5" />
                         快捷交易
                       </ContextMenuItem>
@@ -257,7 +276,13 @@ export function AsideList({
                       </div>
                     </ContextMenuTrigger>
                     <ContextMenuContent className="w-44">
-                      <ContextMenuItem onSelect={(event) => event.preventDefault()} className="text-xs">
+                      <ContextMenuItem
+                        onSelect={(event) => {
+                          event.preventDefault()
+                          handleQuickTrade(s.code, s.name)
+                        }}
+                        className="text-xs"
+                      >
                         <Zap className="w-3.5 h-3.5" />
                         快捷交易
                       </ContextMenuItem>

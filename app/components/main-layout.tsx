@@ -12,15 +12,14 @@ import { Toaster } from './ui/toaster'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import { ModeToggle } from './mode-toggle'
 import { LanguageToggle } from './language-toggle'
-import { TradingPopup } from './trading-popup'
 import { SearchDropdown } from './search-dropdown'
-import { useState } from 'react'
 import DiscoveryPage from '../pages/DiscoveryPage'
 import HeatmapPage from '../pages/HeatmapPage'
 import TradePage from '../pages/TradePage'
 import DocPage from '../pages/DocPage'
 import { LanguageProvider, useLanguage } from '../contexts/LanguageContext'
 import { TradingLockProvider, useTradingLock } from '../contexts/TradingLockContext'
+import { TradingPopupProvider, useTradingPopup } from '../contexts/TradingPopupContext'
 
 const PlaceholderPage = ({ title }: { title: string }) => {
   const { t } = useLanguage()
@@ -34,9 +33,9 @@ const PlaceholderPage = ({ title }: { title: string }) => {
 
 function MainLayoutContent() {
   const navigate = useNavigate()
-  const [tradingPopupOpen, setTradingPopupOpen] = useState(false)
   const { t } = useLanguage()
   const { isTradeUnlocked, showUnlockDialog, lockTrading } = useTradingLock()
+  const { openTradingPopup } = useTradingPopup()
 
   const handleGoHome = () => {
     navigate('/market')
@@ -56,7 +55,7 @@ function MainLayoutContent() {
 
 
   const handleQuickTrading = () => {
-    setTradingPopupOpen(true)
+    openTradingPopup()
   }
 
   const handleLockToggle = () => {
@@ -161,10 +160,6 @@ function MainLayoutContent() {
           </div>
         </div>
         <Toaster />
-        <TradingPopup 
-          open={tradingPopupOpen} 
-          onOpenChange={setTradingPopupOpen} 
-        />
       </div>
   )
 }
@@ -174,7 +169,9 @@ export function MainLayout() {
     <LanguageProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <TradingLockProvider>
-          <MainLayoutContent />
+          <TradingPopupProvider>
+            <MainLayoutContent />
+          </TradingPopupProvider>
         </TradingLockProvider>
       </ThemeProvider>
     </LanguageProvider>
