@@ -203,7 +203,7 @@ export function AsideList({
                         <Settings className="w-3.5 h-3.5" />
                         分组管理
                       </ContextMenuItem>
-                      <ContextMenuItem
+                       {isWatchlistRoute && (<ContextMenuItem
                         onSelect={(event) => {
                           event.preventDefault()
                           showRemoveToast(s.name)
@@ -213,7 +213,7 @@ export function AsideList({
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                         删除自选
-                      </ContextMenuItem>
+                      </ContextMenuItem>)}
                     </ContextMenuContent>
                   </ContextMenu>
                 ))}
