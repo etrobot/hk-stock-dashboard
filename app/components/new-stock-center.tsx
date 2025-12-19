@@ -14,9 +14,9 @@ export const NewStockCenter = () => {
                 <th className="text-left py-2 px-3 whitespace-nowrap">{t('new_stock.serial_number')}</th>
                 <th className="text-left py-2 px-3 whitespace-nowrap">{t('table.code')}</th>
                 <th className="text-left py-2 px-3 whitespace-nowrap">{t('table.name')}</th>
-                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.ipo_price')}</th>
-                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.lot_size')}</th>
-                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.min_subscription')}</th>
+                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.subscription_multiple')}</th>
+                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.lottery_rate')}</th>
+                <th className="text-left py-2 px-3 whitespace-nowrap">{t('new_stock.listing_date')}</th>
               </tr>
             </thead>
             <tbody>
@@ -25,9 +25,9 @@ export const NewStockCenter = () => {
                   <td className="py-2 px-3 whitespace-nowrap">{index + 1}</td>
                   <td className="py-2 px-3 font-medium whitespace-nowrap">{stock.code}</td>
                   <td className="py-2 px-3 whitespace-nowrap">{stock.name}</td>
-                  <td className="py-2 px-3 text-right whitespace-nowrap">{stock.ipoPrice}</td>
-                  <td className="py-2 px-3 text-right whitespace-nowrap">{stock.lotSize}</td>
-                  <td className="py-2 px-3 text-right whitespace-nowrap">{stock.minSubscription}</td>
+                  <td className="py-2 px-3 text-right whitespace-nowrap">{stock.subscriptionMultiple}</td>
+                  <td className="py-2 px-3 text-right whitespace-nowrap">{stock.lotteryRate}</td>
+                  <td className="py-2 px-3 whitespace-nowrap">{stock.listingDate}</td>
                 </tr>
               ))}
             </tbody>
@@ -46,24 +46,27 @@ export const NewStockCenter = () => {
                 <th className="text-left py-2 px-3 whitespace-nowrap">{t('table.name')}</th>
                 <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.latest_price')}</th>
                 <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.first_day_change')}</th>
-                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.dark_market_change')}</th>
+                <th className="text-right py-2 px-3 whitespace-nowrap">{t('new_stock.cumulative_change')}</th>
+                <th className="text-left py-2 px-3 whitespace-nowrap">{t('new_stock.listing_date')}</th>
               </tr>
             </thead>
             <tbody>
               {listedNewStocks.map((stock, index) => {
-                const isPositive = stock.firstDayChange.startsWith('+') || (stock.firstDayChange !== '0.00%' && !stock.firstDayChange.includes('-'))
+                const isFirstDayPositive = stock.firstDayChange.startsWith('+') || (stock.firstDayChange !== '0.00%' && !stock.firstDayChange.includes('-'))
+                const isCumulativePositive = stock.cumulativeChange.startsWith('+') || (stock.cumulativeChange !== '0.00%' && !stock.cumulativeChange.includes('-'))
                 return (
                   <tr key={stock.code} className="border-b hover:bg-muted/50 text-xs">
                     <td className="py-2 px-3 whitespace-nowrap">{index + 1}</td>
                     <td className="py-2 px-3 font-medium whitespace-nowrap">{stock.code}</td>
                     <td className="py-2 px-3 whitespace-nowrap">{stock.name}</td>
                     <td className="py-2 px-3 text-right whitespace-nowrap">{stock.latestPrice}</td>
-                    <td className={`py-2 px-3 text-right whitespace-nowrap ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                    <td className={`py-2 px-3 text-right whitespace-nowrap ${isFirstDayPositive ? 'text-green-600' : 'text-red-600'}`}>
                       {stock.firstDayChange}
                     </td>
-                    <td className={`py-2 px-3 text-right whitespace-nowrap ${stock.darkMarketChange.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
-                      {stock.darkMarketChange}
+                    <td className={`py-2 px-3 text-right whitespace-nowrap ${isCumulativePositive ? 'text-green-600' : 'text-red-600'}`}>
+                      {stock.cumulativeChange}
                     </td>
+                    <td className="py-2 px-3 whitespace-nowrap">{stock.listingDate}</td>
                   </tr>
                 )
               })}

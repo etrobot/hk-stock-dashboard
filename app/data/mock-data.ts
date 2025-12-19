@@ -330,9 +330,10 @@ export const usIndexDetail: IndexDetail = {
 export interface NewStock {
   code: string;
   name: string;
-  ipoPrice: string;
-  lotSize: number;
-  minSubscription: string;
+  market: string;
+  subscriptionMultiple: string;
+  lotteryRate: string;
+  listingDate: string;
 }
 
 export interface ListedNewStock {
@@ -340,26 +341,27 @@ export interface ListedNewStock {
   name: string;
   latestPrice: string;
   firstDayChange: string;
-  darkMarketChange: string;
+  cumulativeChange: string;
+  listingDate: string;
 }
 
 export const upcomingStocks: NewStock[] = [
-  { code: "44078", name: "政府银债二...", ipoPrice: "100HKD", lotSize: 100, minSubscription: "10000.00HKD" },
-  { code: "02259", name: "紫金黄金国...", ipoPrice: "71.590HKD", lotSize: 100, minSubscription: "7231.19HKD" },
-  { code: "02583", name: "西普尼", ipoPrice: "27.000~29.600HKD", lotSize: 100, minSubscription: "2989.85HKD" },
-  { code: "02889", name: "博泰车联", ipoPrice: "102.230HKD", lotSize: 20, minSubscription: "2065.23HKD" },
-  { code: "09973", name: "奇瑞汽车", ipoPrice: "27.750~30.750HKD", lotSize: 100, minSubscription: "3106.00HKD" }
+  { code: "44078", name: "政府银债二...", market: "港股", subscriptionMultiple: "15.2x", lotteryRate: "85%", listingDate: "2024-01-15" },
+  { code: "02259", name: "紫金黄金国...", market: "港股", subscriptionMultiple: "23.8x", lotteryRate: "65%", listingDate: "2024-01-20" },
+  { code: "02583", name: "西普尼", market: "港股", subscriptionMultiple: "18.5x", lotteryRate: "72%", listingDate: "2024-01-25" },
+  { code: "02889", name: "博泰车联", market: "港股", subscriptionMultiple: "31.2x", lotteryRate: "48%", listingDate: "2024-02-01" },
+  { code: "09973", name: "奇瑞汽车", market: "港股", subscriptionMultiple: "45.6x", lotteryRate: "35%", listingDate: "2024-02-05" }
 ];
 
 export const listedNewStocks: ListedNewStock[] = [
-  { code: "06090", name: "不同集团", latestPrice: "99.000", firstDayChange: "+43.96%", darkMarketChange: "+38.600" },
-  { code: "02595", name: "劲方医药-B", latestPrice: "40.640", firstDayChange: "+106.47%", darkMarketChange: "+22.450" },
-  { code: "02656", name: "健康160", latestPrice: "28.500", firstDayChange: "+137.34%", darkMarketChange: "+17.010" },
-  { code: "02525", name: "禾赛-W", latestPrice: "232.800", firstDayChange: "+9.96%", darkMarketChange: "+15.400" },
-  { code: "09477", name: "平安东西精选-U", latestPrice: "2.076", firstDayChange: "0.00%", darkMarketChange: "0.000" },
-  { code: "09406", name: "平安科技精选-U", latestPrice: "2.216", firstDayChange: "0.00%", darkMarketChange: "0.000" },
-  { code: "03477", name: "平安东西精选", latestPrice: "16.140", firstDayChange: "0.00%", darkMarketChange: "0.000" },
-  { code: "03406", name: "平安科技精选", latestPrice: "17.230", firstDayChange: "0.00%", darkMarketChange: "0.000" },
-  { code: "02543", name: "大行科工", latestPrice: "59.550", firstDayChange: "+14.95%", darkMarketChange: "+29.200" },
-  { code: "02580", name: "奥克斯电气", latestPrice: "16.200", firstDayChange: "-5.40%", darkMarketChange: "-0.740" }
+  { code: "06090", name: "不同集团", latestPrice: "99.000", firstDayChange: "+43.96%", cumulativeChange: "+65.23%", listingDate: "2023-12-15" },
+  { code: "02595", name: "劲方医药-B", latestPrice: "40.640", firstDayChange: "+106.47%", cumulativeChange: "+142.89%", listingDate: "2023-12-10" },
+  { code: "02656", name: "健康160", latestPrice: "28.500", firstDayChange: "+137.34%", cumulativeChange: "+178.45%", listingDate: "2023-12-05" },
+  { code: "02525", name: "禾赛-W", latestPrice: "232.800", firstDayChange: "+9.96%", cumulativeChange: "+25.67%", listingDate: "2023-11-28" },
+  { code: "09477", name: "平安东西精选-U", latestPrice: "2.076", firstDayChange: "0.00%", cumulativeChange: "+5.23%", listingDate: "2023-11-20" },
+  { code: "09406", name: "平安科技精选-U", latestPrice: "2.216", firstDayChange: "0.00%", cumulativeChange: "+8.91%", listingDate: "2023-11-15" },
+  { code: "03477", name: "平安东西精选", latestPrice: "16.140", firstDayChange: "0.00%", cumulativeChange: "+12.45%", listingDate: "2023-11-10" },
+  { code: "03406", name: "平安科技精选", latestPrice: "17.230", firstDayChange: "0.00%", cumulativeChange: "+15.78%", listingDate: "2023-11-05" },
+  { code: "02543", name: "大行科工", latestPrice: "59.550", firstDayChange: "+14.95%", cumulativeChange: "+38.92%", listingDate: "2023-10-28" },
+  { code: "02580", name: "奥克斯电气", latestPrice: "16.200", firstDayChange: "-5.40%", cumulativeChange: "+8.67%", listingDate: "2023-10-20" }
 ];

@@ -85,6 +85,7 @@ const translations: Record<Language, Record<string, string>> = {
     'table.dividend_yield_ttm': '股息率TTM',
     'table.ytd': '年初至今涨跌幅',
     'table.amount': '成交额',
+    'table.market': '市场',
     
     // 通用
     'common.home': '首页',
@@ -305,6 +306,10 @@ const translations: Record<Language, Record<string, string>> = {
     'new_stock.latest_price': '最新价',
     'new_stock.first_day_change': '首日涨幅',
     'new_stock.dark_market_change': '暗盘涨跌额',
+    'new_stock.subscription_multiple': '申购倍数',
+    'new_stock.lottery_rate': '一手中签率',
+    'new_stock.listing_date': '上市日期',
+    'new_stock.cumulative_change': '累计涨幅',
     
     // 板块热力图
     'heatmap.sector_heatmap': '板块热力图',
@@ -589,6 +594,7 @@ const translations: Record<Language, Record<string, string>> = {
     'table.dividend_yield_ttm': 'Dividend Yield TTM',
     'table.ytd': 'YTD',
     'table.amount': 'Amount',
+    'table.market': 'Market',
     
     // 通用
     'common.home': 'Home',
@@ -791,6 +797,10 @@ const translations: Record<Language, Record<string, string>> = {
     'new_stock.latest_price': 'Latest Price',
     'new_stock.first_day_change': 'First Day Change',
     'new_stock.dark_market_change': 'Dark Pool Change',
+    'new_stock.subscription_multiple': 'Subscription Multiple',
+    'new_stock.lottery_rate': 'Lottery Rate',
+    'new_stock.listing_date': 'Listing Date',
+    'new_stock.cumulative_change': 'Cumulative Change',
     
     // 板块热力图
     'heatmap.sector_heatmap': 'Sector Heatmap',
