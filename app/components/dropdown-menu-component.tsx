@@ -3,7 +3,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '../lib/utils'
-import { ChevronRight, FileText, TrendingUp, CreditCard, Settings, LogOut, HelpCircle } from 'lucide-react'
+import { ChevronRight, TrendingUp, Settings, LogOut } from 'lucide-react'
+// import { FileText,CreditCard, HelpCircle } from 'lucide-react'
 import { SettingsDetailPage } from './settings-detail-page'
 import { LoginDialog } from './login-dialog'
 
@@ -45,10 +46,10 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
   }, [onClose])
 
   const menuItems: MenuItem[] = [
-    { labelKey: 'dropdown.business', hasArrow: true, icon: <FileText className="w-3 h-3" /> },
+    // { labelKey: 'dropdown.business', hasArrow: true, icon: <FileText className="w-3 h-3" /> },
     { labelKey: 'dropdown.my_quotes', hasArrow: true, isActive: true, icon: <TrendingUp className="w-3 h-3" /> },
-    { labelKey: 'dropdown.my_cards', hasArrow: true, icon: <CreditCard className="w-3 h-3" /> },
-    { labelKey: 'dropdown.help_center', hasArrow: false, icon: <HelpCircle className="w-3 h-3" /> },
+    // { labelKey: 'dropdown.my_cards', hasArrow: true, icon: <CreditCard className="w-3 h-3" /> },
+    // { labelKey: 'dropdown.help_center', hasArrow: false, icon: <HelpCircle className="w-3 h-3" /> },
     { labelKey: 'dropdown.settings', hasArrow: false, icon: <Settings className="w-3 h-3" /> },
     { labelKey: 'dropdown.logout', hasArrow: false, icon: <LogOut className="w-3 h-3" /> },
   ]
