@@ -129,6 +129,11 @@ function App() {
     return currentPage === 'cn' ? cnSectors : hkSectors;
   };
 
+  const handleUpgradeClick = () => {
+    // 触发自定义事件来打开 my_quotes 下拉菜单
+    window.dispatchEvent(new CustomEvent('openMyQuotesDropdown'));
+  };
+
   const renderPageContent = () => {
     switch (currentPage) {
       case 'cn':
@@ -173,7 +178,7 @@ function App() {
               </Button>
             </div>
             <div className="container mx-auto p-3 space-y-3">
-            {activeTab === t('tab.home') && <MarketIndices indices={hkIndices} onIndexClick={handleIndexClick} />}
+            {activeTab === t('tab.home') && <MarketIndices indices={hkIndices} onIndexClick={handleIndexClick} onUpgradeClick={handleUpgradeClick} />}
 
               <div className="flex gap-4">
                 {activeTab === t('tab.concept_sectors') ? (

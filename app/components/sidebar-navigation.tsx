@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { cn } from '../lib/utils'
 import { Star, BarChart3, User, Compass, SlidersHorizontal, MessageSquare, Landmark } from 'lucide-react'
@@ -27,9 +27,24 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
   const [isMessagePopupOpen, setIsMessagePopupOpen] = useState(false)
   const [isCommunityPopupOpen, setIsCommunityPopupOpen] = useState(false)
   const [isStockDetailOpen, setIsStockDetailOpen] = useState(false)
+  const [shouldOpenMyQuotes, setShouldOpenMyQuotes] = useState(false)
   const { t } = useLanguage()
   const { isTradeUnlocked, showUnlockDialog } = useTradingLock()
   const navigate = useNavigate()
+
+  // 监听自定义事件来打开 my_quotes 下拉菜单
+  useEffect(() => {
+    const handleOpenMyQuotes = () => {
+      setShouldOpenMyQuotes(true)
+      setIsDropdownOpen(true)
+    }
+
+    window.addEventListener('openMyQuotesDropdown', handleOpenMyQuotes as EventListener)
+    
+    return () => {
+      window.removeEventListener('openMyQuotesDropdown', handleOpenMyQuotes as EventListener)
+    }
+  }, [])
 
   const handleAccountClick = (e: React.MouseEvent) => {
     if (!isTradeUnlocked) {
@@ -76,9 +91,13 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
 
         <DropdownMenu 
           isOpen={isDropdownOpen} 
-          onClose={() => setIsDropdownOpen(false)}
+          onClose={() => {
+            setIsDropdownOpen(false)
+            setShouldOpenMyQuotes(false)
+          }}
           onOpenStockDetail={() => setIsStockDetailOpen(true)}
           onOpenCommunityPopup={() => setIsCommunityPopupOpen(true)}
+          shouldOpenMyQuotes={shouldOpenMyQuotes}
         />
       </div>
 

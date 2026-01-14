@@ -20,7 +20,7 @@ type Option = {
 
 export function StockDetailDialog({ isOpen, onClose, className }: StockDetailDialogProps) {
   const [activeTab, setActiveTab] = useState<'hk' | 'us'>('hk')
-  const [stage, setStage] = useState<'select' | 'pay' | 'success'>('select')
+  const [stage, setStage] = useState<'quotes' | 'select' | 'pay' | 'success'>('quotes')
   const [selectedOption, setSelectedOption] = useState<Option | null>(null)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const dialogRef = useRef<HTMLDivElement>(null)
@@ -29,7 +29,7 @@ export function StockDetailDialog({ isOpen, onClose, className }: StockDetailDia
     function handleClickOutside(event: MouseEvent) {
       if (dialogRef.current && !dialogRef.current.contains(event.target as Node)) {
         onClose()
-        setStage('select')
+        setStage('quotes')
         setSelectedOption(null)
       }
     }
@@ -82,6 +82,19 @@ export function StockDetailDialog({ isOpen, onClose, className }: StockDetailDia
                 </button>
               )}
               {stage === 'select' && (
+                <button
+                  onClick={() => setStage('quotes')}
+                  className="text-[#676770] hover:text-[#1E1F2D] transition-colors text-sm"
+                >
+                  返回
+                </button>
+              )}
+              {stage === 'quotes' && (
+                <div className="text-[#1E1F2D] text-sm font-medium">
+                  我的行情
+                </div>
+              )}
+              {stage === 'select' && (
                 <div className="flex space-x-8">
                   <button
                     onClick={() => { setActiveTab('hk'); setStage('select'); setSelectedOption(null) }}
@@ -105,7 +118,7 @@ export function StockDetailDialog({ isOpen, onClose, className }: StockDetailDia
               )}
             </div>
             <button
-              onClick={() => { onClose(); setStage('select'); setSelectedOption(null) }}
+              onClick={() => { onClose(); setStage('quotes'); setSelectedOption(null) }}
               className="text-gray-400 hover:text-gray-600 transition-colors"
             >
               <X className="w-5 h-5" />
@@ -114,6 +127,67 @@ export function StockDetailDialog({ isOpen, onClose, className }: StockDetailDia
         </div>
 
         <div className={cn('p-4 flex-1', confirmOpen ? 'overflow-hidden' : 'overflow-y-auto')}>
+          {stage === 'quotes' && (
+            <div className="space-y-3">
+              {/* Hong Kong Stocks Card */}
+              <div
+                onClick={() => { setActiveTab('hk'); setStage('select') }}
+                className="block cursor-pointer"
+              >
+                <div className="relative overflow-hidden rounded-lg border border-gray-600 hover:shadow-md transition-shadow cursor-pointer">
+                  <div className="bg-gradient-to-r from-purple-500 to-purple-600 p-3 text-white">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-6 h-6 bg-gradient-to-br from-purple-400 to-purple-700 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">HK</span>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-xs">港股Lv2高级行情</h4>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full"></div>
+                          <span className="text-xs text-yellow-200">已开通</span>
+                          <span className="text-xs text-yellow-200">剩余180天</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); /* TODO: Show order history */ }}
+                      className="mt-2 text-xs text-white/80 underline"
+                    >
+                      查看历史订单 →
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* US Stocks Card */}
+              <div
+                onClick={() => { setActiveTab('us'); setStage('select') }}
+                className="block cursor-pointer"
+              >
+                <div className="relative overflow-hidden rounded-lg border border-gray-600 hover:shadow-md transition-shadow cursor-pointer">
+                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-3 text-white">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-blue-700 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">US</span>
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-xs">美股Lv1高级行情</h4>
+                        <div className="mt-1">
+                          <span className="text-xs text-yellow-200">开通即享全美最佳买卖1档</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); /* TODO: Show order history */ }}
+                      className="mt-2 text-xs text-white/80 underline"
+                    >
+                      查看历史订单 →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           {stage === 'select' && (
             <>
               <div className="mb-4">
@@ -165,9 +239,9 @@ export function StockDetailDialog({ isOpen, onClose, className }: StockDetailDia
                   {(activeTab === 'hk' ? [
                     { name: '行情功能', basic: 'Level 1基础行情', advanced: 'Level 2基础行情' },
                     { name: '行情数据', basic: '至少延迟15分钟', advanced: '实时行情' },
-                    { name: '挂单盘口', basic: '1档', advanced: '10档深度盘口' },
+                    { name: '挂单盘口', basic: '无', advanced: '10档深度盘口' },
                     { name: '经纪商列队', basic: '无', advanced: '有' },
-                    { name: '逐笔成交明细', basic: '最新4笔', advanced: '全部' }
+                    { name: '逐笔成交明细', basic: '无', advanced: '全部' }
                   ] : [
                     { name: '行情功能', basic: 'Level 0基础行情', advanced: 'Level 1高级行情' },
                     { name: '行情数据', basic: '至少延迟15分钟', advanced: '实时行情' },
