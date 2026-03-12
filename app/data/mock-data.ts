@@ -346,8 +346,7 @@ export interface ListedNewStock {
 }
 
 export const upcomingStocks: NewStock[] = [
-  { code: "44078", name: "政府银债二...", market: "港股", subscriptionMultiple: "15.2x", lotteryRate: "85%", listingDate: "2024-01-15" },
-  { code: "02259", name: "紫金黄金国...", market: "港股", subscriptionMultiple: "23.8x", lotteryRate: "65%", listingDate: "2024-01-20" },
+  { code: "02259", name: "紫金黄金", market: "港股", subscriptionMultiple: "申购中", lotteryRate: "--", listingDate: "2026-05-20" },
   { code: "02583", name: "西普尼", market: "港股", subscriptionMultiple: "18.5x", lotteryRate: "72%", listingDate: "2024-01-25" },
   { code: "02889", name: "博泰车联", market: "港股", subscriptionMultiple: "31.2x", lotteryRate: "48%", listingDate: "2024-02-01" },
   { code: "09973", name: "奇瑞汽车", market: "港股", subscriptionMultiple: "45.6x", lotteryRate: "35%", listingDate: "2024-02-05" }
