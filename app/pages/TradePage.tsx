@@ -63,6 +63,7 @@ export default function TradePage() {
     '自定义分组1': hkHotStocks.slice(0, 10)
   })
   const [selectedGroup, setSelectedGroup] = useState<string>('自定义分组1')
+  const [showTradeTicks, setShowTradeTicks] = useState(true)
 
   const adjustPrice = (delta: number) => {
     const cur = parseFloat(price)
@@ -220,8 +221,13 @@ export default function TradePage() {
         onGridItemClick={handleGridSidebarItemClick}
         hideViewToggle={true}
       />
-      <div className="w-[480px] overflow-y-auto flex-shrink-0 border-l border-border bg-background h-full">
-        <IndexInfoPanel indexDetail={transformStockToIndex(stockData)} wide />
+      <div className={`${showTradeTicks ? 'w-[480px]' : 'w-[280px]'} overflow-y-auto flex-shrink-0 border-l border-border bg-background h-full transition-[width] duration-200`}>
+        <IndexInfoPanel
+          indexDetail={transformStockToIndex(stockData)}
+          wide
+          showTradeTicks={showTradeTicks}
+          onShowTradeTicksChange={setShowTradeTicks}
+        />
       </div>
 
       {/* Main Trading Content */}

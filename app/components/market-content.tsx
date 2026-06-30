@@ -7,9 +7,10 @@ import { mockDetailedStocks } from '../data/mock-detailed-stocks'
 interface MarketContentProps {
   indexCode?: string;
   wide?: boolean;
+  showTradeTicks?: boolean;
 }
 
-export function MarketContent({ indexCode, wide = false }: MarketContentProps) {
+export function MarketContent({ indexCode, wide = false, showTradeTicks = true }: MarketContentProps) {
   const { t } = useLanguage()
   
   // Find stock data based on indexCode, fallback to first stock if not found
@@ -18,6 +19,7 @@ export function MarketContent({ indexCode, wide = false }: MarketContentProps) {
     : mockDetailedStocks[0]
 
   const basePrice = parseFloat(selectedStock.last.replace(/,/g, '')) || 100
+  const klineWide = wide && showTradeTicks
 
   const klineSection = (
     <div className="mb-4">
@@ -29,7 +31,7 @@ export function MarketContent({ indexCode, wide = false }: MarketContentProps) {
           percentage: selectedStock.changeRate
         }}
         selectedPeriod="daily"
-        wide={wide}
+        wide={klineWide}
       />
     </div>
   )
@@ -219,14 +221,16 @@ export function MarketContent({ indexCode, wide = false }: MarketContentProps) {
       <div className="bg-background">
         {klineSection}
         <div className="flex items-stretch">
-          <div className="w-[260px] flex-shrink-0 pr-3 space-y-4">
+          <div className={`${showTradeTicks ? 'w-[260px]' : 'w-full'} flex-shrink-0 pr-3 space-y-4`}>
             {orderBookSection}
             {brokerSection}
             {capitalFlowSection}
           </div>
-          <div className="w-[220px] flex-shrink-0 border-l border-border">
-            <TradeTickPanel basePrice={basePrice} className="h-full" />
-          </div>
+          {showTradeTicks && (
+            <div className="w-[220px] flex-shrink-0 border-l border-border">
+              <TradeTickPanel basePrice={basePrice} className="h-full" />
+            </div>
+          )}
         </div>
       </div>
     )

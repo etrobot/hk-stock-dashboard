@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useLanguage } from '../contexts/LanguageContext'
 
 interface TradeTick {
   id: string
@@ -40,7 +39,6 @@ interface TradeTickPanelProps {
 }
 
 export function TradeTickPanel({ basePrice, className }: TradeTickPanelProps) {
-  const { t } = useLanguage()
   const [ticks, setTicks] = useState<TradeTick[]>(() => generateTicks(basePrice, 30))
 
   useEffect(() => {
@@ -70,12 +68,7 @@ export function TradeTickPanel({ basePrice, className }: TradeTickPanelProps) {
   return (
     <div className={`flex flex-col ${className ?? 'h-full'}`}>
       <div className="px-3 py-3 border-b border-border flex-shrink-0">
-        <h3 className="text-sm font-semibold text-foreground">成交明细</h3>
-      </div>
-      <div className="grid grid-cols-3 gap-1 px-3 py-2 text-[10px] text-muted-foreground border-b border-border flex-shrink-0">
-        <span>{t('transactions.execution_time')}</span>
-        <span className="text-right">{t('transactions.execution_price')}</span>
-        <span className="text-right">{t('transactions.execution_quantity')}</span>
+        <h3 className="text-sm font-semibold text-foreground text-right">成交明细</h3>
       </div>
       <div className="flex-1 overflow-y-auto">
         {ticks.map((tick) => (

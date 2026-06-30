@@ -1,19 +1,30 @@
 
 import { Button } from "./ui/button"
-import { Heart, TrendingUp } from "lucide-react"
+import { Heart, TrendingUp, ScrollText } from "lucide-react"
 import { IndexDetail } from "../types/market"
 import { MarketContent } from "./market-content"
 import { useState } from "react"
 import { useTheme } from "./theme-provider"
 import { useLanguage } from "../contexts/LanguageContext"
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip"
 
 interface IndexInfoPanelProps {
   indexDetail: IndexDetail;
   wide?: boolean;
+  showTradeTicks?: boolean;
+  onShowTradeTicksChange?: (show: boolean) => void;
 }
 
-export function IndexInfoPanel({ indexDetail, wide = false }: IndexInfoPanelProps) {
+export function IndexInfoPanel({
+  indexDetail,
+  wide = false,
+  showTradeTicks: showTradeTicksProp,
+  onShowTradeTicksChange,
+}: IndexInfoPanelProps) {
   const [activeTab, setActiveTab] = useState<'market' | 'analysis' | 'news'>('market')
+  const [internalShowTradeTicks, setInternalShowTradeTicks] = useState(true)
+  const showTradeTicks = showTradeTicksProp ?? internalShowTradeTicks
+  const setShowTradeTicks = onShowTradeTicksChange ?? setInternalShowTradeTicks
   const { resolvedTheme } = useTheme()
   const { t } = useLanguage()
   
@@ -144,7 +155,8 @@ export function IndexInfoPanel({ indexDetail, wide = false }: IndexInfoPanelProp
 
       {/* Tabs Section */}
       <div className="space-y-4 p-4">
-        <div className="flex items-center gap-4 text-sm">
+        <div className="flex items-center justify-between gap-4 text-sm">
+          <div className="flex items-center gap-4">
           <button 
             className={`pb-1 ${activeTab === 'market' ? 'border-b-2 border-orange-500' : 'text-slate-400 hover:border-b-2 border-transparent hover:border-orange-500'}`}
             onClick={() => setActiveTab('market')}
@@ -163,6 +175,27 @@ export function IndexInfoPanel({ indexDetail, wide = false }: IndexInfoPanelProp
           >
             {t('index_panel.news_tab')}
           </button>
+          </div>
+          {wide && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={() => setShowTradeTicks(!showTradeTicks)}
+                  className={`p-1 rounded flex-shrink-0 transition-colors ${
+                    showTradeTicks
+                      ? 'text-orange-500 hover:text-orange-400'
+                      : 'text-slate-500 hover:text-slate-400'
+                  }`}
+                  aria-label="成交明细"
+                  aria-pressed={showTradeTicks}
+                >
+                  <ScrollText className="w-4 h-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">成交明细</TooltipContent>
+            </Tooltip>
+          )}
         </div>
         
         {/* News sub-tabs - only show when news tab is active */}
@@ -195,7 +228,7 @@ export function IndexInfoPanel({ indexDetail, wide = false }: IndexInfoPanelProp
         >
           {/* Market Tab Content */}
           {activeTab === 'market' && (
-            <MarketContent indexCode={indexDetail.code} wide={wide} />
+            <MarketContent indexCode={indexDetail.code} wide={wide} showTradeTicks={showTradeTicks} />
           )}
           
           {/* Analysis Tab Content */}
