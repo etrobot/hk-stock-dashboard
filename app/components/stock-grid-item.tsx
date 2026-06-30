@@ -1,4 +1,6 @@
 import { Card } from "./ui/card";
+import { useState } from "react";
+import { IntradayChartDialog } from "./intraday-chart-dialog";
 
 
 // 生成基于 mockChartData 的K线数据
@@ -54,9 +56,9 @@ function generateKLineData(stockCode: string, period: string, basePrice: number)
 }
 
 // Enhanced K-line chart component with axes
-function MiniKLineChart({ data, period }: { data: KLinePoint[], period: string }) {
-  const width = 280;
-  const height = 140; // Increased to accommodate axes
+function MiniKLineChart({ data, period, wide = false }: { data: KLinePoint[], period: string, wide?: boolean }) {
+  const width = wide ? 480 : 280;
+  const height = wide ? 240 : 140;
   const paddingLeft = 40;
   const paddingRight = 10;
   const paddingTop = 10;
@@ -64,7 +66,10 @@ function MiniKLineChart({ data, period }: { data: KLinePoint[], period: string }
   
   if (!data || data.length === 0) {
     return (
-      <div className="w-full h-[140px] bg-muted rounded flex items-center justify-center text-muted-foreground">
+      <div
+        className="w-full bg-muted rounded flex items-center justify-center text-muted-foreground"
+        style={{ height }}
+      >
         No data
       </div>
     );
@@ -134,8 +139,8 @@ function MiniKLineChart({ data, period }: { data: KLinePoint[], period: string }
   });
   
   return (
-    <div className="w-full h-[140px] bg-background rounded border text-foreground">
-      <svg width="100%" height="140" viewBox={`0 0 ${width} ${height}`}>
+    <div className="w-full bg-background rounded border text-foreground" style={{ height }}>
+      <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`}>
         {/* Chart background */}
         <rect 
           x={paddingLeft} 
@@ -270,19 +275,22 @@ interface StockGridItemProps {
   stock: StockSummary
   selectedPeriod: string
   onClick?: () => void
+  wide?: boolean
 }
 
-export function StockGridItem({ stock, selectedPeriod, onClick }: StockGridItemProps) {
+export function StockGridItem({ stock, selectedPeriod, onClick, wide = false }: StockGridItemProps) {
+  const [intradayOpen, setIntradayOpen] = useState(false)
   const isPositive = stock.percentage?.startsWith('+') ?? false;
   let klineData = stock.klineData?.[selectedPeriod] || [];
+  const basePrice = parseFloat(stock.price?.replace(/,/g, '') || '') || 100;
   
   // 如果没有数据，使用生成的数据
   if (!klineData || klineData.length === 0) {
-    const basePrice = parseFloat(stock.price?.replace(/,/g, '') || '') || 100;
     klineData = generateKLineData(stock.code || '', selectedPeriod, basePrice);
   }
   
   return (
+    <>
     <Card className="p-4 bg-card border-border hover:shadow-md transition-shadow cursor-pointer" onClick={onClick}>
       <div className="space-y-3">
         {/* Header */}
@@ -300,13 +308,28 @@ export function StockGridItem({ stock, selectedPeriod, onClick }: StockGridItemP
         </div>
         
         {/* K-line Chart */}
-        <div className="relative">
-          <MiniKLineChart 
+        <div
+          className="relative cursor-crosshair"
+          onDoubleClick={(e) => {
+            e.stopPropagation()
+            setIntradayOpen(true)
+          }}
+        >
+          <MiniKLineChart
             data={klineData}
             period={selectedPeriod}
+            wide={wide}
           />
         </div>
       </div>
     </Card>
+    <IntradayChartDialog
+      open={intradayOpen}
+      onOpenChange={setIntradayOpen}
+      stockCode={stock.code || ''}
+      stockName={stock.name || ''}
+      basePrice={basePrice}
+    />
+    </>
   );
 }

@@ -9,9 +9,10 @@ import { useLanguage } from "../contexts/LanguageContext"
 
 interface IndexInfoPanelProps {
   indexDetail: IndexDetail;
+  wide?: boolean;
 }
 
-export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
+export function IndexInfoPanel({ indexDetail, wide = false }: IndexInfoPanelProps) {
   const [activeTab, setActiveTab] = useState<'market' | 'analysis' | 'news'>('market')
   const { resolvedTheme } = useTheme()
   const { t } = useLanguage()
@@ -187,10 +188,14 @@ export function IndexInfoPanel({ indexDetail }: IndexInfoPanelProps) {
           </div>
         )}
         
-        <div className={`${activeTab === 'analysis' ? 'p-0' : ''} max-h-96 overflow-y-auto`}>
+        <div
+          className={`${activeTab === 'analysis' ? 'p-0' : ''} ${
+            wide && activeTab === 'market' ? '' : 'max-h-96 overflow-y-auto'
+          }`}
+        >
           {/* Market Tab Content */}
           {activeTab === 'market' && (
-            <MarketContent indexCode={indexDetail.code} />
+            <MarketContent indexCode={indexDetail.code} wide={wide} />
           )}
           
           {/* Analysis Tab Content */}

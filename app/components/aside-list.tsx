@@ -1,11 +1,13 @@
 'use client'
 
+import { useState, useMemo, type DragEvent, type ReactNode } from 'react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { hkHotStocks } from '../data/mock-data'
+import { Stock } from '../types/market'
 import { Button } from './ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from './ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
-import { List, Grid3X3, ChevronDown, Plus, Settings, Zap, Star, Trash2 } from 'lucide-react'
+import { List, Grid3X3, ChevronDown, ChevronUp, Plus, Settings, Zap, Star, Trash2, GripVertical } from 'lucide-react'
 import { StockGridItem } from './stock-grid-item'
 import { Dialog, DialogTrigger } from './ui/dialog'
 import {
@@ -54,6 +56,87 @@ export function AsideList({
 }) {
   const { t } = useLanguage()
   const { openTradingPopup } = useTradingPopup()
+
+  type SortField = 'price' | 'percentage'
+  type SortDirection = 'asc' | 'desc'
+
+  const [stocks, setStocks] = useState<Stock[]>(() => hkHotStocks.slice(0, 20))
+  const [sortField, setSortField] = useState<SortField | null>(null)
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
+
+  const parsePrice = (price: string) => parseFloat(price.replace(/,/g, ''))
+  const parsePercentage = (percentage: string) => parseFloat(percentage.replace(/[%+]/g, ''))
+
+  const sortStocks = (list: Stock[], field: SortField, direction: SortDirection) => {
+    return [...list].sort((a, b) => {
+      const aVal = field === 'price' ? parsePrice(a.price) : parsePercentage(a.percentage)
+      const bVal = field === 'price' ? parsePrice(b.price) : parsePercentage(b.percentage)
+      return direction === 'asc' ? aVal - bVal : bVal - aVal
+    })
+  }
+
+  const displayedStocks = useMemo(() => {
+    if (!isWatchlistRoute) return hkHotStocks.slice(0, 20)
+    if (!sortField) return stocks
+    return sortStocks(stocks, sortField, sortDirection)
+  }, [isWatchlistRoute, stocks, sortField, sortDirection])
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))
+    } else {
+      setSortField(field)
+      setSortDirection('desc')
+    }
+  }
+
+  const handleDragStart = (e: DragEvent, index: number) => {
+    setDraggedIndex(index)
+    e.dataTransfer.setData('text/plain', index.toString())
+  }
+
+  const handleDragOver = (e: DragEvent) => {
+    e.preventDefault()
+  }
+
+  const handleDrop = (e: DragEvent, dropIndex: number) => {
+    e.preventDefault()
+    const dragIndex = parseInt(e.dataTransfer.getData('text/plain'), 10)
+    if (dragIndex === dropIndex) {
+      setDraggedIndex(null)
+      return
+    }
+
+    const currentList = sortField
+      ? sortStocks(stocks, sortField, sortDirection)
+      : [...stocks]
+    const [draggedStock] = currentList.splice(dragIndex, 1)
+    currentList.splice(dropIndex, 0, draggedStock)
+    setStocks(currentList)
+    setSortField(null)
+    setDraggedIndex(null)
+  }
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null)
+  }
+
+  const SortableHeader = ({ field, children }: { field: SortField; children: ReactNode }) => (
+    <TableHead
+      className="text-muted-foreground cursor-pointer hover:text-foreground select-none"
+      onClick={() => handleSort(field)}
+    >
+      <div className="flex items-center gap-0.5">
+        {children}
+        {sortField === field && (
+          sortDirection === 'asc'
+            ? <ChevronUp className="w-3 h-3" />
+            : <ChevronDown className="w-3 h-3" />
+        )}
+      </div>
+    </TableHead>
+  )
   
   const filterOptions = [
     '全部',
@@ -167,22 +250,43 @@ export function AsideList({
               <TableHeader>
                 <TableRow className="border-border">
                   <TableHead className="text-muted-foreground">{t('stock_detail.name_code')}</TableHead>
-                  <TableHead className="text-muted-foreground">{t('stock_detail.latest_price')}</TableHead>
-                  <TableHead className="text-muted-foreground">{t('stock_detail.change_percent')}</TableHead>
+                  {isWatchlistRoute ? (
+                    <>
+                      <SortableHeader field="price">{t('stock_detail.latest_price')}</SortableHeader>
+                      <SortableHeader field="percentage">{t('stock_detail.change_percent')}</SortableHeader>
+                    </>
+                  ) : (
+                    <>
+                      <TableHead className="text-muted-foreground">{t('stock_detail.latest_price')}</TableHead>
+                      <TableHead className="text-muted-foreground">{t('stock_detail.change_percent')}</TableHead>
+                    </>
+                  )}
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {hkHotStocks.slice(0, 20).map((s, idx) => (
-                  <ContextMenu key={`${s.code}-${idx}`}>
+                {displayedStocks.map((s, idx) => (
+                  <ContextMenu key={s.code}>
                     <ContextMenuTrigger asChild>
                       <TableRow
-                        className="border-border hover:bg-muted/20 cursor-pointer"
+                        className={`border-border hover:bg-muted/20 cursor-pointer ${
+                          isWatchlistRoute ? 'cursor-move' : ''
+                        } ${draggedIndex === idx ? 'opacity-50' : ''}`}
+                        draggable={isWatchlistRoute}
+                        onDragStart={isWatchlistRoute ? (e) => handleDragStart(e, idx) : undefined}
+                        onDragOver={isWatchlistRoute ? handleDragOver : undefined}
+                        onDrop={isWatchlistRoute ? (e) => handleDrop(e, idx) : undefined}
+                        onDragEnd={isWatchlistRoute ? handleDragEnd : undefined}
                         onClick={() => onListItemClick(s.code)}
                       >
                         <TableCell className="text-sm whitespace-nowrap">
-                          <div className="flex flex-col leading-tight">
-                            <span className="text-foreground">{s.name}</span>
-                            <span className="text-xs text-muted-foreground">{s.code}</span>
+                          <div className="flex items-center gap-1.5">
+                            {isWatchlistRoute && (
+                              <GripVertical className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+                            )}
+                            <div className="flex flex-col leading-tight">
+                              <span className="text-foreground">{s.name}</span>
+                              <span className="text-xs text-muted-foreground">{s.code}</span>
+                            </div>
                           </div>
                         </TableCell>
                         <TableCell className="text-sm font-mono text-foreground">{s.price}</TableCell>

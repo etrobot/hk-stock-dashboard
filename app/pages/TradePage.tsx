@@ -220,9 +220,8 @@ export default function TradePage() {
         onGridItemClick={handleGridSidebarItemClick}
         hideViewToggle={true}
       />
-            {/* IndexInfoPanel Column */}
-      <div className="w-[360px] border-l border-border bg-background flex-shrink-0">
-        <IndexInfoPanel indexDetail={transformStockToIndex(stockData)} />
+      <div className="w-[480px] overflow-y-auto flex-shrink-0 border-l border-border bg-background h-full">
+        <IndexInfoPanel indexDetail={transformStockToIndex(stockData)} wide />
       </div>
 
       {/* Main Trading Content */}
