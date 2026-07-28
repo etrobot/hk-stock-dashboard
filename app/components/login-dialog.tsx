@@ -29,10 +29,12 @@ function PhoneInput({
   value,
   onChange,
   className = 'ml-[29px]',
+  readOnly = false,
 }: {
   value: string
   onChange: (value: string) => void
   className?: string
+  readOnly?: boolean
 }) {
   return (
     <div className={rowClassName}>
@@ -46,6 +48,7 @@ function PhoneInput({
         onChange={(e) => onChange(e.target.value)}
         className={`${inputClassName} ${className}`}
         placeholder="请输入手机号"
+        readOnly={readOnly}
         required
       />
     </div>
@@ -93,12 +96,13 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
   const [loginError, setLoginError] = useState('')
   const [setupSuccessHint, setSetupSuccessHint] = useState('')
   const [sessionCredentials, setSessionCredentials] = useState<SessionCredentials | null>(null)
+  const [verifiedPhone, setVerifiedPhone] = useState<string | null>(null)
+  const [showPasswordLoginButton, setShowPasswordLoginButton] = useState(false)
+  const [onboardingCompleted, setOnboardingCompleted] = useState(false)
 
   const [smsForm, setSmsForm] = useState({ phone: '', verificationCode: '' })
   const [passwordForm, setPasswordForm] = useState({ phone: '', password: '' })
   const [setupForm, setSetupForm] = useState({
-    phone: '',
-    verificationCode: '',
     newPassword: '',
     confirmPassword: '',
   })
@@ -114,12 +118,17 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
       setSetupError('')
       setLoginError('')
       setSetupSuccessHint('')
-      setSessionCredentials(null)
       setSmsForm({ phone: '', verificationCode: '' })
       setPasswordForm({ phone: '', password: '' })
-      setSetupForm({ phone: '', verificationCode: '', newPassword: '', confirmPassword: '' })
+      setSetupForm({ newPassword: '', confirmPassword: '' })
+
+      if (!onboardingCompleted) {
+        setVerifiedPhone(null)
+        setSessionCredentials(null)
+        setShowPasswordLoginButton(false)
+      }
     }
-  }, [isOpen])
+  }, [isOpen, onboardingCompleted])
 
   const handleGetVerificationCode = (phone: string, scene: string) => {
     console.log('[LoginDialog] 获取验证码:', { phone, scene })
@@ -131,30 +140,44 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
 
   const handleSmsSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('[LoginDialog] 验证码登录:', smsForm)
-    onClose()
-  }
+    console.log('[LoginDialog] 验证码登录成功，进入首次设置密码:', smsForm)
 
-  const enterPasswordFlow = () => {
+    setVerifiedPhone(smsForm.phone)
     setLoginMode('password')
     setPasswordStep('setup')
     setSetupError('')
+    setSetupForm({ newPassword: '', confirmPassword: '' })
+
+    toast({
+      title: '验证码验证成功',
+      description: '请设置您的登录密码',
+    })
+  }
+
+  const enterPasswordLogin = () => {
+    if (!sessionCredentials) {
+      console.log('[LoginDialog] 尚未完成密码设置，无法密码登录')
+      return
+    }
+
+    setLoginMode('password')
+    setPasswordStep('login')
     setLoginError('')
     setSetupSuccessHint('')
-    setSessionCredentials(null)
-    setSetupForm((prev) => ({
-      ...prev,
-      phone: smsForm.phone || prev.phone,
-      verificationCode: '',
-      newPassword: '',
-      confirmPassword: '',
-    }))
-    console.log('[LoginDialog] demo 模式，进入首次设置密码')
+    setPasswordForm({ phone: sessionCredentials.phone, password: '' })
+    console.log('[LoginDialog] 进入密码登录:', { phone: sessionCredentials.phone })
   }
 
   const handleSetupPasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setSetupError('')
+
+    const phone = verifiedPhone
+    if (!phone) {
+      setSetupError('请先完成手机验证码登录')
+      console.log('[LoginDialog] 设置密码失败: 未验证手机号')
+      return
+    }
 
     if (setupForm.newPassword.length < 8 || !/\d/.test(setupForm.newPassword)) {
       setSetupError('密码至少8位，且包含数字')
@@ -168,20 +191,15 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
       return
     }
 
-    const credentials = {
-      phone: setupForm.phone,
-      password: setupForm.newPassword,
-    }
+    const credentials = { phone, password: setupForm.newPassword }
     setSessionCredentials(credentials)
 
-    console.log('[LoginDialog] 首次设置密码成功，进入密码登录:', {
-      phone: credentials.phone,
-    })
+    console.log('[LoginDialog] 首次设置密码成功，进入密码登录:', { phone })
 
     setPasswordStep('login')
-    setPasswordForm({ phone: setupForm.phone, password: '' })
+    setPasswordForm({ phone, password: '' })
     setSetupSuccessHint('密码设置成功，请使用密码登录')
-    setSetupForm({ phone: '', verificationCode: '', newPassword: '', confirmPassword: '' })
+    setSetupForm({ newPassword: '', confirmPassword: '' })
 
     toast({
       title: '密码设置成功',
@@ -204,6 +222,9 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
     }
 
     console.log('[LoginDialog] 密码登录成功:', { phone: passwordForm.phone })
+    setOnboardingCompleted(true)
+    setShowPasswordLoginButton(true)
+
     toast({
       title: '登录成功',
       description: `欢迎回来，${passwordForm.phone}`,
@@ -237,10 +258,12 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
             登录/注册
           </button>
 
-          <div className="flex items-center justify-between">
-            <button type="button" className={linkClassName} onClick={enterPasswordFlow}>
-              密码登录
-            </button>
+          <div className={`flex items-center ${showPasswordLoginButton ? 'justify-between' : 'justify-end'}`}>
+            {showPasswordLoginButton && (
+              <button type="button" className={linkClassName} onClick={enterPasswordLogin}>
+                密码登录
+              </button>
+            )}
             <button type="button" className={linkClassName}>
               旧手机号无法使用？
             </button>
@@ -254,21 +277,13 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
     <>
       <h2 className="text-[20px] font-semibold text-[#1E1F2D] mb-[30px]">首次登录设置密码</h2>
       <p className="text-[10px] text-[#72737A] mb-[24px] leading-relaxed">
-        请输入手机号并完成验证码验证，然后设置您的登录密码
+        手机验证码已通过，请设置您的登录密码
       </p>
 
       <form onSubmit={handleSetupPasswordSubmit} className="space-y-[28px]">
-        <PhoneInput
-          value={setupForm.phone}
-          onChange={(phone) => setSetupForm((prev) => ({ ...prev, phone }))}
-        />
-
-        <VerificationCodeInput
-          value={setupForm.verificationCode}
-          onChange={(verificationCode) => setSetupForm((prev) => ({ ...prev, verificationCode }))}
-          phone={setupForm.phone}
-          onGetCode={() => handleGetVerificationCode(setupForm.phone, 'setup_password')}
-        />
+        {verifiedPhone && (
+          <PhoneInput value={verifiedPhone} onChange={() => {}} readOnly />
+        )}
 
         <div className={rowClassName}>
           <span className="whitespace-nowrap text-[11px] text-[#1E1F2D]">新密码</span>
@@ -300,21 +315,10 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
           <button
             type="submit"
             className={submitClassName}
-            disabled={
-              !setupForm.phone ||
-              !setupForm.verificationCode ||
-              !setupForm.newPassword ||
-              !setupForm.confirmPassword
-            }
+            disabled={!setupForm.newPassword || !setupForm.confirmPassword}
           >
             完成设置
           </button>
-
-          <div className="text-right">
-            <button type="button" className={linkClassName} onClick={() => setLoginMode('sms')}>
-              验证码登录
-            </button>
-          </div>
         </div>
       </form>
     </>
@@ -357,29 +361,9 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
             登录
           </button>
 
-          <div className="flex items-center justify-between">
+          <div className="text-right">
             <button type="button" className={linkClassName} onClick={() => setLoginMode('sms')}>
               验证码登录
-            </button>
-            <button
-              type="button"
-              className={linkClassName}
-              onClick={() => {
-                setPasswordStep('setup')
-                setSetupSuccessHint('')
-                setLoginError('')
-                setSessionCredentials(null)
-                setSetupForm((prev) => ({
-                  ...prev,
-                  phone: passwordForm.phone,
-                  verificationCode: '',
-                  newPassword: '',
-                  confirmPassword: '',
-                }))
-                console.log('[LoginDialog] 重新设置密码')
-              }}
-            >
-              重新设置密码
             </button>
           </div>
         </div>
