@@ -122,33 +122,28 @@ export function DropdownMenu({ isOpen, onClose, onOpenStockDetail, onOpenCommuni
   }
 
 
-  if (!isOpen) return null
-
   return (
     <>
-      {/* Login Dialog - Always render when needed */}
-      <LoginDialog 
+      {/* Login Dialog - 保持挂载，避免退出登录后 demo 状态丢失 */}
+      <LoginDialog
         isOpen={showLoginDialog}
         onClose={handleLoginClose}
       />
-      
+
       {/* Settings Detail Page */}
-      <SettingsDetailPage 
-        isOpen={showSettingsDetail} 
+      <SettingsDetailPage
+        isOpen={showSettingsDetail}
         onClose={handleSettingsClose}
         className={className}
       />
 
-
-
-      <OrderHistoryDialog 
+      <OrderHistoryDialog
         isOpen={showOrderHistory}
         onClose={handleOrderHistoryClose}
       />
 
-
       {/* Main Dropdown Menu - Only show when settings is not open */}
-      {!showSettingsDetail && (
+      {isOpen && !showSettingsDetail && (
         <div 
           ref={dropdownRef}
           className={cn(
