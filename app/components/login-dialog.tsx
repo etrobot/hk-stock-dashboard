@@ -130,24 +130,35 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
 
   useEffect(() => {
     if (!isOpen) {
-      setLoginMode('sms')
-      setPasswordStep('setup')
       setSetupError('')
       setLoginError('')
       setForgotError('')
       setSetupSuccessHint('')
       setSmsForm({ phone: '', verificationCode: '' })
-      setPasswordForm({ phone: '', password: '' })
       setSetupForm({ newPassword: '', confirmPassword: '' })
       setForgotForm({ newPassword: '', confirmPassword: '', phone: '', verificationCode: '' })
 
       if (!onboardingCompleted) {
+        setLoginMode('sms')
+        setPasswordStep('setup')
         setVerifiedPhone(null)
         setSessionCredentials(null)
         setShowPasswordLoginButton(false)
+        setPasswordForm({ phone: '', password: '' })
+      } else {
+        setPasswordForm((prev) => ({ ...prev, password: '' }))
       }
+      return
     }
-  }, [isOpen, onboardingCompleted])
+
+    if (onboardingCompleted && sessionCredentials) {
+      setLoginMode('password')
+      setPasswordStep('login')
+      setPasswordForm({ phone: sessionCredentials.phone, password: '' })
+      setShowPasswordLoginButton(true)
+      console.log('[LoginDialog] 已完成 onboarding，默认密码登录')
+    }
+  }, [isOpen, onboardingCompleted, sessionCredentials])
 
   const handleGetVerificationCode = (phone: string, scene: string) => {
     console.log('[LoginDialog] 获取验证码:', { phone, scene })
