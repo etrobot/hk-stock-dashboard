@@ -11,7 +11,7 @@ interface LoginDialogProps {
 }
 
 type LoginMode = 'sms' | 'password' | 'qr'
-type PasswordStep = 'setup' | 'login' | 'forgot-password' | 'forgot-verify'
+type PasswordStep = 'setup' | 'login' | 'forgot-password'
 
 interface SessionCredentials {
   phone: string
@@ -216,7 +216,47 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
       phone: sessionCredentials?.phone || passwordForm.phone || '',
       verificationCode: '',
     })
-    console.log('[LoginDialog] 进入忘记密码')
+    console.log('[LoginDialog] 进入重置密码')
+  }
+
+  const handleResetPasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setForgotError('')
+
+    if (!forgotForm.phone || !forgotForm.verificationCode) {
+      setForgotError('请填写手机号和验证码')
+      return
+    }
+
+    const passwordError = validatePassword(forgotForm.newPassword)
+    if (passwordError) {
+      setForgotError(passwordError)
+      console.log('[LoginDialog] 重置密码校验失败: 密码格式不符')
+      return
+    }
+
+    if (forgotForm.newPassword !== forgotForm.confirmPassword) {
+      setForgotError('两次输入的密码不一致')
+      console.log('[LoginDialog] 重置密码校验失败: 密码不一致')
+      return
+    }
+
+    const credentials = { phone: forgotForm.phone, password: forgotForm.newPassword }
+    setSessionCredentials(credentials)
+    setShowPasswordLoginButton(true)
+    setOnboardingCompleted(true)
+
+    console.log('[LoginDialog] 重置密码成功:', { phone: forgotForm.phone })
+
+    setPasswordStep('login')
+    setPasswordForm({ phone: forgotForm.phone, password: '' })
+    setSetupSuccessHint('密码已重置，请使用新密码登录')
+    setForgotForm({ newPassword: '', confirmPassword: '', phone: '', verificationCode: '' })
+
+    toast({
+      title: '密码重置成功',
+      description: '请使用新密码登录',
+    })
   }
 
   const handleSetupPasswordSubmit = (e: React.FormEvent) => {
@@ -256,59 +296,6 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
     toast({
       title: '密码设置成功',
       description: '请继续完成密码登录',
-    })
-  }
-
-  const handleForgotPasswordSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setForgotError('')
-
-    const passwordError = validatePassword(forgotForm.newPassword)
-    if (passwordError) {
-      setForgotError(passwordError)
-      console.log('[LoginDialog] 忘记密码校验失败: 密码格式不符')
-      return
-    }
-
-    if (forgotForm.newPassword !== forgotForm.confirmPassword) {
-      setForgotError('两次输入的密码不一致')
-      console.log('[LoginDialog] 忘记密码校验失败: 密码不一致')
-      return
-    }
-
-    console.log('[LoginDialog] 新密码已填写，进入手机验证')
-    setPasswordStep('forgot-verify')
-    setForgotForm((prev) => ({
-      ...prev,
-      verificationCode: '',
-      phone: prev.phone || sessionCredentials?.phone || '',
-    }))
-  }
-
-  const handleForgotVerifySubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setForgotError('')
-
-    if (!forgotForm.phone || !forgotForm.verificationCode) {
-      setForgotError('请填写手机号和验证码')
-      return
-    }
-
-    const credentials = { phone: forgotForm.phone, password: forgotForm.newPassword }
-    setSessionCredentials(credentials)
-    setShowPasswordLoginButton(true)
-    setOnboardingCompleted(true)
-
-    console.log('[LoginDialog] 忘记密码重置成功:', { phone: forgotForm.phone })
-
-    setPasswordStep('login')
-    setPasswordForm({ phone: forgotForm.phone, password: '' })
-    setSetupSuccessHint('密码已重置，请使用新密码登录')
-    setForgotForm({ newPassword: '', confirmPassword: '', phone: '', verificationCode: '' })
-
-    toast({
-      title: '密码重置成功',
-      description: '请使用新密码登录',
     })
   }
 
@@ -477,7 +464,7 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
               验证码登录
             </button>
             <button type="button" className={linkClassName} onClick={enterForgotPassword}>
-              忘记密码
+              重置密码
             </button>
           </div>
         </div>
@@ -485,14 +472,14 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
     </>
   )
 
-  const renderForgotPassword = () => (
+  const renderResetPassword = () => (
     <>
-      <h2 className="text-[20px] font-semibold text-[#1E1F2D] mb-[30px]">忘记密码</h2>
-      <p className="text-[10px] text-[#72737A] mb-[24px] leading-relaxed">
-        请先设置新密码，下一步将通过手机号验证
+      <h2 className="text-[20px] font-semibold text-[#1E1F2D] mb-[24px]">重置密码</h2>
+      <p className="text-[10px] text-[#72737A] mb-[20px] leading-relaxed">
+        请先设置新密码，再验证手机号
       </p>
 
-      <form onSubmit={handleForgotPasswordSubmit} className="space-y-[28px]">
+      <form onSubmit={handleResetPasswordSubmit} className="space-y-[22px]">
         <div className={rowClassName}>
           <span className="whitespace-nowrap text-[11px] text-[#1E1F2D]">新密码</span>
           <input
@@ -517,15 +504,32 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
           />
         </div>
 
+        <PhoneInput
+          value={forgotForm.phone}
+          onChange={(phone) => setForgotForm((prev) => ({ ...prev, phone }))}
+        />
+
+        <VerificationCodeInput
+          value={forgotForm.verificationCode}
+          onChange={(verificationCode) => setForgotForm((prev) => ({ ...prev, verificationCode }))}
+          phone={forgotForm.phone}
+          onGetCode={() => handleGetVerificationCode(forgotForm.phone, 'reset_password')}
+        />
+
         {forgotError && <p className="text-[10px] text-red-500">{forgotError}</p>}
 
         <div className="pt-[4px] space-y-3">
           <button
             type="submit"
             className={submitClassName}
-            disabled={!forgotForm.newPassword || !forgotForm.confirmPassword}
+            disabled={
+              !forgotForm.phone ||
+              !forgotForm.verificationCode ||
+              !forgotForm.newPassword ||
+              !forgotForm.confirmPassword
+            }
           >
-            下一步
+            完成重置
           </button>
 
           <div className="text-right">
@@ -545,54 +549,6 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
     </>
   )
 
-  const renderForgotVerify = () => (
-    <>
-      <h2 className="text-[20px] font-semibold text-[#1E1F2D] mb-[30px]">验证手机号</h2>
-      <p className="text-[10px] text-[#72737A] mb-[24px] leading-relaxed">
-        请验证手机号以完成密码重置
-      </p>
-
-      <form onSubmit={handleForgotVerifySubmit} className="space-y-[28px]">
-        <PhoneInput
-          value={forgotForm.phone}
-          onChange={(phone) => setForgotForm((prev) => ({ ...prev, phone }))}
-        />
-
-        <VerificationCodeInput
-          value={forgotForm.verificationCode}
-          onChange={(verificationCode) => setForgotForm((prev) => ({ ...prev, verificationCode }))}
-          phone={forgotForm.phone}
-          onGetCode={() => handleGetVerificationCode(forgotForm.phone, 'forgot_password')}
-        />
-
-        {forgotError && <p className="text-[10px] text-red-500">{forgotError}</p>}
-
-        <div className="pt-[4px] space-y-3">
-          <button
-            type="submit"
-            className={submitClassName}
-            disabled={!forgotForm.phone || !forgotForm.verificationCode}
-          >
-            完成重置
-          </button>
-
-          <div className="text-right">
-            <button
-              type="button"
-              className={linkClassName}
-              onClick={() => {
-                setPasswordStep('forgot-password')
-                setForgotError('')
-              }}
-            >
-              返回上一步
-            </button>
-          </div>
-        </div>
-      </form>
-    </>
-  )
-
   const renderPasswordMode = () => {
     switch (passwordStep) {
       case 'setup':
@@ -600,9 +556,7 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
       case 'login':
         return renderPasswordLogin()
       case 'forgot-password':
-        return renderForgotPassword()
-      case 'forgot-verify':
-        return renderForgotVerify()
+        return renderResetPassword()
       default:
         return renderPasswordLogin()
     }
