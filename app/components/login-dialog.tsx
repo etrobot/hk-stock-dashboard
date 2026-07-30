@@ -27,10 +27,10 @@ const submitClassName =
 
 function validatePassword(password: string): string | null {
   if (password.length < 6) {
-    return '密码至少6位，且包含数字和字母'
+    return '密码6到14位，且包含数字和字母'
   }
   if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
-    return '密码至少6位，且包含数字和字母'
+    return '密码6到14位，且包含数字和字母'
   }
   return null
 }
