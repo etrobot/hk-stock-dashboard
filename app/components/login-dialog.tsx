@@ -373,10 +373,6 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
       </p>
 
       <form onSubmit={handleSetupPasswordSubmit} className="space-y-[28px]">
-        {verifiedPhone && (
-          <PhoneInput value={verifiedPhone} onChange={() => {}} readOnly />
-        )}
-
         <div className={rowClassName}>
           <span className="whitespace-nowrap text-[11px] text-[#1E1F2D]">新密码</span>
           <input
