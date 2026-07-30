@@ -27,10 +27,10 @@ const submitClassName =
 
 function validatePassword(password: string): string | null {
   if (password.length < 6) {
-    return '密码6到14位，且包含数字和字母'
+    return '密码6到14位，且必须为数字和字母'
   }
   if (!/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
-    return '密码6到14位，且包含数字和字母'
+    return '密码6到14位，且必须为数字和字母'
   }
   return null
 }
@@ -379,7 +379,7 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
             value={setupForm.newPassword}
             onChange={(e) => setSetupForm((prev) => ({ ...prev, newPassword: e.target.value }))}
             className={`${inputClassName} ml-[15px]`}
-            placeholder="至少6位，包含数字和字母"
+            placeholder="6到14位，必须为数字和字母"
             required
           />
         </div>
@@ -482,7 +482,7 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
             value={forgotForm.newPassword}
             onChange={(e) => setForgotForm((prev) => ({ ...prev, newPassword: e.target.value }))}
             className={`${inputClassName} ml-[15px]`}
-            placeholder="至少6位，包含数字和字母"
+            placeholder="6到14位，必须为数字和字母"
             required
           />
         </div>
