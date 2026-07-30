@@ -285,18 +285,17 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
 
     const credentials = { phone, password: setupForm.newPassword }
     setSessionCredentials(credentials)
-
-    console.log('[LoginDialog] 首次设置密码成功，进入密码登录:', { phone })
-
-    setPasswordStep('login')
-    setPasswordForm({ phone, password: '' })
-    setSetupSuccessHint('密码设置成功，请使用密码登录')
+    setOnboardingCompleted(true)
+    setShowPasswordLoginButton(true)
     setSetupForm({ newPassword: '', confirmPassword: '' })
 
+    console.log('[LoginDialog] 首次设置密码成功，直接登录:', { phone })
+
     toast({
-      title: '密码设置成功',
-      description: '请继续完成密码登录',
+      title: '登录成功',
+      description: `欢迎回来，${phone}`,
     })
+    onClose()
   }
 
   const handlePasswordLoginSubmit = (e: React.FormEvent) => {
@@ -405,7 +404,7 @@ export function LoginDialog({ isOpen, onClose }: LoginDialogProps) {
             className={submitClassName}
             disabled={!setupForm.newPassword || !setupForm.confirmPassword}
           >
-            完成设置
+            登录
           </button>
 
           <div className="text-right">
