@@ -89,6 +89,26 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
   const [showLayoutListPanel, setShowLayoutListPanel] = useState(false)
   const [layoutNameInput, setLayoutNameInput] = useState('')
 
+  // Dirty tracking: compare current state vs last-loaded config
+  const [order, setOrder] = useState<string[]>(defaultInitialOrder)
+  const lastLoadedRef = useRef<{ order: string[]; hiddenIds: string[]; showAside: boolean }>({
+    order: [...defaultInitialOrder],
+    hiddenIds: [],
+    showAside: true,
+  })
+
+  // Pending switch target (when user needs to confirm unsaved changes before switching)
+  const [pendingSwitchTarget, setPendingSwitchTarget] = useState<LayoutConfig | null>(null)
+  const [showSwitchConfirm, setShowSwitchConfirm] = useState(false)
+
+  const isDirty = useMemo(() => {
+    const last = lastLoadedRef.current
+    const orderSame = JSON.stringify(order) === JSON.stringify(last.order)
+    const hiddenSame = JSON.stringify([...hiddenIds].sort()) === JSON.stringify([...last.hiddenIds].sort())
+    const asideSame = showAside === last.showAside
+    return !orderSame || !hiddenSame || !asideSame
+  }, [order, hiddenIds, showAside])
+
   // Merge default + saved; default is always at top, not editable (no delete)
   const displayedLayouts = useMemo(
     () => [defaultLayout, ...layouts],
@@ -120,6 +140,21 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
     return `${y}/${mm}/${dd}-${hh}:${mi}:${ss}`
   }
 
+  const applyLayout = (layout: LayoutConfig) => {
+    setOrder([...layout.order])
+    setHiddenIds(new Set(layout.hiddenIds))
+    if (showAside !== layout.showAside) {
+      onToggleAside()
+    }
+    setActiveLayoutId(layout.id)
+    lastLoadedRef.current = {
+      order: [...layout.order],
+      hiddenIds: [...layout.hiddenIds],
+      showAside: layout.showAside,
+    }
+    bumpActiveBadge()
+  }
+
   const handleSaveLayout = () => {
     const base = layoutNameInput.trim()
     if (!base) return
@@ -134,19 +169,47 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
     }
     setLayouts(prev => [...prev, newLayout])
     setActiveLayoutId(newLayout.id)
+    lastLoadedRef.current = {
+      order: [...order],
+      hiddenIds: Array.from(hiddenIds),
+      showAside,
+    }
     bumpActiveBadge()
     setShowSaveDialog(false)
     setLayoutNameInput('')
+
+    // If there's a pending switch, execute it after saving
+    if (pendingSwitchTarget) {
+      const target = pendingSwitchTarget
+      setPendingSwitchTarget(null)
+      // Use setTimeout to ensure state updates are flushed
+      setTimeout(() => applyLayout(target), 0)
+    }
   }
 
   const handleSwitchLayout = (layout: LayoutConfig) => {
-    setOrder([...layout.order])
-    setHiddenIds(new Set(layout.hiddenIds))
-    if (showAside !== layout.showAside) {
-      onToggleAside()
+    if (isDirty) {
+      setPendingSwitchTarget(layout)
+      setShowSwitchConfirm(true)
+      setShowLayoutListPanel(false)
+    } else {
+      applyLayout(layout)
+      setShowLayoutListPanel(false)
     }
-    setActiveLayoutId(layout.id)
-    bumpActiveBadge()
+  }
+
+  const handleDiscardAndSwitch = () => {
+    setShowSwitchConfirm(false)
+    if (pendingSwitchTarget) {
+      applyLayout(pendingSwitchTarget)
+      setPendingSwitchTarget(null)
+    }
+    setShowLayoutListPanel(false)
+  }
+
+  const handleSaveBeforeSwitch = () => {
+    setShowSwitchConfirm(false)
+    setShowSaveDialog(true)
   }
 
   const handleDeleteLayout = (id: string) => {
@@ -155,7 +218,6 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
     if (activeLayoutId === id) setActiveLayoutId(null)
   }
 
-  const [order, setOrder] = useState<string[]>(defaultInitialOrder)
 
   const stockData = mockStockData
   const indexDetail = transformStockToIndex(stockData)
@@ -665,7 +727,7 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
           <Button
             variant="outline"
             size="sm"
-            className="h-6 px-2 text-xs gap-1 relative"
+            className="h-6 px-2 text-xs gap-1"
             onClick={() => {
               setShowLayoutListPanel(v => !v)
               setShowManagePanel(false)
@@ -673,15 +735,15 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
           >
             <FolderOpen className="w-3.5 h-3.5" />
             布局管理
-            {layouts.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#FF5C00] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-                {layouts.length}
-              </span>
-            )}
           </Button>
           <Button
             size="sm"
-            className="h-6 px-2 text-xs gap-1 bg-[#FF5C00] hover:bg-[#e54f00]"
+            className={`h-6 px-2 text-xs gap-1 transition-colors ${
+              isDirty
+                ? 'bg-[#FF5C00] hover:bg-[#e54f00] text-white'
+                : 'bg-muted text-muted-foreground cursor-not-allowed'
+            }`}
+            disabled={!isDirty}
             onClick={() => {
               setShowSaveDialog(true)
               setLayoutNameInput('')
@@ -806,6 +868,33 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
               disabled={!layoutNameInput.trim()}
             >
               确定
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* switch confirmation dialog */}
+      <Dialog open={showSwitchConfirm} onOpenChange={setShowSwitchConfirm}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>当前布局未保存</DialogTitle>
+          </DialogHeader>
+          <div className="text-sm text-muted-foreground py-2">
+            当前布局已修改但未保存，是否保存？
+          </div>
+          <DialogFooter className="flex gap-2">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={handleDiscardAndSwitch}
+            >
+              永久丢弃
+            </Button>
+            <Button
+              className="flex-1 bg-[#FF5C00] hover:bg-[#e54f00]"
+              onClick={handleSaveBeforeSwitch}
+            >
+              保存当前布局
             </Button>
           </DialogFooter>
         </DialogContent>
