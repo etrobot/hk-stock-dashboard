@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { GripVertical, Heart, TrendingUp, RefreshCwIcon, X, LayoutGrid, Save, FolderOpen, Trash2 } from 'lucide-react'
+import { Heart, TrendingUp, RefreshCwIcon, X, LayoutGrid, Save, FolderOpen, Trash2 } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Card, CardContent } from './ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
@@ -901,13 +901,13 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
       </Dialog>
 
       {/* draggable dashboard - horizontal scroll, 3 rows like a financial terminal */}
-      <div className="flex-1 overflow-x-auto overflow-y-hidden p-3">
+      <div className="flex-1 overflow-x-auto overflow-y-hidden">
         <div
-          className="inline-grid gap-3 h-full"
+          className="inline-grid gap-px h-full"
           style={{
             gridTemplateRows: 'repeat(3, minmax(0, 1fr))',
             gridAutoFlow: 'column dense',
-            gridAutoColumns: '112px',
+            gridAutoColumns: '108px',
           }}
         >
           {order.filter(id => !hiddenIds.has(id)).map((id) => {
@@ -922,19 +922,16 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
                 onDrop={handleDrop}
                 onDragEnd={() => setDraggedId(null)}
                 style={{ gridColumn: `span ${block.span}`, gridRow: block.rowSpan ? `span ${block.rowSpan}` : undefined }}
-                className={draggedId === id ? 'opacity-50' : ''}
+                className={`relative ${draggedId === id ? 'opacity-50' : ''}`}
               >
-                <div className="border border-border rounded-md bg-card overflow-hidden shadow-sm h-full flex flex-col">
-                  <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-muted/30 cursor-grab active:cursor-grabbing select-none flex-shrink-0">
-                    <GripVertical className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-xs font-medium text-foreground flex-1">{block.title}</span>
-                    <button
-                      onClick={() => toggleHidden(id)}
-                      className="text-muted-foreground hover:text-foreground p-0.5 rounded hover:bg-accent"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                <div className="border border-border bg-card overflow-hidden h-full flex flex-col">
+                  <button
+                    onClick={() => toggleHidden(id)}
+                    className="absolute top-1 right-1 z-10 w-4 h-4 flex items-center justify-center rounded-sm bg-muted/60 hover:bg-accent text-muted-foreground hover:text-foreground"
+                    title={block.title}
+                  >
+                    <X className="w-2.5 h-2.5" />
+                  </button>
                   <div className="p-4 flex-1 min-h-0 overflow-y-auto">
                     {block.content}
                   </div>

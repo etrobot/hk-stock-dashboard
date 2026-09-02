@@ -90,7 +90,7 @@ export default function TradePage() {
   }
 
   return (
-    <div className="h-full bg-background text-foreground relative flex">
+    <div className="h-full bg-background text-foreground relative flex no-scrollbar">
       {/* Left AsideList - fixed, not draggable, can be hidden via panel management */}
       {showAside && <AsideList
         rankingTitle={t('nav.watchlist')}
