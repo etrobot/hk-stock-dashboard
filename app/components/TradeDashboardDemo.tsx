@@ -1,11 +1,14 @@
 'use client'
 
-import { useState } from 'react'
-import { GripVertical, Heart, TrendingUp, RefreshCwIcon, X, LayoutGrid } from 'lucide-react'
+import { useState, useEffect, useRef, useMemo } from 'react'
+import { GripVertical, Heart, TrendingUp, RefreshCwIcon, X, LayoutGrid, Save, FolderOpen, Trash2 } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Card, CardContent } from './ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { Button } from './ui/button'
+import { Input } from './ui/input'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from './ui/dialog'
+import { Label } from './ui/label'
 import { StockGridItem } from './stock-grid-item'
 import { TradeTickPanel } from './trade-tick-panel'
 import { CapitalFlowChart } from './CapitalFlowChart'
@@ -52,12 +55,107 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
   const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set())
   const [showManagePanel, setShowManagePanel] = useState(false)
 
-  const [order, setOrder] = useState<string[]>([
+  // Layout management
+  type LayoutConfig = {
+    id: string
+    name: string
+    savedAt: string
+    order: string[]
+    hiddenIds: string[]
+    showAside: boolean
+    isDefault?: boolean
+  }
+  const DEFAULT_LAYOUT_ID = 'default_layout'
+  const defaultInitialOrder = [
     'orderbook', 'kline', 'levels',
     'ticks', 'fundflow', 'news', 'analysis',
     'assets', 'cash', 'withdraw', 'form',
     'assetPanel',
-  ])
+  ]
+  const defaultLayout: LayoutConfig = {
+    id: DEFAULT_LAYOUT_ID,
+    name: '默认布局',
+    savedAt: '-',
+    order: defaultInitialOrder,
+    hiddenIds: [],
+    showAside: true,
+    isDefault: true,
+  }
+  const [layouts, setLayouts] = useState<LayoutConfig[]>([])
+  const [activeLayoutId, setActiveLayoutId] = useState<string | null>(null)
+  const [showActiveBadge, setShowActiveBadge] = useState(false)
+  const badgeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [showSaveDialog, setShowSaveDialog] = useState(false)
+  const [showLayoutListPanel, setShowLayoutListPanel] = useState(false)
+  const [layoutNameInput, setLayoutNameInput] = useState('')
+
+  // Merge default + saved; default is always at top, not editable (no delete)
+  const displayedLayouts = useMemo(
+    () => [defaultLayout, ...layouts],
+    [layouts]
+  )
+
+  // Clear previous active badge display timer and start a new 3s one
+  const bumpActiveBadge = () => {
+    setShowActiveBadge(true)
+    if (badgeTimerRef.current) clearTimeout(badgeTimerRef.current)
+    badgeTimerRef.current = setTimeout(() => {
+      setShowActiveBadge(false)
+    }, 3000)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (badgeTimerRef.current) clearTimeout(badgeTimerRef.current)
+    }
+  }, [])
+
+  const formatSavedAt = (date: Date) => {
+    const y = date.getFullYear()
+    const mm = String(date.getMonth() + 1).padStart(2, '0')
+    const dd = String(date.getDate()).padStart(2, '0')
+    const hh = String(date.getHours()).padStart(2, '0')
+    const mi = String(date.getMinutes()).padStart(2, '0')
+    const ss = String(date.getSeconds()).padStart(2, '0')
+    return `${y}/${mm}/${dd}-${hh}:${mi}:${ss}`
+  }
+
+  const handleSaveLayout = () => {
+    const base = layoutNameInput.trim()
+    if (!base) return
+    const now = new Date()
+    const newLayout: LayoutConfig = {
+      id: `ly_${Date.now()}`,
+      name: base,
+      savedAt: formatSavedAt(now),
+      order: [...order],
+      hiddenIds: Array.from(hiddenIds),
+      showAside,
+    }
+    setLayouts(prev => [...prev, newLayout])
+    setActiveLayoutId(newLayout.id)
+    bumpActiveBadge()
+    setShowSaveDialog(false)
+    setLayoutNameInput('')
+  }
+
+  const handleSwitchLayout = (layout: LayoutConfig) => {
+    setOrder([...layout.order])
+    setHiddenIds(new Set(layout.hiddenIds))
+    if (showAside !== layout.showAside) {
+      onToggleAside()
+    }
+    setActiveLayoutId(layout.id)
+    bumpActiveBadge()
+  }
+
+  const handleDeleteLayout = (id: string) => {
+    if (id === DEFAULT_LAYOUT_ID) return
+    setLayouts(prev => prev.filter(l => l.id !== id))
+    if (activeLayoutId === id) setActiveLayoutId(null)
+  }
+
+  const [order, setOrder] = useState<string[]>(defaultInitialOrder)
 
   const stockData = mockStockData
   const indexDetail = transformStockToIndex(stockData)
@@ -536,26 +634,61 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
     <div className="h-full flex flex-col min-w-0 bg-background text-foreground">
       {/* account selector bar */}
       <div className="p-3 border-b flex items-center justify-between flex-shrink-0 relative">
-        <Select value={selectedAccount} onValueChange={setSelectedAccount}>
-          <SelectTrigger className="bg-input text-xs h-6 px-2 border-0">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-popover border-border">
-            <SelectItem value="孖展账户12345678" className="text-xs">孖展账户12345678</SelectItem>
-            <SelectItem value="现金账户888888" className="text-xs">现金账户888888</SelectItem>
-            <SelectItem value="VA账户12345678" className="text-xs">VA账户12345678</SelectItem>
-          </SelectContent>
-        </Select>
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-muted-foreground">拖动块标题即可自由拖拽排列</span>
+        <div className="flex items-center gap-2">
+          <Select value={selectedAccount} onValueChange={setSelectedAccount}>
+            <SelectTrigger className="bg-input text-xs h-6 px-2 border-0">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-popover border-border">
+              <SelectItem value="孖展账户12345678" className="text-xs">孖展账户12345678</SelectItem>
+              <SelectItem value="现金账户888888" className="text-xs">现金账户888888</SelectItem>
+              <SelectItem value="VA账户12345678" className="text-xs">VA账户12345678</SelectItem>
+            </SelectContent>
+          </Select>
+          {activeLayoutId && showActiveBadge && (
+            <span className="text-xs text-[#FF5C00] px-2 py-0.5 border border-[#FF5C00]/40 rounded transition-opacity duration-300">
+              {displayedLayouts.find(l => l.id === activeLayoutId)?.name}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground hidden md:inline">拖动块标题即可自由拖拽排列</span>
           <Button
             variant="outline"
             size="sm"
             className="h-6 px-2 text-xs gap-1"
-            onClick={() => setShowManagePanel(!showManagePanel)}
+            onClick={() => setShowManagePanel(v => !v)}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
             模块管理
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-6 px-2 text-xs gap-1 relative"
+            onClick={() => {
+              setShowLayoutListPanel(v => !v)
+              setShowManagePanel(false)
+            }}
+          >
+            <FolderOpen className="w-3.5 h-3.5" />
+            布局管理
+            {layouts.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-[#FF5C00] text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+                {layouts.length}
+              </span>
+            )}
+          </Button>
+          <Button
+            size="sm"
+            className="h-6 px-2 text-xs gap-1 bg-[#FF5C00] hover:bg-[#e54f00]"
+            onClick={() => {
+              setShowSaveDialog(true)
+              setLayoutNameInput('')
+            }}
+          >
+            <Save className="w-3.5 h-3.5" />
+            保存布局
           </Button>
         </div>
 
@@ -592,7 +725,91 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
             </div>
           </div>
         )}
+
+        {/* layout management list panel */}
+        {showLayoutListPanel && (
+          <div className="absolute top-full right-24 mt-1 z-50 w-72 bg-popover border border-border rounded-md shadow-lg p-2">
+            <div className="text-xs font-medium text-foreground mb-2 px-1 flex items-center justify-between">
+              <span>布局列表</span>
+              <span className="text-muted-foreground">共 {displayedLayouts.length} 个</span>
+            </div>
+            <div className="space-y-1 max-h-72 overflow-y-auto">
+              {displayedLayouts.map(layout => {
+                const isActive = layout.id === activeLayoutId
+                const isDefault = layout.isDefault
+                return (
+                  <div
+                    key={layout.id}
+                    className={`flex items-center justify-between gap-2 px-2 py-1.5 rounded border cursor-pointer transition-colors ${
+                      isActive ? 'border-[#FF5C00] bg-[#FF5C00]/5' : 'border-transparent hover:bg-accent'
+                    } ${isDefault ? 'bg-muted/30' : ''}`}
+                    onClick={() => handleSwitchLayout(layout)}
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1">
+                        {isDefault && (
+                          <span className="text-[10px] text-[#FF5C00] border border-[#FF5C00]/40 rounded px-1 py-0">默认</span>
+                        )}
+                        <div className={`text-xs truncate ${isActive ? 'text-[#FF5C00] font-medium' : 'text-foreground'}`}>
+                          {layout.name}
+                        </div>
+                      </div>
+                      <div className="text-[10px] text-muted-foreground truncate">{layout.savedAt}</div>
+                    </div>
+                    {isDefault ? (
+                      <span className="text-[10px] text-muted-foreground/60 px-1">不可删除</span>
+                    ) : (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeleteLayout(layout.id)
+                        }}
+                        className="text-muted-foreground hover:text-red-500 p-1 rounded hover:bg-red-50 flex-shrink-0"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* save layout dialog */}
+      <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>保存布局</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div>
+              <Label htmlFor="layoutName">布局名称</Label>
+              <Input
+                id="layoutName"
+                value={layoutNameInput}
+                onChange={(e) => setLayoutNameInput(e.target.value)}
+                placeholder="例如：日常看盘"
+                className="mt-1"
+              />
+              <div className="text-xs text-muted-foreground mt-2">
+                保存时会自动记录新增时间，格式：yyyy/mm/dd-hh:mm:ss
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowSaveDialog(false)}>取消</Button>
+            <Button
+              className="bg-[#FF5C00] hover:bg-[#e54f00]"
+              onClick={handleSaveLayout}
+              disabled={!layoutNameInput.trim()}
+            >
+              确定
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* draggable dashboard - horizontal scroll, 3 rows like a financial terminal */}
       <div className="flex-1 overflow-x-auto overflow-y-hidden p-3">
