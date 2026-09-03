@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { Heart, TrendingUp, RefreshCwIcon, X, LayoutGrid, Save, FolderOpen, Trash2 } from 'lucide-react'
+import { Heart, TrendingUp, RefreshCwIcon, X, Trash2, ArrowLeft } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Card, CardContent } from './ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
@@ -19,6 +19,7 @@ import { useTheme } from './theme-provider'
 import { type StockData, mockStockData } from '../data/mockStockData'
 import { type IndexDetail } from '../types/market'
 import { mockDetailedStocks } from '../data/mock-detailed-stocks'
+import { useLayout, type LayoutConfig, DEFAULT_INITIAL_ORDER, MODULE_DEFS } from '../contexts/LayoutContext'
 
 // Transform StockData to IndexDetail format (same as original TradePage)
 function transformStockToIndex(stockData: StockData): IndexDetail {
@@ -40,7 +41,12 @@ function transformStockToIndex(stockData: StockData): IndexDetail {
   }
 }
 
-export default function TradeDashboardDemo({ showAside, onToggleAside }: { showAside: boolean; onToggleAside: () => void }) {
+export default function TradeDashboardDemo({ showAside, onToggleAside, initialLayoutId, onBack }: {
+  showAside: boolean
+  onToggleAside: () => void
+  initialLayoutId?: string | null
+  onBack?: () => void
+}) {
   const { t } = useLanguage()
   const { resolvedTheme } = useTheme()
   const [selectedAccount, setSelectedAccount] = useState('孖展账户12345678')
@@ -55,34 +61,22 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
   const [hiddenIds, setHiddenIds] = useState<Set<string>>(new Set())
   const [showManagePanel, setShowManagePanel] = useState(false)
 
-  // Layout management
-  type LayoutConfig = {
-    id: string
-    name: string
-    savedAt: string
-    order: string[]
-    hiddenIds: string[]
-    showAside: boolean
-    isDefault?: boolean
-  }
-  const DEFAULT_LAYOUT_ID = 'default_layout'
-  const defaultInitialOrder = [
-    'orderbook', 'kline', 'levels',
-    'ticks', 'fundflow', 'news', 'analysis',
-    'assets', 'cash', 'withdraw', 'form',
-    'assetPanel',
-  ]
-  const defaultLayout: LayoutConfig = {
-    id: DEFAULT_LAYOUT_ID,
-    name: '默认布局',
-    savedAt: '-',
-    order: defaultInitialOrder,
-    hiddenIds: [],
-    showAside: true,
-    isDefault: true,
-  }
-  const [layouts, setLayouts] = useState<LayoutConfig[]>([])
-  const [activeLayoutId, setActiveLayoutId] = useState<string | null>(null)
+  // Layout management (shared catalog lives in LayoutContext)
+  const {
+    layouts,
+    displayedLayouts,
+    activeLayoutId,
+    setActiveLayoutId,
+    addLayout,
+    updateLayout,
+    deleteLayout,
+  } = useLayout()
+
+  // Is there an active custom (non-default) layout that can be overwritten?
+  const activeCustomLayout = activeLayoutId
+    ? layouts.find(l => l.id === activeLayoutId)
+    : undefined
+
   const [showActiveBadge, setShowActiveBadge] = useState(false)
   const badgeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [showSaveDialog, setShowSaveDialog] = useState(false)
@@ -90,9 +84,9 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
   const [layoutNameInput, setLayoutNameInput] = useState('')
 
   // Dirty tracking: compare current state vs last-loaded config
-  const [order, setOrder] = useState<string[]>(defaultInitialOrder)
+  const [order, setOrder] = useState<string[]>(DEFAULT_INITIAL_ORDER)
   const lastLoadedRef = useRef<{ order: string[]; hiddenIds: string[]; showAside: boolean }>({
-    order: [...defaultInitialOrder],
+    order: [...DEFAULT_INITIAL_ORDER],
     hiddenIds: [],
     showAside: true,
   })
@@ -108,12 +102,6 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
     const asideSame = showAside === last.showAside
     return !orderSame || !hiddenSame || !asideSame
   }, [order, hiddenIds, showAside])
-
-  // Merge default + saved; default is always at top, not editable (no delete)
-  const displayedLayouts = useMemo(
-    () => [defaultLayout, ...layouts],
-    [layouts]
-  )
 
   // Clear previous active badge display timer and start a new 3s one
   const bumpActiveBadge = () => {
@@ -155,20 +143,17 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
     bumpActiveBadge()
   }
 
-  const handleSaveLayout = () => {
-    const base = layoutNameInput.trim()
-    if (!base) return
-    const now = new Date()
-    const newLayout: LayoutConfig = {
-      id: `ly_${Date.now()}`,
-      name: base,
-      savedAt: formatSavedAt(now),
-      order: [...order],
-      hiddenIds: Array.from(hiddenIds),
-      showAside,
-    }
-    setLayouts(prev => [...prev, newLayout])
-    setActiveLayoutId(newLayout.id)
+  // 从缩略图选择页进入时，按传入的布局 id 加载布局
+  useEffect(() => {
+    if (!initialLayoutId) return
+    const target = displayedLayouts.find(l => l.id === initialLayoutId)
+    if (target) applyLayout(target)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialLayoutId])
+
+  // Mark the just-saved state as clean and run any pending layout switch
+  const finalizeSave = (savedLayoutId: string | null) => {
+    setActiveLayoutId(savedLayoutId)
     lastLoadedRef.current = {
       order: [...order],
       hiddenIds: Array.from(hiddenIds),
@@ -185,6 +170,39 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
       // Use setTimeout to ensure state updates are flushed
       setTimeout(() => applyLayout(target), 0)
     }
+  }
+
+  // 另存为：始终新建一份自定义布局
+  const handleSaveAs = () => {
+    const base = layoutNameInput.trim()
+    if (!base) return
+    const now = new Date()
+    const newLayout: LayoutConfig = {
+      id: `ly_${Date.now()}`,
+      name: base,
+      savedAt: formatSavedAt(now),
+      order: [...order],
+      hiddenIds: Array.from(hiddenIds),
+      showAside,
+    }
+    addLayout(newLayout)
+    finalizeSave(newLayout.id)
+  }
+
+  // 保存：若当前是自定义布局则覆盖，否则等同于另存为
+  const handleSaveLayout = () => {
+    if (activeCustomLayout) {
+      const now = new Date()
+      updateLayout(activeCustomLayout.id, {
+        savedAt: formatSavedAt(now),
+        order: [...order],
+        hiddenIds: Array.from(hiddenIds),
+        showAside,
+      })
+      finalizeSave(activeCustomLayout.id)
+      return
+    }
+    handleSaveAs()
   }
 
   const handleSwitchLayout = (layout: LayoutConfig) => {
@@ -213,9 +231,7 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
   }
 
   const handleDeleteLayout = (id: string) => {
-    if (id === DEFAULT_LAYOUT_ID) return
-    setLayouts(prev => prev.filter(l => l.id !== id))
-    if (activeLayoutId === id) setActiveLayoutId(null)
+    deleteLayout(id)
   }
 
 
@@ -301,9 +317,11 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
     })
   }
 
-  const allModuleIds = [
-    'orderbook', 'kline', 'levels', 'ticks', 'fundflow', 'news',
-    'analysis', 'assets', 'cash', 'withdraw', 'form', 'assetPanel',
+  // 组件管理弹窗：按三列分类展示（自选放在行情资讯列）
+  const componentGroups: { title: string; ids: string[] }[] = [
+    { title: '行情资讯', ids: ['kline', 'fundflow', 'news', 'analysis'] },
+    { title: '交易盘口', ids: ['orderbook', 'levels', 'ticks', 'form'] },
+    { title: '持仓信息', ids: ['assets', 'cash', 'withdraw', 'assetPanel'] },
   ]
 
   // ---- orderBookSection (copied from MarketContent) ----------------------
@@ -697,6 +715,17 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
       {/* account selector bar */}
       <div className="p-3 border-b flex items-center justify-between flex-shrink-0 relative">
         <div className="flex items-center gap-2">
+          {onBack && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 w-6 p-0"
+              onClick={onBack}
+              title="返回选择页"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+          )}
           <Select value={selectedAccount} onValueChange={setSelectedAccount}>
             <SelectTrigger className="bg-input text-xs h-6 px-2 border-0">
               <SelectValue />
@@ -713,6 +742,7 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
             </span>
           )}
         </div>
+        {/* 右上角操作区（已隐藏：拖动提示 / 组件管理 / 布局管理 / 保存布局）
         <div className="flex items-center gap-2">
           <span className="text-xs text-muted-foreground hidden md:inline">拖动块标题即可自由拖拽排列</span>
           <Button
@@ -722,7 +752,7 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
             onClick={() => setShowManagePanel(v => !v)}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
-            模块管理
+            组件管理
           </Button>
           <Button
             variant="outline"
@@ -753,40 +783,73 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
             保存布局
           </Button>
         </div>
+        */}
 
-        {/* show/hide management panel */}
-        {showManagePanel && (
-          <div className="absolute top-full right-3 mt-1 z-50 w-56 bg-popover border border-border rounded-md shadow-lg p-2">
-            <div className="text-xs font-medium text-foreground mb-2 px-1">显示 / 隐藏模块</div>
-            <div className="space-y-1 max-h-72 overflow-y-auto">
-              <label className="flex items-center justify-between px-2 py-1.5 rounded hover:bg-accent cursor-pointer text-xs border-b border-border mb-1">
-                <span className="text-foreground font-medium">自选</span>
-                <input
-                  type="checkbox"
-                  checked={showAside}
-                  onChange={onToggleAside}
-                  className="w-3.5 h-3.5 accent-[#FF5C00]"
-                />
-              </label>
-              {allModuleIds.map(id => {
-                const block = blocks[id]
-                if (!block) return null
-                const isHidden = hiddenIds.has(id)
-                return (
-                  <label key={id} className="flex items-center justify-between px-2 py-1.5 rounded hover:bg-accent cursor-pointer text-xs">
-                    <span className="text-foreground">{block.title}</span>
-                    <input
-                      type="checkbox"
-                      checked={!isHidden}
-                      onChange={() => toggleHidden(id)}
-                      className="w-3.5 h-3.5 accent-[#FF5C00]"
-                    />
-                  </label>
-                )
-              })}
+        {/* component management dialog */}
+        <Dialog open={showManagePanel} onOpenChange={setShowManagePanel}>
+          <DialogContent className="sm:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>组件管理</DialogTitle>
+            </DialogHeader>
+            <div className="grid grid-cols-3 gap-4 max-h-[56vh] overflow-y-auto pr-1">
+              {componentGroups.map((group, gi) => (
+                <div key={group.title}>
+                  <div className="text-xs font-semibold text-muted-foreground mb-2">{group.title}</div>
+                  <div className="space-y-2">
+                    {gi === 0 && (
+                      <div
+                        onClick={onToggleAside}
+                        className={`border rounded-md p-3 cursor-pointer transition-colors ${
+                          showAside ? 'border-[#FF5C00]/60 bg-accent/40' : 'border-border bg-card opacity-50'
+                        }`}
+                      >
+                        <div className="w-full h-9 rounded bg-muted/40 flex items-center justify-center mb-2">
+                          <div className="w-2/3 h-2/3 rounded-sm border border-[#FF5C00]/50" />
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium">自选</span>
+                          <span className={`text-[10px] ${showAside ? 'text-[#FF5C00]' : 'text-muted-foreground'}`}>
+                            {showAside ? '已显示' : '已隐藏'}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    {group.ids.map(id => {
+                      const def = MODULE_DEFS[id]
+                      if (!def) return null
+                      const isHidden = hiddenIds.has(id)
+                      return (
+                        <div
+                          key={id}
+                          onClick={() => toggleHidden(id)}
+                          className={`border rounded-md p-3 cursor-pointer transition-colors ${
+                            !isHidden ? 'border-[#FF5C00]/60 bg-accent/40' : 'border-border bg-card opacity-50'
+                          }`}
+                        >
+                          <div className="w-full h-9 rounded bg-muted/40 flex items-center justify-center mb-2">
+                            <div
+                              className="rounded-sm border border-[#FF5C00]/50"
+                              style={{
+                                width: `${(def.span / 12) * 100}%`,
+                                height: `${((def.rowSpan ?? 1) / 3) * 100}%`,
+                              }}
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-medium">{def.title}</span>
+                            <span className={`text-[10px] ${!isHidden ? 'text-[#FF5C00]' : 'text-muted-foreground'}`}>
+                              {!isHidden ? '已显示' : '已隐藏'}
+                            </span>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-        )}
+          </DialogContent>
+        </Dialog>
 
         {/* layout management list panel */}
         {showLayoutListPanel && (
@@ -852,22 +915,33 @@ export default function TradeDashboardDemo({ showAside, onToggleAside }: { showA
                 id="layoutName"
                 value={layoutNameInput}
                 onChange={(e) => setLayoutNameInput(e.target.value)}
-                placeholder="例如：日常看盘"
+                placeholder={activeCustomLayout ? `另存为新布局时填写名称（当前：${activeCustomLayout.name}）` : '例如：日常看盘'}
                 className="mt-1"
               />
               <div className="text-xs text-muted-foreground mt-2">
-                保存时会自动记录新增时间，格式：yyyy/mm/dd-hh:mm:ss
+                {activeCustomLayout ? (
+                  <>保存将覆盖当前自定义布局「{activeCustomLayout.name}」；如需保留原布局请使用「另存为」。</>
+                ) : (
+                  <>保存时会新建一份自定义布局，并自动记录保存时间，格式：yyyy/mm/dd-hh:mm:ss</>
+                )}
               </div>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex gap-2">
             <Button variant="outline" onClick={() => setShowSaveDialog(false)}>取消</Button>
+            <Button
+              variant="outline"
+              onClick={handleSaveAs}
+              disabled={!layoutNameInput.trim()}
+            >
+              另存为
+            </Button>
             <Button
               className="bg-[#FF5C00] hover:bg-[#e54f00]"
               onClick={handleSaveLayout}
-              disabled={!layoutNameInput.trim()}
+              disabled={!activeCustomLayout && !layoutNameInput.trim()}
             >
-              确定
+              {activeCustomLayout ? '覆盖保存' : '确定'}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -17,9 +17,11 @@ import DiscoveryPage from '../pages/DiscoveryPage'
 import HeatmapPage from '../pages/HeatmapPage'
 import TradePage from '../pages/TradePage'
 import DocPage from '../pages/DocPage'
+import LayoutThumbnailPage from '../pages/LayoutThumbnailPage'
 import { LanguageProvider, useLanguage } from '../contexts/LanguageContext'
 import { TradingLockProvider, useTradingLock } from '../contexts/TradingLockContext'
 import { TradingPopupProvider, useTradingPopup } from '../contexts/TradingPopupContext'
+import { LayoutProvider } from '../contexts/LayoutContext'
 
 const PlaceholderPage = ({ title }: { title: string }) => {
   const { t } = useLanguage()
@@ -152,6 +154,7 @@ function MainLayoutContent() {
                 <Route path="/options" element={<PlaceholderPage title={t('nav.options')} />} />
                 <Route path="/discovery" element={<DiscoveryPage />} />
                 <Route path="/trade" element={<TradePage />} />
+                <Route path="/custom" element={<LayoutThumbnailPage />} />
                 <Route path="/heatmap" element={<HeatmapPage />} />
                 <Route path="/doc" element={<DocPage />} />
                 <Route path="*" element={<PlaceholderPage title={t('page.not_found')} />} />
@@ -170,7 +173,9 @@ export function MainLayout() {
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <TradingLockProvider>
           <TradingPopupProvider>
-            <MainLayoutContent />
+            <LayoutProvider>
+              <MainLayoutContent />
+            </LayoutProvider>
           </TradingPopupProvider>
         </TradingLockProvider>
       </ThemeProvider>

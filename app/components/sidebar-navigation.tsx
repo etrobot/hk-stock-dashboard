@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { cn } from '../lib/utils'
-import { Star, BarChart3, User, Compass, SlidersHorizontal, MessageSquare, Landmark } from 'lucide-react'
+import { Star, BarChart3, User, Compass, SlidersHorizontal, MessageSquare, Landmark, LayoutGrid } from 'lucide-react'
 import { DropdownMenu } from './dropdown-menu-component'
 import { MessagePopup } from './message-popup'
 import { StockDetailDialog } from './stock-detail-dialog'
@@ -60,6 +60,7 @@ export function SidebarNavigation({ className }: SidebarNavigationProps) {
     { label: t('nav.market'), to: '/market', icon: (<BarChart3 className="w-4 h-4" />) },
     { label: t('nav.account'), to: '/account', icon: (<User className="w-4 h-4" />) },
     { label: '交易', to: '/trade', icon: (<Landmark className="w-4 h-4" />) },
+    { label: '自定义', to: '/custom', icon: (<LayoutGrid className="w-4 h-4" />) },
     { label: t('nav.discovery'), to: '/discovery', icon: (<Compass className="w-4 h-4" />) },
   ]
 
