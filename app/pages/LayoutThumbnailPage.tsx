@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { LayoutGrid } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { useLayout, MODULE_DEFS, type LayoutConfig } from '../contexts/LayoutContext'
-import TradeDashboardDemo from '../components/TradeDashboardDemo'
+import TradePage from './TradePage'
 
 type FilterTab = 'all' | 'system' | 'custom'
 
@@ -73,12 +73,12 @@ export default function LayoutThumbnailPage() {
   // 点击缩略图后在自定义页面内加载该布局（不跳转交易页）
   if (selectedLayoutId) {
     return (
-      <TradeDashboardDemo
+      <TradePage
         key={selectedLayoutId}
-        showAside={false}
-        onToggleAside={() => {}}
         initialLayoutId={selectedLayoutId}
         onBack={() => setSelectedLayoutId(null)}
+        showLayoutControls
+        hideStaticAside
       />
     )
   }

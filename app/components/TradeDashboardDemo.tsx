@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { Heart, TrendingUp, RefreshCwIcon, X, Trash2, ArrowLeft } from 'lucide-react'
+import { Heart, TrendingUp, RefreshCwIcon, X, Trash2, ArrowLeft, Save, LayoutGrid, FolderOpen } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Card, CardContent } from './ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
@@ -41,11 +41,13 @@ function transformStockToIndex(stockData: StockData): IndexDetail {
   }
 }
 
-export default function TradeDashboardDemo({ showAside, onToggleAside, initialLayoutId, onBack }: {
+export default function TradeDashboardDemo({ showAside, onToggleAside, initialLayoutId, onBack, showLayoutControls = false, asideEl }: {
   showAside: boolean
   onToggleAside: () => void
   initialLayoutId?: string | null
   onBack?: () => void
+  showLayoutControls?: boolean
+  asideEl?: React.ReactNode
 }) {
   const { t } = useLanguage()
   const { resolvedTheme } = useTheme()
@@ -129,14 +131,15 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
   }
 
   const applyLayout = (layout: LayoutConfig) => {
-    setOrder([...layout.order])
+    const nextOrder = asideEl && !layout.order.includes('aside') ? ['aside', ...layout.order] : [...layout.order]
+    setOrder(nextOrder)
     setHiddenIds(new Set(layout.hiddenIds))
     if (showAside !== layout.showAside) {
       onToggleAside()
     }
     setActiveLayoutId(layout.id)
     lastLoadedRef.current = {
-      order: [...layout.order],
+      order: nextOrder,
       hiddenIds: [...layout.hiddenIds],
       showAside: layout.showAside,
     }
@@ -317,9 +320,9 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
     })
   }
 
-  // 组件管理弹窗：按三列分类展示（自选放在行情资讯列）
+  // 组件管理弹窗：按三列分类展示（自选放在行情资讯列；仅作为网格模块时以可勾选模块形式出现）
   const componentGroups: { title: string; ids: string[] }[] = [
-    { title: '行情资讯', ids: ['kline', 'fundflow', 'news', 'analysis'] },
+    { title: '行情资讯', ids: ['kline', 'fundflow', 'news', 'analysis', ...(asideEl ? ['aside'] : [])] },
     { title: '交易盘口', ids: ['orderbook', 'levels', 'ticks', 'form'] },
     { title: '持仓信息', ids: ['assets', 'cash', 'withdraw', 'assetPanel'] },
   ]
@@ -415,6 +418,11 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
   type BlockDef = { id: string; title: string; span: number; rowSpan?: number; content: React.ReactNode }
 
   const blocks: Record<string, BlockDef> = {
+    // 0. 自选 - 可变网格模块（仅当传入 asideEl 时渲染）
+    aside: {
+      id: 'aside', title: '自选', span: 3,
+      content: asideEl ?? <div className="p-4 text-xs text-muted-foreground">自选</div>,
+    },
     // 1. 盘口 - IndexInfoPanel stock detail section with "按实际api数据开发" mask
     orderbook: {
       id: 'orderbook', title: '盘口', span: 3,
@@ -742,48 +750,48 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
             </span>
           )}
         </div>
-        {/* 右上角操作区（已隐藏：拖动提示 / 组件管理 / 布局管理 / 保存布局）
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground hidden md:inline">拖动块标题即可自由拖拽排列</span>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-6 px-2 text-xs gap-1"
-            onClick={() => setShowManagePanel(v => !v)}
-          >
-            <LayoutGrid className="w-3.5 h-3.5" />
-            组件管理
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-6 px-2 text-xs gap-1"
-            onClick={() => {
-              setShowLayoutListPanel(v => !v)
-              setShowManagePanel(false)
-            }}
-          >
-            <FolderOpen className="w-3.5 h-3.5" />
-            布局管理
-          </Button>
-          <Button
-            size="sm"
-            className={`h-6 px-2 text-xs gap-1 transition-colors ${
-              isDirty
-                ? 'bg-[#FF5C00] hover:bg-[#e54f00] text-white'
-                : 'bg-muted text-muted-foreground cursor-not-allowed'
-            }`}
-            disabled={!isDirty}
-            onClick={() => {
-              setShowSaveDialog(true)
-              setLayoutNameInput('')
-            }}
-          >
-            <Save className="w-3.5 h-3.5" />
-            保存布局
-          </Button>
-        </div>
-        */}
+        {showLayoutControls && (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground hidden md:inline">拖动块标题即可自由拖拽排列</span>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-6 px-2 text-xs gap-1"
+              onClick={() => setShowManagePanel(v => !v)}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              组件管理
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-6 px-2 text-xs gap-1"
+              onClick={() => {
+                setShowLayoutListPanel(v => !v)
+                setShowManagePanel(false)
+              }}
+            >
+              <FolderOpen className="w-3.5 h-3.5" />
+              布局管理
+            </Button>
+            <Button
+              size="sm"
+              className={`h-6 px-2 text-xs gap-1 transition-colors ${
+                isDirty
+                  ? 'bg-[#FF5C00] hover:bg-[#e54f00] text-white'
+                  : 'bg-muted text-muted-foreground cursor-not-allowed'
+              }`}
+              disabled={!isDirty}
+              onClick={() => {
+                setShowSaveDialog(true)
+                setLayoutNameInput('')
+              }}
+            >
+              <Save className="w-3.5 h-3.5" />
+              保存布局
+            </Button>
+          </div>
+        )}
 
         {/* component management dialog */}
         <Dialog open={showManagePanel} onOpenChange={setShowManagePanel}>
@@ -796,7 +804,7 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
                 <div key={group.title}>
                   <div className="text-xs font-semibold text-muted-foreground mb-2">{group.title}</div>
                   <div className="space-y-2">
-                    {gi === 0 && (
+                    {gi === 0 && !asideEl && (
                       <div
                         onClick={onToggleAside}
                         className={`border rounded-md p-3 cursor-pointer transition-colors ${
@@ -984,7 +992,7 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
             gridAutoColumns: '108px',
           }}
         >
-          {order.filter(id => !hiddenIds.has(id)).map((id) => {
+          {order.filter(id => !hiddenIds.has(id) && (asideEl || id !== 'aside')).map((id) => {
             const block = blocks[id]
             if (!block) return null
             return (

@@ -12,7 +12,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { useLanguage } from '../contexts/LanguageContext'
 import TradeDashboardDemo from '../components/TradeDashboardDemo'
 
-export default function TradePage() {
+export default function TradePage({ initialLayoutId, onBack, showLayoutControls, hideStaticAside }: {
+  initialLayoutId?: string | null
+  onBack?: () => void
+  showLayoutControls?: boolean
+  hideStaticAside?: boolean
+}) {
   const { t } = useLanguage()
   const { isTradeUnlocked, showUnlockDialog } = useTradingLock()
 
@@ -89,31 +94,42 @@ export default function TradePage() {
     })
   }
 
+  const asideElement = (
+    <AsideList
+      rankingTitle={t('nav.watchlist')}
+      isWatchlistRoute={true}
+      sidebarViewMode={sidebarViewMode}
+      onSidebarViewModeChange={setSidebarViewMode}
+      selectedPeriod={selectedPeriod}
+      onSelectedPeriodChange={setSelectedPeriod}
+      selectedFilter={selectedFilter}
+      onSelectedFilterChange={setSelectedFilter}
+      isCreateGroupOpen={isCreateGroupOpen}
+      setIsCreateGroupOpen={setIsCreateGroupOpen}
+      isManageGroupOpen={isManageGroupOpen}
+      setIsManageGroupOpen={setIsManageGroupOpen}
+      customGroups={customGroups}
+      onListItemClick={handleSidebarItemClick}
+      onGridItemClick={handleGridSidebarItemClick}
+      hideViewToggle={true}
+    />
+  )
+
   return (
     <div className="h-full bg-background text-foreground relative flex no-scrollbar">
-      {/* Left AsideList - fixed, not draggable, can be hidden via panel management */}
-      {showAside && <AsideList
-        rankingTitle={t('nav.watchlist')}
-        isWatchlistRoute={true}
-        sidebarViewMode={sidebarViewMode}
-        onSidebarViewModeChange={setSidebarViewMode}
-        selectedPeriod={selectedPeriod}
-        onSelectedPeriodChange={setSelectedPeriod}
-        selectedFilter={selectedFilter}
-        onSelectedFilterChange={setSelectedFilter}
-        isCreateGroupOpen={isCreateGroupOpen}
-        setIsCreateGroupOpen={setIsCreateGroupOpen}
-        isManageGroupOpen={isManageGroupOpen}
-        setIsManageGroupOpen={setIsManageGroupOpen}
-        customGroups={customGroups}
-        onListItemClick={handleSidebarItemClick}
-        onGridItemClick={handleGridSidebarItemClick}
-        hideViewToggle={true}
-      />}
+      {/* Left AsideList - fixed, not draggable, can be hidden via panel management (trade page) */}
+      {!hideStaticAside && showAside && asideElement}
 
       {/* Draggable trading dashboard demo - horizontal scroll */}
       <div className="flex-1 min-w-0 relative">
-        <TradeDashboardDemo showAside={showAside} onToggleAside={() => setShowAside(v => !v)} />
+        <TradeDashboardDemo
+          showAside={showAside}
+          onToggleAside={() => setShowAside(v => !v)}
+          initialLayoutId={initialLayoutId}
+          onBack={onBack}
+          showLayoutControls={showLayoutControls}
+          asideEl={hideStaticAside ? asideElement : undefined}
+        />
 
         {!isTradeUnlocked && (
           <div className="absolute inset-0 bg-background/70 z-50 flex items-center justify-center">

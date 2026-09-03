@@ -21,6 +21,7 @@ export type ModuleDef = {
 }
 
 export const MODULE_DEFS: Record<string, ModuleDef> = {
+  aside: { id: 'aside', title: '自选', span: 3 },
   orderbook: { id: 'orderbook', title: '盘口', span: 3 },
   kline: { id: 'kline', title: 'K线', span: 6 },
   levels: { id: 'levels', title: '档位', span: 3 },
@@ -39,7 +40,7 @@ export const ALL_MODULE_IDS = Object.keys(MODULE_DEFS)
 
 export const DEFAULT_LAYOUT_ID = 'default_layout'
 export const DEFAULT_INITIAL_ORDER = [
-  'orderbook', 'kline', 'levels',
+  'aside', 'orderbook', 'kline', 'levels',
   'ticks', 'fundflow', 'news', 'analysis',
   'assets', 'cash', 'withdraw', 'form',
   'assetPanel',
