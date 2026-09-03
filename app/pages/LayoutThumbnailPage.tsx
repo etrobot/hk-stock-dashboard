@@ -1,20 +1,29 @@
 'use client'
 
 import { useState } from 'react'
-import { LayoutGrid } from 'lucide-react'
+import { LayoutGrid, Pencil, Trash2 } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs'
+import { Button } from '../components/ui/button'
+import { Input } from '../components/ui/input'
+import { Label } from '../components/ui/label'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../components/ui/dialog'
 import { useLayout, MODULE_DEFS, type LayoutConfig } from '../contexts/LayoutContext'
 import TradePage from './TradePage'
 
 type FilterTab = 'all' | 'system' | 'custom'
 
-function LayoutThumbnail({ layout, onClick }: { layout: LayoutConfig; onClick?: () => void }) {
+function LayoutThumbnail({ layout, onClick, onRename, onDelete }: {
+  layout: LayoutConfig
+  onClick?: () => void
+  onRename: (layout: LayoutConfig) => void
+  onDelete: (layout: LayoutConfig) => void
+}) {
   const visibleOrder = layout.order.filter(id => !layout.hiddenIds.includes(id))
 
   return (
     <div
       onClick={onClick}
-      className="border border-border rounded-lg p-4 bg-card hover:border-[#FF5C00] transition-colors w-full sm:w-[280px] cursor-pointer"
+      className="relative border border-border rounded-lg p-4 bg-card hover:border-[#FF5C00] transition-colors w-full sm:w-[280px] cursor-pointer"
     >
       {/* 矩形缩略图：按交易页面 3 行网格等比缩小，用矩形表示各模块 */}
       <div className="w-full h-28 overflow-hidden rounded-md bg-background p-1.5">
@@ -48,15 +57,31 @@ function LayoutThumbnail({ layout, onClick }: { layout: LayoutConfig; onClick?: 
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-sm font-medium text-foreground truncate">{layout.name}</span>
         </div>
-        <span
-          className={`text-[10px] px-1.5 py-0.5 rounded border flex-shrink-0 ${
-            layout.isDefault
-              ? 'text-[#FF5C00] border-[#FF5C00]/40'
-              : 'text-muted-foreground border-border'
-          }`}
-        >
-          {layout.isDefault ? '系统默认' : '用户自定义'}
-        </span>
+        {layout.isDefault ? (
+          <span className="text-[10px] px-1.5 py-0.5 rounded border flex-shrink-0 text-[#FF5C00] border-[#FF5C00]/40">
+            系统默认
+          </span>
+        ) : (
+          <div className="flex items-center gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+            <span className="text-[10px] px-1.5 py-0.5 rounded border flex-shrink-0 text-muted-foreground border-border">
+              用户自定义
+            </span>
+            <button
+              onClick={() => onRename(layout)}
+              title="修改名称"
+              className="text-muted-foreground hover:text-foreground hover:bg-accent rounded p-1.5"
+            >
+              <Pencil className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={() => onDelete(layout)}
+              title="删除"
+              className="text-muted-foreground hover:text-red-500 hover:bg-red-50 rounded p-1.5"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
       </div>
       <div className="text-xs text-muted-foreground mt-1 truncate">
         {layout.isDefault ? '系统内置布局' : `保存于 ${layout.savedAt}`}
@@ -66,9 +91,30 @@ function LayoutThumbnail({ layout, onClick }: { layout: LayoutConfig; onClick?: 
 }
 
 export default function LayoutThumbnailPage() {
-  const { displayedLayouts } = useLayout()
+  const { displayedLayouts, updateLayout, deleteLayout } = useLayout()
   const [filter, setFilter] = useState<FilterTab>('all')
   const [selectedLayoutId, setSelectedLayoutId] = useState<string | null>(null)
+  const [renameTarget, setRenameTarget] = useState<LayoutConfig | null>(null)
+  const [renameInput, setRenameInput] = useState('')
+  const [deleteTarget, setDeleteTarget] = useState<LayoutConfig | null>(null)
+
+  const handleOpenRename = (layout: LayoutConfig) => {
+    setRenameTarget(layout)
+    setRenameInput(layout.name)
+  }
+
+  const handleConfirmRename = () => {
+    const name = renameInput.trim()
+    if (!renameTarget || !name) return
+    updateLayout(renameTarget.id, { name })
+    setRenameTarget(null)
+  }
+
+  const handleConfirmDelete = () => {
+    if (!deleteTarget) return
+    deleteLayout(deleteTarget.id)
+    setDeleteTarget(null)
+  }
 
   // 点击缩略图后在自定义页面内加载该布局（不跳转交易页）
   if (selectedLayoutId) {
@@ -76,7 +122,10 @@ export default function LayoutThumbnailPage() {
       <TradePage
         key={selectedLayoutId}
         initialLayoutId={selectedLayoutId}
-        onBack={() => setSelectedLayoutId(null)}
+        onBack={() => {
+          setSelectedLayoutId(null)
+          setFilter('all')
+        }}
         showLayoutControls
         hideStaticAside
       />
@@ -119,11 +168,60 @@ export default function LayoutThumbnailPage() {
                 key={layout.id}
                 layout={layout}
                 onClick={() => setSelectedLayoutId(layout.id)}
+                onRename={handleOpenRename}
+                onDelete={setDeleteTarget}
               />
             ))}
           </div>
         )}
       </div>
+
+      {/* 修改名称弹窗（仅自定义布局） */}
+      <Dialog open={!!renameTarget} onOpenChange={(open) => { if (!open) setRenameTarget(null) }}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>修改布局名称</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div>
+              <Label htmlFor="renameInput">布局名称</Label>
+              <Input
+                id="renameInput"
+                value={renameInput}
+                onChange={(e) => setRenameInput(e.target.value)}
+                placeholder="输入新名称"
+                className="mt-1"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRenameTarget(null)}>取消</Button>
+            <Button
+              className="bg-[#FF5C00] hover:bg-[#e54f00]"
+              onClick={handleConfirmRename}
+              disabled={!renameInput.trim()}
+            >
+              确定
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* 删除确认弹窗（仅自定义布局） */}
+      <Dialog open={!!deleteTarget} onOpenChange={(open) => { if (!open) setDeleteTarget(null) }}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>删除布局</DialogTitle>
+          </DialogHeader>
+          <div className="text-sm text-muted-foreground py-2">
+            确定删除自定义布局「{deleteTarget?.name}」吗？该操作不可撤销。
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteTarget(null)}>取消</Button>
+            <Button variant="destructive" onClick={handleConfirmDelete}>删除</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

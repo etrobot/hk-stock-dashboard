@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { Heart, TrendingUp, RefreshCwIcon, X, Trash2, ArrowLeft, Save, LayoutGrid, FolderOpen } from 'lucide-react'
+import { Heart, TrendingUp, RefreshCwIcon, X, Trash2, Save, LayoutGrid, FolderOpen } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Card, CardContent } from './ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
@@ -95,6 +95,8 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
 
   // Pending switch target (when user needs to confirm unsaved changes before switching)
   const [pendingSwitchTarget, setPendingSwitchTarget] = useState<LayoutConfig | null>(null)
+  // Pending go-back (跳转缩略页) after saving/discarding unsaved changes
+  const [pendingBack, setPendingBack] = useState(false)
   const [showSwitchConfirm, setShowSwitchConfirm] = useState(false)
 
   const isDirty = useMemo(() => {
@@ -173,6 +175,11 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
       // Use setTimeout to ensure state updates are flushed
       setTimeout(() => applyLayout(target), 0)
     }
+    // If there's a pending go-back (跳转缩略页), run it after saving
+    if (pendingBack) {
+      setPendingBack(false)
+      setTimeout(() => onBack?.(), 0)
+    }
   }
 
   // 另存为：始终新建一份自定义布局
@@ -224,6 +231,10 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
     if (pendingSwitchTarget) {
       applyLayout(pendingSwitchTarget)
       setPendingSwitchTarget(null)
+    }
+    if (pendingBack) {
+      setPendingBack(false)
+      onBack?.()
     }
     setShowLayoutListPanel(false)
   }
@@ -723,17 +734,6 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
       {/* account selector bar */}
       <div className="p-3 border-b flex items-center justify-between flex-shrink-0 relative">
         <div className="flex items-center gap-2">
-          {onBack && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-6 w-6 p-0"
-              onClick={onBack}
-              title="返回选择页"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </Button>
-          )}
           <Select value={selectedAccount} onValueChange={setSelectedAccount}>
             <SelectTrigger className="bg-input text-xs h-6 px-2 border-0">
               <SelectValue />
@@ -767,8 +767,13 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
               size="sm"
               className="h-6 px-2 text-xs gap-1"
               onClick={() => {
-                setShowLayoutListPanel(v => !v)
                 setShowManagePanel(false)
+                if (isDirty) {
+                  setPendingBack(true)
+                  setShowSwitchConfirm(true)
+                } else {
+                  onBack?.()
+                }
               }}
             >
               <FolderOpen className="w-3.5 h-3.5" />
