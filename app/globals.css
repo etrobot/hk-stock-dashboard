@@ -136,3 +136,25 @@
   width: 0;
   height: 0;
 }
+
+/* Re-enable visible scrollbars for specific scroll containers (e.g. warrant table) */
+.show-scrollbar,
+.show-scrollbar * {
+  -ms-overflow-style: auto;
+  scrollbar-width: thin;
+}
+.show-scrollbar::-webkit-scrollbar,
+.show-scrollbar *::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+  height: 8px;
+}
+.show-scrollbar::-webkit-scrollbar-track,
+.show-scrollbar *::-webkit-scrollbar-track {
+  background: transparent;
+}
+.show-scrollbar::-webkit-scrollbar-thumb,
+.show-scrollbar *::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}

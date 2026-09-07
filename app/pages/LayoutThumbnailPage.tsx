@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { LayoutGrid, Pencil, Trash2 } from 'lucide-react'
+import { LayoutGrid, Pencil, Trash2, Plus } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
@@ -116,6 +116,22 @@ export default function LayoutThumbnailPage() {
     setDeleteTarget(null)
   }
 
+  // 新增：进入第一个系统默认布局
+  const handleAdd = () => {
+    const defaultLayout = displayedLayouts.find(l => l.isDefault)
+    if (defaultLayout) setSelectedLayoutId(defaultLayout.id)
+  }
+
+  const newTile = (
+    <button
+      onClick={handleAdd}
+      className="w-full sm:w-[280px] min-h-[180px] rounded-lg border border-dashed border-border hover:border-[#FF5C00] hover:text-[#FF5C00] text-muted-foreground bg-card/50 flex flex-col items-center justify-center gap-2 transition-colors cursor-pointer"
+    >
+      <Plus className="w-6 h-6" />
+      <span className="text-sm">新增</span>
+    </button>
+  )
+
   // 点击缩略图后在自定义页面内加载该布局（不跳转交易页）
   if (selectedLayoutId) {
     return (
@@ -158,9 +174,13 @@ export default function LayoutThumbnailPage() {
       {/* 缩略图网格 */}
       <div className="flex-1 overflow-y-auto p-4">
         {filtered.length === 0 ? (
-          <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
-            暂无布局
-          </div>
+          filter === 'custom' ? (
+            <div className="flex flex-wrap justify-center gap-4">{newTile}</div>
+          ) : (
+            <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
+              暂无布局
+            </div>
+          )
         ) : (
           <div className="flex flex-wrap justify-center gap-4">
             {filtered.map(layout => (
@@ -172,6 +192,7 @@ export default function LayoutThumbnailPage() {
                 onDelete={setDeleteTarget}
               />
             ))}
+            {filter === 'custom' && newTile}
           </div>
         )}
       </div>

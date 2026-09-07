@@ -61,6 +61,41 @@ export interface NewsItem {
   type: 'news' | 'report'
 }
 
+// 锚定标的（underlying）股票 mock 数据，用于轮证详情页展示
+function mk(code: string, name: string, price: number): StockData {
+  return {
+    symbol: code,
+    name,
+    price,
+    change: price * 0.01,
+    changePercent: 1.0,
+    volume: '2560万',
+    turnover: '18.34亿',
+    high: price * 1.015,
+    low: price * 0.985,
+    open: price * 0.995,
+    previousClose: price * 0.99,
+    marketCap: '1.02万亿',
+    pe: '22.4',
+    timeZone: 'HKT',
+    market: 'HKEX',
+    currency: 'HKD',
+  }
+}
+
+export const mockUnderlyingStocks: Record<string, StockData> = {
+  '0388': mk('0388', '香港交易所', 328.6),
+  '0700': mk('0700', '腾讯控股', 368.4),
+  '9988': mk('9988', '阿里巴巴-W', 88.2),
+  '1299': mk('1299', '友邦保险', 73.5),
+  '2020': mk('2020', '安踏体育', 82.6),
+  '1211': mk('1211', '比亚迪股份', 247.8),
+  '3690': mk('3690', '美团-W', 132.4),
+  '1093': mk('1093', '石药集团', 7.64),
+  '1810': mk('1810', '小米集团-W', 20.8),
+  'HSI': mk('HSI', '恒生指数', 23900.79),
+}
+
 // Mock stock data based on AAPL from MasterGo design
 export const mockStockData: StockData = {
   symbol: 'AAPL',

@@ -5,7 +5,8 @@ import { useParams, useLocation } from 'react-router-dom'
 import { StockPriceHeader } from './stock-price-header'
 import { StockChart } from './stock-chart'
 import { IndexInfoPanel } from './index-info-panel'
-import { type StockData, mockStockData } from '../data/mockStockData'
+import { type StockData, mockStockData, mockUnderlyingStocks } from '../data/mockStockData'
+import { warrantUnderlying, mockWarrantData, type Warrant } from '../data/mockWarrantData'
 import { type IndexDetail } from '../types/market'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
 import { Button } from './ui/button'
@@ -18,6 +19,19 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { toast } from 'sonner'
 import { AsideList } from './aside-list'
+import { WarrantTable } from './warrant-table'
+
+// 把轮证转成头部展示用的 StockData（名称/价格与点击条目一致）
+function warrantToStock(w: Warrant): StockData {
+  return {
+    ...mockStockData,
+    symbol: w.code,
+    name: w.name,
+    price: w.latestPrice,
+    change: w.change,
+    changePercent: w.changePercent,
+  }
+}
 
 // Transform StockData to IndexDetail format
 function transformStockToIndex(stockData: StockData): IndexDetail {
@@ -55,7 +69,22 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
     '自定义分组1': hkHotStocks.slice(0, 10)
   })
   const [selectedGroup, setSelectedGroup] = useState<string>('自定义分组1')
+  const [activeTab, setActiveTab] = useState('chart')
   const { t } = useLanguage()
+
+  // 轮证详情模式：路由 /warrant/:code
+  const routeParams = params as unknown as { symbol?: string; code?: string }
+  const warrantCode = routeParams?.code
+  const isWarrant = !!warrantCode
+  const underlyingCode = isWarrant ? (warrantUnderlying[warrantCode!] ?? '') : ''
+  const underlyingStock = isWarrant ? (mockUnderlyingStocks[underlyingCode] ?? mockStockData) : stockData
+  const chartStock = isWarrant ? underlyingStock : stockData
+
+  // 标题头部用被点击那一条（轮证详情用轮证本身，个股详情用点击的股票）
+  const currentWarrant = isWarrant ? mockWarrantData.find((w) => w.code === warrantCode) : undefined
+  const headerStock: StockData = isWarrant && currentWarrant
+    ? warrantToStock(currentWarrant)
+    : stockData
 
   // Check if we're on the watchlist route
   const isWatchlistRoute = location.pathname === '/watchlist'
@@ -196,19 +225,28 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
 
       {/* Main Content Area - Only show in list mode */}
       {sidebarViewMode === 'list' && (
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-w-0">
           {/* Main Content */}
-          <div className="flex flex-1">
+          <div className="flex flex-1 min-w-0">
             {/* Content Area */}
-            <div className="flex-1 flex flex-col p-4">
+            <div className="flex-1 flex flex-col p-4 min-w-0">
               {/* Stock Price Header */}
               <div className="mb-4">
-                <StockPriceHeader stockData={stockData} />
+                <StockPriceHeader
+                  stockData={headerStock}
+                  activeTab={activeTab}
+                  onTabChange={setActiveTab}
+                  mode={isWarrant ? 'warrant' : 'stock'}
+                />
               </div>
 
-              {/* Chart Area */}
+              {/* Content Area - 图表/轮证 */}
               <div className="mb-4">
-                <StockChart symbol={stockData.symbol} />
+                {activeTab === 'chart' ? (
+                  <StockChart symbol={chartStock.symbol} />
+                ) : (
+                  <WarrantTable underlying={isWarrant ? underlyingCode : undefined} />
+                )}
               </div>
             </div>
           </div>
@@ -236,7 +274,7 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
 
       {/* Right Info Panel - Always visible */}
       <div className="w-[360px] border-l border-border bg-background p-4 flex-shrink-0 no-scrollbar">
-        <IndexInfoPanel indexDetail={transformStockToIndex(stockData)} />
+        <IndexInfoPanel indexDetail={transformStockToIndex(headerStock)} />
       </div>
 
       {/* Create Group Dialog */}

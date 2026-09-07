@@ -150,6 +150,7 @@ function MainLayoutContent() {
                 <Route path="/watchlist" element={<StockDetailPage titleOverride={t('nav.watchlist')} />} />
                 <Route path="/market" element={<div className="bg-background text-foreground"><App /></div>} />
                 <Route path="/stock/:symbol" element={<StockDetailPage />} />
+                <Route path="/warrant/:code" element={<StockDetailPage />} />
                 <Route path="/account" element={<AccountPage />} />
                 <Route path="/options" element={<PlaceholderPage title={t('nav.options')} />} />
                 <Route path="/discovery" element={<DiscoveryPage />} />

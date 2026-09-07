@@ -1012,13 +1012,15 @@ export default function TradeDashboardDemo({ showAside, onToggleAside, initialLa
                 className={`relative ${draggedId === id ? 'opacity-50' : ''}`}
               >
                 <div className="border border-border bg-card overflow-hidden h-full flex flex-col">
-                  <button
-                    onClick={() => toggleHidden(id)}
-                    className="absolute top-1 right-1 z-10 w-4 h-4 flex items-center justify-center rounded-sm bg-muted/60 hover:bg-accent text-muted-foreground hover:text-foreground"
-                    title={block.title}
-                  >
-                    <X className="w-2.5 h-2.5" />
-                  </button>
+                  {activeCustomLayout && (
+                    <button
+                      onClick={() => toggleHidden(id)}
+                      className="absolute top-1 right-1 z-10 w-4 h-4 flex items-center justify-center rounded-sm bg-muted/60 hover:bg-accent text-muted-foreground hover:text-foreground"
+                      title={block.title}
+                    >
+                      <X className="w-2.5 h-2.5" />
+                    </button>
+                  )}
                   <div className="p-4 flex-1 min-h-0 overflow-y-auto">
                     {block.content}
                   </div>
