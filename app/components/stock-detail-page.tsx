@@ -253,25 +253,6 @@ export function StockDetailPage({ titleOverride }: { titleOverride?: string }) {
         </div>
       )}
 
-      {/* Second self-select list - reuse original AsideList component */}
-      <AsideList
-        rankingTitle={rankingTitle}
-        isWatchlistRoute={isWatchlistRoute}
-        sidebarViewMode={sidebarViewMode}
-        onSidebarViewModeChange={setSidebarViewMode}
-        selectedPeriod={selectedPeriod}
-        onSelectedPeriodChange={setSelectedPeriod}
-        selectedFilter={selectedFilter}
-        onSelectedFilterChange={setSelectedFilter}
-        isCreateGroupOpen={isCreateGroupOpen}
-        setIsCreateGroupOpen={setIsCreateGroupOpen}
-        isManageGroupOpen={isManageGroupOpen}
-        setIsManageGroupOpen={setIsManageGroupOpen}
-        customGroups={customGroups}
-        onListItemClick={handleSidebarItemClick}
-        onGridItemClick={handleGridSidebarItemClick}
-      />
-
       {/* Right Info Panel - Always visible */}
       <div className="w-[360px] border-l border-border bg-background p-4 flex-shrink-0 no-scrollbar">
         <IndexInfoPanel indexDetail={transformStockToIndex(headerStock)} />
