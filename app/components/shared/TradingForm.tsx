@@ -1,6 +1,7 @@
 "use client"
 
-import { Info } from 'lucide-react'
+import { useState } from 'react'
+import { Info, Lock, Unlock } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
@@ -48,17 +49,36 @@ export function TradingForm({
   nameBelowCode,
 }: TradingFormProps) {
   const { t } = useLanguage()
+  const [codeLocked, setCodeLocked] = useState(false)
 
   return (
     <div className="space-y-4">
       <div className="space-y-2">
         <label className="text-xs text-foreground">{t('trade.code')}</label>
-        <div className="relative">
+        <div className="relative flex items-center gap-1">
           <Input 
             value={stockCode}
             onChange={(e) => setStockCode(e.target.value)}
-            className="text-xs h-6 px-3 bg-input"
+            className="text-xs h-6 px-3 bg-input flex-1"
           />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={() => setCodeLocked(!codeLocked)}
+                className={`h-6 w-6 flex items-center justify-center rounded transition-colors ${
+                  codeLocked 
+                    ? 'text-[#F44345] bg-input hover:bg-accent' 
+                    : 'text-muted-foreground bg-input hover:bg-accent'
+                }`}
+              >
+                {codeLocked ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="text-xs">
+              {codeLocked ? '已锁定 - 下单后保留代码' : '下单后保留代码'}
+            </TooltipContent>
+          </Tooltip>
         </div>
         {nameBelowCode ? (
           <div className="text-xs text-muted-foreground">{nameBelowCode}</div>
